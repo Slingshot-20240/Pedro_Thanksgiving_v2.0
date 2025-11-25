@@ -4,45 +4,48 @@ import dev.nextftc.control.ControlSystem;
 import dev.nextftc.core.commands.Command;
 import dev.nextftc.core.subsystems.Subsystem;
 import dev.nextftc.hardware.controllable.MotorGroup;
+import dev.nextftc.hardware.controllable.RunToState;
 import dev.nextftc.hardware.controllable.RunToVelocity;
 import dev.nextftc.hardware.impl.MotorEx;
+import dev.nextftc.hardware.powerable.SetPower;
 
 public class Shooter implements Subsystem {
     public static final Shooter INSTANCE = new Shooter();
     private Shooter() { }
 
     public MotorEx outtake1, outtake2;
+    public MotorGroup shooter;
 
     private final ControlSystem shooterController = ControlSystem.builder()
             .velPid(0.005, 0, 0)
             .build();
 
-    private enum shooter_states {
+    private enum shooterStates {
         IDLE (0),
         CLOSE_SIDE (0.5),
         FAR_SIDE (0.7);
 
-        private final double shooter_state;
-        shooter_states(double state) {
-            this.shooter_state = state;
+        private final double shooterState;
+        shooterStates(double state) {
+            this.shooterState = state;
         }
         public double getState() {
-            return shooter_state;
+            return shooterState;
         }
     }
 
     public Command closeSide() {
-        return new RunToVelocity(shooterController, shooter_states.CLOSE_SIDE.getState());
+        return new SetPower(shooter, shooterStates.CLOSE_SIDE.getState());
     }
     public Command farSide() {
-        return new RunToVelocity(shooterController, shooter_states.FAR_SIDE.getState());
+        return new SetPower(shooter, shooterStates.FAR_SIDE.getState());
     }
     public Command idle() {
-        return new RunToVelocity(shooterController, shooter_states.IDLE.getState());
+        return new SetPower(shooter, shooterStates.IDLE.getState());
     }
 
     public Command setShooterVel(double shooterVel) {
-        return new RunToVelocity(shooterController, shooterVel);
+        return new SetPower(shooter, shooterVel);
     }
 
 
@@ -51,6 +54,11 @@ public class Shooter implements Subsystem {
         outtake1 = new MotorEx("outtake1");
         outtake2 = new MotorEx("outtake2");
         //outtake1.reverse();
-        MotorGroup outtake = new MotorGroup(outtake1, outtake2);
+        new MotorGroup(outtake1, outtake2);
+    }
+    @Override
+    public void periodic(){
+        outtake1.setPower(shooterController.calculate(outtake1.getState()));
+        outtake2.setPower(shooterController.calculate(outtake2.getState()));
     }
 }
