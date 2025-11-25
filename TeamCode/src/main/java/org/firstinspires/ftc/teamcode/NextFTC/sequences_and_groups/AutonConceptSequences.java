@@ -32,7 +32,7 @@ public class AutonConceptSequences extends SubsystemGroup {
      */
     public final Command scoreSet(double speedUpTime, double transferTime) {
         return new SequentialGroup(
-                Intake.INSTANCE.in,
+                Intake.INSTANCE.in(),
                 new SequentialGroup(
                         new Delay(speedUpTime),
                         AutonConceptHWS.INSTANCE.transferUpFor(transferTime)
@@ -46,8 +46,8 @@ public class AutonConceptSequences extends SubsystemGroup {
      */
     public final Command intakeSet(double shooterPower) {
         return new ParallelGroup(
-                Intake.INSTANCE.in,
-                Transfer.INSTANCE.hotdog,
+                Intake.INSTANCE.in(),
+                Transfer.INSTANCE.hotdog(),
                 Shooter.INSTANCE.setShooterVel(shooterPower)
         );
     }

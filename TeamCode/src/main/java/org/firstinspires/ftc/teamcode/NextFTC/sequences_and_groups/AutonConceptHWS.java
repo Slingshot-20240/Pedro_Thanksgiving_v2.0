@@ -9,7 +9,6 @@ import org.firstinspires.ftc.teamcode.NextFTC.subsystems.VariableHood;
 
 import dev.nextftc.core.commands.Command;
 import dev.nextftc.core.commands.delays.Delay;
-import dev.nextftc.core.commands.groups.ParallelGroup;
 import dev.nextftc.core.commands.groups.SequentialGroup;
 import dev.nextftc.core.subsystems.SubsystemGroup;
 
@@ -27,17 +26,17 @@ public class AutonConceptHWS extends SubsystemGroup {
 
     public Command intakeInFor(double time) {
         return new SequentialGroup(
-                Intake.INSTANCE.in,
+                Intake.INSTANCE.in(),
                 new Delay(time),
-                Intake.INSTANCE.idle
+                Intake.INSTANCE.idle()
         );
     }
 
     public Command transferUpFor(double time) {
         return new SequentialGroup(
-                Transfer.INSTANCE.on,
+                Transfer.INSTANCE.on(),
                 new Delay(time),
-                Transfer.INSTANCE.hotdog
+                Transfer.INSTANCE.hotdog()
         );
     }
 
@@ -45,7 +44,7 @@ public class AutonConceptHWS extends SubsystemGroup {
         return new SequentialGroup(
                 Shooter.INSTANCE.setShooterVel(vel),
                 new Delay(time),
-                Intake.INSTANCE.idle
+                Intake.INSTANCE.idle()
         );
     }
 

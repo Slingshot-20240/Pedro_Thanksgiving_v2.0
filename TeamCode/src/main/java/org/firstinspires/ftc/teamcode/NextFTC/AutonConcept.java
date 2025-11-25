@@ -160,7 +160,7 @@ public class AutonConcept extends NextFTCOpMode {
 
         buildPaths();
         new SequentialGroup(
-                VariableHood.INSTANCE.closeSide
+                VariableHood.INSTANCE.setHoodPos(0.42)
         );
     }
 

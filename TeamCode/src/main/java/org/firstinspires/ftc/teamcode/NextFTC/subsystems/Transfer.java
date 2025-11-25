@@ -10,27 +10,42 @@ public class Transfer implements Subsystem {
     public static final Transfer INSTANCE = new Transfer();
     private Transfer() {}
 
-    private final CRServoEx frontTransfer = new CRServoEx("transferF");
-    private final CRServoEx backTransfer = new CRServoEx("transferB");
+    public CRServoEx frontTransfer;
+    public CRServoEx backTransfer;
 
 
-    public Command on =
-            new ParallelGroup(
-                    new SetPower(frontTransfer, -1.0),
-                    new SetPower(backTransfer, -1.0)
-            );
+    public Command on() {
+        return new ParallelGroup(
+                new SetPower(frontTransfer, -1.0),
+                new SetPower(backTransfer, -1.0)
+        );
+    }
 
-    public Command hotdog =
-            new ParallelGroup(
-                    new SetPower(frontTransfer, -0.05),
-                    new SetPower(backTransfer, -1.0)
-            );
-
-    public Command idle =
-            new ParallelGroup(
-                    new SetPower(frontTransfer, -0.05),
-                    new SetPower(backTransfer, -1.0)
-            );
+    public Command hotdog() {
+        return new ParallelGroup(
+                new SetPower(frontTransfer, -0.05),
+                new SetPower(backTransfer, -1.0)
+        );
+    }
 
 
+    public Command idle() {
+        return new ParallelGroup(
+                new SetPower(frontTransfer, -0.05),
+                new SetPower(backTransfer, -1.0)
+        );
+    }
+
+
+
+    @Override
+    public void initialize() {
+        frontTransfer = new CRServoEx("transferF");
+        backTransfer = new CRServoEx("transferB");
+    }
+
+    @Override
+    public void periodic(){
+
+    }
 }

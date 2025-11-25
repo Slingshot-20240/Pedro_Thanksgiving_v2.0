@@ -56,6 +56,6 @@ public class Shooter implements Subsystem {
     }
     @Override
     public void periodic(){
-        outtake1.setPower(shooterController.calculate(shooter.getState()));
+        shooter.setPower(shooterController.calculate(shooter.getState()));
     }
 }
