@@ -4,6 +4,7 @@ import dev.nextftc.control.ControlSystem;
 import dev.nextftc.core.commands.Command;
 import dev.nextftc.core.subsystems.Subsystem;
 import dev.nextftc.hardware.controllable.MotorGroup;
+import dev.nextftc.hardware.controllable.RunToVelocity;
 import dev.nextftc.hardware.impl.MotorEx;
 import dev.nextftc.hardware.powerable.SetPower;
 
@@ -15,13 +16,13 @@ public class Shooter implements Subsystem {
     public MotorGroup shooter;
 
     private final ControlSystem shooterController = ControlSystem.builder()
-            .velPid(0.005, 0, 0)
+            .velPid(0.15, 0, 0)
             .build();
 
     private enum shooterStates {
         IDLE (0),
-        CLOSE_SIDE (0.5),
-        FAR_SIDE (0.7);
+        CLOSE_SIDE (-0.5),
+        FAR_SIDE (-0.9);
 
         private final double shooterState;
         shooterStates(double state) {
@@ -51,11 +52,16 @@ public class Shooter implements Subsystem {
     public void initialize() {
         outtake1 = new MotorEx("outtake1");
         outtake2 = new MotorEx("outtake2");
+
         outtake2.reverse();
         shooter = new MotorGroup(outtake1, outtake2);
+
     }
     @Override
     public void periodic(){
+//        outtake1.setPower(shooterController.calculate(outtake1.getState()));
+//        outtake2.setPower(shooterController.calculate(outtake2.getState()));
         shooter.setPower(shooterController.calculate(shooter.getState()));
+
     }
 }

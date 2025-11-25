@@ -23,8 +23,8 @@ public class Transfer implements Subsystem {
 
     public Command hotdog() {
         return new ParallelGroup(
-                new SetPower(frontTransfer, -0.05),
-                new SetPower(backTransfer, -1.0)
+                new SetPower(frontTransfer, -0.2),
+                new SetPower(backTransfer, 1.0)
         );
     }
 

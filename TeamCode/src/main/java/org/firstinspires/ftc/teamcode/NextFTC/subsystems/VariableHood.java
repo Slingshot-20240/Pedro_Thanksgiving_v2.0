@@ -9,10 +9,14 @@ public class VariableHood implements Subsystem {
     public static final VariableHood INSTANCE = new VariableHood();
     private VariableHood() {}
 
-    private ServoEx variableHood = new ServoEx("variableHood");
+    private final ServoEx variableHood = new ServoEx("variableHood");
 
-    public Command closeSide = new SetPosition(variableHood, 0.42).requires(this);
-    public Command farSide = new SetPosition(variableHood, 0.3).requires(this);
+    public Command closeSide() {
+        return new SetPosition(variableHood, 0.5).requires(this);
+    }
+    public Command farSide() {
+        return new SetPosition(variableHood, 0.3).requires(this);
+    }
 
     public Command setHoodPos(double hoodPosition) {
         return new SetPosition(variableHood, hoodPosition).requires(this);

@@ -13,9 +13,6 @@ public class Intake implements Subsystem {
 
     public MotorEx intake;
 
-    private final ControlSystem intakeController = ControlSystem.builder()
-            .velPid(0,0,0)
-            .build();
     private enum intakeStates {
         IN (1.0),
         IDLE (0),
@@ -46,7 +43,5 @@ public class Intake implements Subsystem {
     }
 
     @Override
-    public void periodic(){
-        intake.setPower(intakeController.calculate(intake.getState()));
-    }
+    public void periodic() {}
 }

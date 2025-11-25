@@ -26,7 +26,7 @@ public class PathingTest extends OpMode {
         panelsTelemetry = PanelsTelemetry.INSTANCE.getTelemetry();
 
         follower = Constants.createFollower(hardwareMap);
-        follower.setStartingPose(new Pose(72, 8, Math.toRadians(90)));
+        follower.setStartingPose(new Pose(126, 118, Math.toRadians(36)));
 
         paths = new Paths(follower); // Build paths
 
@@ -66,7 +66,7 @@ public class PathingTest extends OpMode {
             scorePreloads = follower
                     .pathBuilder()
                     .addPath(
-                            new BezierLine(new Pose(125.500, 118.300), new Pose(96.500, 96.000))
+                            new BezierLine(new Pose(125.500, 118.300), new Pose(97,97))
                     )
                     .setLinearHeadingInterpolation(Math.toRadians(36), Math.toRadians(45))
                     .build();
@@ -74,7 +74,7 @@ public class PathingTest extends OpMode {
             prepareSet2 = follower
                     .pathBuilder()
                     .addPath(
-                            new BezierLine(new Pose(96.500, 96.000), new Pose(95.000, 83.800))
+                            new BezierLine(new Pose(97,97), new Pose(96.500, 83.800))
                     )
                     .setLinearHeadingInterpolation(Math.toRadians(45), Math.toRadians(0))
                     .build();
@@ -82,7 +82,7 @@ public class PathingTest extends OpMode {
             grabSet2 = follower
                     .pathBuilder()
                     .addPath(
-                            new BezierLine(new Pose(95.000, 83.800), new Pose(129.000, 83.800))
+                            new BezierLine(new Pose(96.500, 83.800), new Pose(124, 83.800))
                     )
                     .setLinearHeadingInterpolation(Math.toRadians(0), Math.toRadians(0))
                     .build();
@@ -90,7 +90,7 @@ public class PathingTest extends OpMode {
             prepareGate = follower
                     .pathBuilder()
                     .addPath(
-                            new BezierLine(new Pose(129.000, 83.800), new Pose(123.000, 70.000))
+                            new BezierLine(new Pose(124, 83.800), new Pose(123.000, 70.000))
                     )
                     .setLinearHeadingInterpolation(Math.toRadians(0), Math.toRadians(90))
                     .build();
@@ -98,7 +98,7 @@ public class PathingTest extends OpMode {
             hitGate = follower
                     .pathBuilder()
                     .addPath(
-                            new BezierLine(new Pose(123.000, 70.000), new Pose(130.000, 70.000))
+                            new BezierLine(new Pose(123.000, 70.000), new Pose(125, 70.000))
                     )
                     .setLinearHeadingInterpolation(Math.toRadians(90), Math.toRadians(90))
                     .build();
@@ -106,7 +106,7 @@ public class PathingTest extends OpMode {
             scoreSet2 = follower
                     .pathBuilder()
                     .addPath(
-                            new BezierLine(new Pose(130.000, 70.000), new Pose(96.500, 96.000))
+                            new BezierLine(new Pose(125, 70.000), new Pose(97,97))
                     )
                     .setLinearHeadingInterpolation(Math.toRadians(90), Math.toRadians(45))
                     .build();
@@ -114,7 +114,7 @@ public class PathingTest extends OpMode {
             prepareSet3 = follower
                     .pathBuilder()
                     .addPath(
-                            new BezierLine(new Pose(96.500, 96.000), new Pose(96.500, 59.500))
+                            new BezierLine(new Pose(97,97), new Pose(96.500, 58.000))
                     )
                     .setLinearHeadingInterpolation(Math.toRadians(45), Math.toRadians(0))
                     .build();
@@ -122,7 +122,7 @@ public class PathingTest extends OpMode {
             grabSet3 = follower
                     .pathBuilder()
                     .addPath(
-                            new BezierLine(new Pose(96.500, 59.500), new Pose(135.000, 59.500))
+                            new BezierLine(new Pose(96.500, 58), new Pose(131, 59.5))
                     )
                     .setLinearHeadingInterpolation(Math.toRadians(0), Math.toRadians(0))
                     .build();
@@ -131,10 +131,10 @@ public class PathingTest extends OpMode {
                     .pathBuilder()
                     .addPath(
                             new BezierCurve(
-                                    new Pose(135.000, 59.500),
+                                    new Pose(131, 59.5),
                                     new Pose(91.262, 56.240),
                                     new Pose(95.176, 82.815),
-                                    new Pose(96.500, 96.000)
+                                    new Pose(97,97)
                             )
                     )
                     .setLinearHeadingInterpolation(Math.toRadians(0), Math.toRadians(45))
@@ -143,7 +143,7 @@ public class PathingTest extends OpMode {
             prepareSet4 = follower
                     .pathBuilder()
                     .addPath(
-                            new BezierLine(new Pose(96.500, 96.000), new Pose(96.000, 35.500))
+                            new BezierLine(new Pose(97,97), new Pose(96.000, 38))
                     )
                     .setLinearHeadingInterpolation(Math.toRadians(45), Math.toRadians(0))
                     .build();
@@ -151,7 +151,7 @@ public class PathingTest extends OpMode {
             grabSet4 = follower
                     .pathBuilder()
                     .addPath(
-                            new BezierLine(new Pose(96.000, 35.500), new Pose(135.000, 35.500))
+                            new BezierLine(new Pose(96.000, 38), new Pose(130, 37))
                     )
                     .setLinearHeadingInterpolation(Math.toRadians(0), Math.toRadians(0))
                     .build();
@@ -159,9 +159,9 @@ public class PathingTest extends OpMode {
             scoreSet4 = follower
                     .pathBuilder()
                     .addPath(
-                            new BezierLine(new Pose(135.000, 35.500), new Pose(90.000, 110.000))
+                            new BezierLine(new Pose(130, 37), new Pose(90.000, 110.000))
                     )
-                    .setLinearHeadingInterpolation(Math.toRadians(0), Math.toRadians(32))
+                    .setLinearHeadingInterpolation(Math.toRadians(0), Math.toRadians(29))
                     .build();
         }
     }
