@@ -4,8 +4,6 @@ import dev.nextftc.control.ControlSystem;
 import dev.nextftc.core.commands.Command;
 import dev.nextftc.core.subsystems.Subsystem;
 import dev.nextftc.hardware.controllable.MotorGroup;
-import dev.nextftc.hardware.controllable.RunToState;
-import dev.nextftc.hardware.controllable.RunToVelocity;
 import dev.nextftc.hardware.impl.MotorEx;
 import dev.nextftc.hardware.powerable.SetPower;
 
@@ -53,12 +51,11 @@ public class Shooter implements Subsystem {
     public void initialize() {
         outtake1 = new MotorEx("outtake1");
         outtake2 = new MotorEx("outtake2");
-        //outtake1.reverse();
-        new MotorGroup(outtake1, outtake2);
+        outtake2.reverse();
+        shooter = new MotorGroup(outtake1, outtake2);
     }
     @Override
     public void periodic(){
-        outtake1.setPower(shooterController.calculate(outtake1.getState()));
-        outtake2.setPower(shooterController.calculate(outtake2.getState()));
+        outtake1.setPower(shooterController.calculate(shooter.getState()));
     }
 }
