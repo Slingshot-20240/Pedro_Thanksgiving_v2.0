@@ -129,7 +129,9 @@ public class Tuning extends SelectableOpMode {
 class LocalizationTest extends OpMode {
     @Override
     public void init() {
-        follower.setStartingPose(new Pose(72,72));
+        //Edited by ishaan
+        //follower.setStartingPose(new Pose(72,72));
+        follower.setStartingPose(new Pose(126, 118, Math.toRadians(36)));
     }
 
     /** This initializes the PoseUpdater, the mecanum drive motors, and the Panels telemetry. */
