@@ -1,5 +1,7 @@
 package org.firstinspires.ftc.teamcode.teleop;
 
+import static org.firstinspires.ftc.teamcode.pedroPathing.Tuning.follower;
+
 import com.acmerobotics.dashboard.FtcDashboard;
 import com.acmerobotics.dashboard.telemetry.MultipleTelemetry;
 import com.acmerobotics.dashboard.telemetry.TelemetryPacket;
@@ -46,8 +48,8 @@ public class ASlingTele extends OpMode {
         follower = Constants.createFollower(hardwareMap);
 
         // Set starting position
-        startingPose = new Pose(126, 118, Math.toRadians(36));
-        follower.setStartingPose(startingPose);
+        follower.setStartingPose(new Pose(126, 118, Math.toRadians(36)));
+
 
         follower.update();
         telemetryM = PanelsTelemetry.INSTANCE.getTelemetry();
@@ -95,7 +97,7 @@ public class ASlingTele extends OpMode {
         if (!automatedDrive) {
 
             // --- ALIGN TO RED GOAL ---
-            if (gamepad1.x) { // X button held
+            if (gamepad1.startWasPressed()) { // X button held
                 // Create a tiny path to rotate in place
                 PathChain alignPath = follower.pathBuilder()
                         .addPath(new Path(new BezierLine(
@@ -124,7 +126,7 @@ public class ASlingTele extends OpMode {
         }
 
         // Automated path
-        if (gamepad1.startWasPressed()) {
+        if (gamepad1.xWasPressed()) {
             follower.followPath(pathChain.get());
             automatedDrive = true;
         }
