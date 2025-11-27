@@ -117,7 +117,7 @@ public class ARedTele extends OpMode {
             double Kp = 0.8;
             rotate = headingError * Kp;
         } else {
-            //if auto turn isnt deciding the turn rate, then it just gets it fom gamepad for regular driving
+            //if auto turn isn't deciding the turn rate, then it just gets it fom gamepad for regular driving
             rotate = -gamepad1.right_stick_x;
         }
         //Sets Drive to have driver inputs
