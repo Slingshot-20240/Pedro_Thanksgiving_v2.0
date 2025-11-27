@@ -30,8 +30,6 @@ public class ABlueTele extends OpMode {
     private boolean automatedDrive;
     private Supplier<PathChain> pathChain;
     private TelemetryManager telemetryM;
-    private boolean slowMode = false;
-    private double slowModeMultiplier = 0.5;
 
     private boolean autoTurn = false;
     private double goalHeading = 0;
@@ -43,31 +41,22 @@ public class ABlueTele extends OpMode {
         fsm = new FSM(hardwareMap, controls, robot);
 
         follower = Constants.createFollower(hardwareMap);
-        follower.setStartingPose(new Pose(-126, 118, Math.toRadians(144)));
+
+        follower.setStartingPose(new Pose(18, 118, Math.toRadians(144)));
         follower.update();
+
         telemetryM = PanelsTelemetry.INSTANCE.getTelemetry();
 
         pathChain = () -> follower.pathBuilder()
-                .addPath(
-                        new Path(
-                                new BezierLine(
-                                        follower::getPose,
-                                        new Pose(
-                                                follower.getPose().getX() + 0.1,
-                                                follower.getPose().getY() + 0.1
-                                        )
-                                )
-                        )
-                )
+                .addPath(new Path(new BezierLine(
+                        follower::getPose,
+                        new Pose(105.4, 33.4)
+                )))
                 .setHeadingInterpolation(
                         HeadingInterpolator.linearFromPoint(
                                 follower::getHeading,
-                                () -> {
-                                    double x = follower.getPose().getX();
-                                    double y = follower.getPose().getY();
-                                    return Math.atan2(144 - y, -144 - x);
-                                },
-                                0.98
+                                Math.toRadians(90),
+                                0.9
                         )
                 )
                 .build();
@@ -81,45 +70,63 @@ public class ABlueTele extends OpMode {
 
     @Override
     public void loop() {
+
+        // Updates fsm, follower, and telemetry
         fsm.update();
         follower.update();
         telemetryM.update();
+        telemetry.update();
 
-        Pose p = follower.getPose();
-        double x = p.getX();
-        double y = p.getY();
-        double heading = p.getHeading();
+        // Robot pose
+        Pose pose = follower.getPose();
+        double x = pose.getX();
+        double y = pose.getY();
+        double heading = pose.getHeading();
+
+        // Relocalize robot
+        if (gamepad1.xWasPressed()) {
+            follower.setPose(new Pose(18, 118, Math.toRadians(144)));
+        }
+
+        // -------------------------------
+        //          HEADING LOCK
+        // -------------------------------
 
         if (gamepad1.a && !autoTurn) {
             autoTurn = true;
-            double GX = -144;
-            double GY = 144;
-            goalHeading = Math.atan2(GY - y, GX - x);
+
+            // BLUE GOAL TARGET (-144, 144)
+            goalHeading = Math.atan2(144 - y, -144 - x);
         }
 
         double headingError = angleWrap(goalHeading - heading);
-        boolean finished = Math.abs(headingError) < Math.toRadians(3);
+        boolean turnFinished = Math.abs(headingError) < Math.toRadians(2);
 
-        if (autoTurn && finished) autoTurn = false;
+        if (autoTurn && turnFinished) {
+            follower.holdPoint(follower.getPose());
+            autoTurn = false;
+        }
 
+        // Driving inputs
         double forward = -gamepad1.left_stick_y;
         double strafe = -gamepad1.left_stick_x;
         double rotate;
 
-        if (slowMode) {
-            forward *= slowModeMultiplier;
-            strafe *= slowModeMultiplier;
-        }
+        if (autoTurn) {
+            forward = 0;
+            strafe = 0;
 
-        if (autoTurn) rotate = headingError * 1.8;
-        else {
+            double Kp = 0.8;
+            rotate = headingError * Kp;
+
+        } else {
             rotate = -gamepad1.right_stick_x;
-            if (slowMode) rotate *= slowModeMultiplier;
         }
 
         follower.setTeleOpDrive(forward, strafe, rotate, true);
 
-        if (gamepad1.aWasPressed()) {
+        // Auto-park
+        if (gamepad1.startWasPressed()) {
             follower.followPath(pathChain.get());
             automatedDrive = true;
         }
@@ -129,17 +136,17 @@ public class ABlueTele extends OpMode {
             automatedDrive = false;
         }
 
-        if (gamepad1.rightBumperWasPressed()) slowMode = !slowMode;
-        if (gamepad1.xWasPressed()) slowModeMultiplier += 0.25;
-        if (gamepad2.yWasPressed()) slowModeMultiplier -= 0.25;
-
-        telemetryM.debug("pose", p);
-        telemetryM.debug("autoTurn", autoTurn);
+        // Telemetry
+        telemetry.addData("pose", pose);
+        telemetry.addData("Heading", heading);
+        telemetry.addLine("--------------------------------");
+        telemetry.addData("autoTurn", autoTurn);
+        telemetry.addData("Automated Drive", automatedDrive);
     }
 
-    private double angleWrap(double a) {
-        while (a > Math.PI) a -= 2 * Math.PI;
-        while (a < -Math.PI) a += 2 * Math.PI;
-        return a;
+    private double angleWrap(double angle) {
+        while (angle > Math.PI) angle -= 2 * Math.PI;
+        while (angle < -Math.PI) angle += 2 * Math.PI;
+        return angle;
     }
 }
