@@ -44,9 +44,6 @@ public class FSM {
     public void update() {
         // Updates driver controls here as well
 
-        //ISHAAN TOOK THIS OUT FOR NO REVERSING MOTOR CONFLICT WITH RR
-        //drivetrain.update();
-
         // Updates all other controls
         gamepad.update();
 

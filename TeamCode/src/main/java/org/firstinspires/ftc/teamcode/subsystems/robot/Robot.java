@@ -55,7 +55,7 @@ public class Robot {
         shooter = new Shooter(hardwareMap);
 
         //ISHAAN TOOK THIS OUT SO THE REVERSING MOTORS DOES NOT CLASH WITH THE RR MOTORS
-        //drivetrain = new Drivetrain(hardwareMap, imu, controls);
+        drivetrain = new Drivetrain(hardwareMap, imu, controls);
 
         //limelight = new PythonLimelight(hardwareMap);
     }

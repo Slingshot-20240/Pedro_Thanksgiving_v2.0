@@ -38,6 +38,8 @@ public class ASlingTele extends OpMode {
         telemetry.update();
         //TODO - yeah so basically idk how to make the dt move, so add that in :)
 
+        robot.drivetrain.update();
+
     }
 
 
