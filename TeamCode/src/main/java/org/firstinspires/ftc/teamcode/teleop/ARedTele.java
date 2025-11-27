@@ -28,7 +28,7 @@ public class ARedTele extends OpMode {
     private FSM fsm;
     private Robot robot;
 
-    
+
     private Follower follower;
     private boolean automatedDrive;
     private Supplier<PathChain> pathChain;
