@@ -5,11 +5,11 @@ import com.pedropathing.geometry.Pose;
 public class LocalizationMath {
 
     // Goal coordinates
-    public static final double RED_GOAL_X = 144.0;
-    public static final double RED_GOAL_Y = 144.0;
+    public static final double RED_GOAL_X = 141;
+    public static final double RED_GOAL_Y = 141;
 
-    public static final double BLUE_GOAL_X = -144.0;
-    public static final double BLUE_GOAL_Y = 144.0;
+    public static final double BLUE_GOAL_X = -141;
+    public static final double BLUE_GOAL_Y = 141;
 
 
     /* ---------------------------------------------------------

@@ -1,6 +1,8 @@
 package org.firstinspires.ftc.teamcode.teleop;
 
-import static org.firstinspires.ftc.teamcode.pedroPathing.Tuning.follower;
+import static org.firstinspires.ftc.teamcode.pedroPathing.Tuning.draw;
+import static org.firstinspires.ftc.teamcode.pedroPathing.Tuning.drawOnlyCurrent;
+
 
 import com.acmerobotics.dashboard.FtcDashboard;
 import com.acmerobotics.dashboard.telemetry.MultipleTelemetry;
@@ -34,7 +36,7 @@ public class ASlingTele extends OpMode {
     public static Pose startingPose;
     private boolean automatedDrive;
     private Supplier<PathChain> pathChain;
-    private TelemetryManager telemetryM;
+    TelemetryManager telemetryM;
 
     @Override
     public void init() {
@@ -62,10 +64,11 @@ public class ASlingTele extends OpMode {
                 .build();
     }
 
+
     @Override
     public void start() {
         robot.hardwareSoftReset();
-        follower.startTeleopDrive(true);
+        follower.startTeleOpDrive(true);
     }
 
     @Override
@@ -73,14 +76,16 @@ public class ASlingTele extends OpMode {
         fsm.update();
         follower.update();
 
-        telemetryM.update();
+        telemetry.update();
         Pose pose = follower.getPose();
 
+
         //----------------------------Telemetry----------------------------\\
-        telemetryM.debug("x:" + pose.getX());
-        telemetryM.debug("y:" + pose.getY());
-        telemetryM.debug("heading:" + Math.toDegrees(pose.getHeading()));
+        telemetryM.debug("x:" + follower.getPose().getX());
+        telemetryM.debug("y:" + follower.getPose().getY());
+        telemetryM.debug("heading:" + Math.toDegrees(follower.getPose().getHeading()));
         telemetryM.debug("total heading:" + Math.toDegrees(follower.getTotalHeading()));
+        telemetryM.update(telemetry);
 
         double dist = LocalizationMath.getRedDistance(pose);
         double headingErr = LocalizationMath.getRedHeadingError(pose);
@@ -108,7 +113,7 @@ public class ASlingTele extends OpMode {
                                 HeadingInterpolator.linearFromPoint(
                                         follower::getHeading,
                                         Math.toRadians(pose.getHeading()) + Math.toRadians(headingErr),
-                                        1.0
+                                        0.99
                                 )
                         )
                         .build();
@@ -133,8 +138,10 @@ public class ASlingTele extends OpMode {
 
         // Stop automated path
         if (automatedDrive && (gamepad1.bWasPressed() || !follower.isBusy())) {
-            follower.startTeleopDrive(true);
+            follower.startTeleOpDrive(true);
             automatedDrive = false;
         }
     }
+
+
 }

@@ -19,8 +19,10 @@ import dev.nextftc.core.commands.groups.ParallelGroup;
 import dev.nextftc.core.commands.groups.ParallelRaceGroup;
 import dev.nextftc.core.commands.groups.SequentialGroup;
 import dev.nextftc.core.components.SubsystemComponent;
+import dev.nextftc.core.units.Angle;
 import dev.nextftc.extensions.pedro.FollowPath;
 import dev.nextftc.extensions.pedro.PedroComponent;
+import dev.nextftc.extensions.pedro.TurnTo;
 import dev.nextftc.ftc.NextFTCOpMode;
 import dev.nextftc.ftc.components.BulkReadComponent;
 
@@ -66,7 +68,7 @@ public class SplineAutonTest extends NextFTCOpMode {
                         new BezierCurve(
                                 new Pose(87.000, 87.000),
                                 new Pose(92.292, 80.549),
-                                new Pose(129.000, 83.800)
+                                new Pose(128, 83.800)
                         )
                 )
                 .setLinearHeadingInterpolation(Math.toRadians(45), Math.toRadians(0))
@@ -76,9 +78,9 @@ public class SplineAutonTest extends NextFTCOpMode {
                 .pathBuilder()
                 .addPath(
                         new BezierCurve(
-                                new Pose(129.000, 83.800),
+                                new Pose(128, 83.800),
                                 new Pose(113.000, 77.000),
-                                new Pose(130.000, 71.000)
+                                new Pose(128, 71.000)
                         )
                 )
                 .setLinearHeadingInterpolation(Math.toRadians(0), Math.toRadians(90))
@@ -87,7 +89,7 @@ public class SplineAutonTest extends NextFTCOpMode {
         scoreSet2 = PedroComponent.follower()
                 .pathBuilder()
                 .addPath(
-                        new BezierLine(new Pose(130.000, 71.000), new Pose(87.000, 87.000))
+                        new BezierLine(new Pose(128, 71.000), new Pose(87.000, 87.000))
                 )
                 .setLinearHeadingInterpolation(Math.toRadians(90), Math.toRadians(45))
                 .build();
@@ -97,9 +99,9 @@ public class SplineAutonTest extends NextFTCOpMode {
                 .addPath(
                         new BezierCurve(
                                 new Pose(87.000, 87.000),
-                                new Pose(87.760, 65.305),
-                                new Pose(79.313, 56.446),
-                                new Pose(136.172, 58.094)
+                                new Pose(87.760, 64),
+                                new Pose(79.313, 55),
+                                new Pose(133, 57)
                         )
                 )
                 .setLinearHeadingInterpolation(Math.toRadians(45), Math.toRadians(0))
@@ -109,43 +111,25 @@ public class SplineAutonTest extends NextFTCOpMode {
                 .pathBuilder()
                 .addPath(
                         new BezierCurve(
-                                new Pose(136.172, 58.094),
+                                new Pose(133, 57),
                                 new Pose(91.262, 56.240),
                                 new Pose(95.176, 82.815),
-                                new Pose(96.500, 96.000)
+                                new Pose(87,87)
                         )
                 )
                 .setLinearHeadingInterpolation(Math.toRadians(0), Math.toRadians(45))
                 .build();
 
-        turnSet4 = PedroComponent.follower()
-                .pathBuilder()
-                .addPath(
-                        new BezierLine(new Pose(96.500, 96.000), new Pose(96.500, 96.000))
-                )
-                .setLinearHeadingInterpolation(Math.toRadians(45), Math.toRadians(270))
-                .build();
-
-        driveToSet4 = PedroComponent.follower()
-                .pathBuilder()
-                .addPath(
-                        new BezierLine(new Pose(96.500, 96.000), new Pose(96.500, 36.000))
-                )
-                .setLinearHeadingInterpolation(Math.toRadians(270), Math.toRadians(270))
-                .build();
-
-        turnToBallsSet4 = PedroComponent.follower()
-                .pathBuilder()
-                .addPath(
-                        new BezierLine(new Pose(96.500, 36.000), new Pose(96.500, 36.000))
-                )
-                .setLinearHeadingInterpolation(Math.toRadians(270), Math.toRadians(0))
-                .build();
 
         grabSet4 = PedroComponent.follower()
                 .pathBuilder()
                 .addPath(
-                        new BezierLine(new Pose(96.500, 36.000), new Pose(137.000, 36.000))
+                        new BezierCurve(
+                                new Pose(87, 87),
+                                new Pose(92.498, 40.584),
+                                new Pose(87.142, 33.579),
+                                new Pose(137, 36)
+                        )
                 )
                 .setLinearHeadingInterpolation(Math.toRadians(0), Math.toRadians(0))
                 .build();
@@ -155,19 +139,19 @@ public class SplineAutonTest extends NextFTCOpMode {
                 .addPath(
                         new BezierLine(new Pose(137.000, 36.000), new Pose(90.000, 110.000))
                 )
-                .setLinearHeadingInterpolation(Math.toRadians(0), Math.toRadians(36))
+                .setLinearHeadingInterpolation(Math.toRadians(0), Math.toRadians(30))
                 .build();
 
     }
 
     private Command init_bot() {
         return new SequentialGroup(
-                Hoodnf.INSTANCE.setHoodPos(0.5)
+                Hoodnf.INSTANCE.setHoodPos(0.45)
         );
     }
 
     private Command transferUpFor(double time) {
-        return new ParallelRaceGroup(
+        return new ParallelGroup(
                 Transfernf.INSTANCE.on(),
                 new Delay(time)
         );
@@ -176,7 +160,7 @@ public class SplineAutonTest extends NextFTCOpMode {
     private Command baseState() {
         return new ParallelGroup(
                 Transfernf.INSTANCE.hotdog(),
-                Hoodnf.INSTANCE.setHoodPos(0.5)
+                Hoodnf.INSTANCE.setHoodPos(0.61)
         );
     }
 
@@ -192,11 +176,11 @@ public class SplineAutonTest extends NextFTCOpMode {
                                 new FollowPath(scorePreloads),
 
                                 baseState(),
-                                Shooternf.INSTANCE.setShooterVel(-1200)
+                                Shooternf.INSTANCE.setShooterVel(-1255)
                         ),
                         //Spin up time
                         new Delay(1),
-                        transferUpFor(2.5),
+                        transferUpFor(2.2),
 
 
 
@@ -206,47 +190,39 @@ public class SplineAutonTest extends NextFTCOpMode {
 
                                 baseState(),
                                 //SET 2 Shooter vel
-                                Shooternf.INSTANCE.setShooterVel(-1200)
+                                Shooternf.INSTANCE.setShooterVel(-1255)
                         ),
                         new SequentialGroup(
                                 new FollowPath(hitGate),
                                 new Delay(1.5),
                                 new FollowPath(scoreSet2)
                         ),
-                        transferUpFor(2.5)
+                        transferUpFor(2.5),
 
-//
-//                        //SET 3
-//                        new ParallelGroup(
-//                                new SequentialGroup(
-//                                        new FollowPath(grabSet3),
-//                                        new FollowPath(scoreSet3)
-//                                ),
-//                                Transfernf.INSTANCE.hotdog(),
-//                                //SET 3 Shooter vel
-//                                Shooternf.INSTANCE.setShooterVel(-1100)
-//                        ),
-//
-//                        new ParallelRaceGroup(
-//                                Transfernf.INSTANCE.on(),
-//                                new Delay(2.5)
-//                        ),
-//
-//                        //SET 4
-//                        new ParallelGroup(
-//                                new SequentialGroup(
-//                                        new FollowPath(grabSet4),
-//                                        new FollowPath(scoreSet4)
-//                                ),
-//                                Transfernf.INSTANCE.hotdog(),
-//                                //SET 4 Shooter vel
-//                                Shooternf.INSTANCE.setShooterVel(-1100)
-//                        ),
-//
-//                        new ParallelRaceGroup(
-//                                Transfernf.INSTANCE.on(),
-//                                new Delay(2.5)
-//                        )
+
+                        //SET 3
+                        new ParallelGroup(
+                                new SequentialGroup(
+                                        new FollowPath(grabSet3),
+                                        new FollowPath(scoreSet3)
+                                ),
+                                Transfernf.INSTANCE.hotdog(),
+                                //SET 3 Shooter vel
+                                Shooternf.INSTANCE.setShooterVel(-1255)
+                        ),
+                        transferUpFor(2.5),
+
+                        //SET 4
+                        new ParallelGroup(
+                                new SequentialGroup(
+                                        new FollowPath(grabSet4),
+                                        new FollowPath(scoreSet4)
+                                ),
+                                Transfernf.INSTANCE.hotdog(),
+                                //SET 4 Shooter vel
+                                Shooternf.INSTANCE.setShooterVel(-1190)
+                        ),
+                        transferUpFor(2.5)
 
 
                 )
@@ -258,10 +234,12 @@ public class SplineAutonTest extends NextFTCOpMode {
     public void onInit() {
         buildPaths();
         init_bot().schedule();
+        Shooternf.INSTANCE.disable();
     }
 
     @Override
     public void onStartButtonPressed() {
         autonomous().schedule();
+        Shooternf.INSTANCE.enable();
     }
 }

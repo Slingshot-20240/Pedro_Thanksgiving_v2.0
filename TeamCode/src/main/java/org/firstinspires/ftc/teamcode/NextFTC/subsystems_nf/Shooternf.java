@@ -4,7 +4,6 @@ import dev.nextftc.control.ControlSystem;
 import dev.nextftc.core.commands.Command;
 import dev.nextftc.core.subsystems.Subsystem;
 import dev.nextftc.hardware.controllable.MotorGroup;
-import dev.nextftc.hardware.controllable.RunToPosition;
 import dev.nextftc.hardware.controllable.RunToVelocity;
 import dev.nextftc.hardware.impl.MotorEx;
 
@@ -19,18 +18,16 @@ public class Shooternf implements Subsystem {
             .velPid(0.35)
             .build();
 
+    private boolean enabled = false;   // <--- ADD THIS
+
     private enum shooterStates {
         IDLE (0),
         CLOSE_SIDE (-1167),
         FAR_SIDE (-1420);
 
         private final double shooterState;
-        shooterStates(double state) {
-            this.shooterState = state;
-        }
-        public double getState() {
-            return shooterState;
-        }
+        shooterStates(double state) { this.shooterState = state; }
+        public double getState() { return shooterState; }
     }
 
     public Command closeSide() {
@@ -42,11 +39,18 @@ public class Shooternf implements Subsystem {
     public Command idle() {
         return new RunToVelocity(shooterController, shooterStates.IDLE.getState());
     }
-
     public Command setShooterVel(double shooterVel) {
-        return new RunToPosition(shooterController, shooterVel);
+        return new RunToVelocity(shooterController, shooterVel);
     }
 
+    public void enable() {
+        enabled = true;
+    }
+
+    public void disable() {
+        enabled = false;
+        shooter.setPower(0);   // <--- prevents spinning in init
+    }
 
     @Override
     public void initialize() {
@@ -55,11 +59,17 @@ public class Shooternf implements Subsystem {
         outtake2.reverse();
         shooter = new MotorGroup(outtake1, outtake2);
 
+        disable(); //makes sure motor is off during init
     }
+
     @Override
-    public void periodic(){
+    public void periodic() {
+
+        if (!enabled) {
+            shooter.setPower(0);
+            return;
+        }
 
         shooter.setPower(shooterController.calculate(shooter.getState()));
-
     }
 }
