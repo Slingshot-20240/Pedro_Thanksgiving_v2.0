@@ -16,7 +16,6 @@ import org.firstinspires.ftc.teamcode.misc.gamepad.GamepadMapping;
 import org.firstinspires.ftc.teamcode.pedroPathing.Constants;
 import org.firstinspires.ftc.teamcode.subsystems.robot.Robot;
 import org.firstinspires.ftc.teamcode.teleop.fsm.FSM;
-import org.firstinspires.ftc.teamcode.teleop.fsm.IshaanFSM;
 
 import java.util.function.Supplier;
 
@@ -46,16 +45,14 @@ public class ARedTele extends OpMode {
         follower.update();
         telemetryM = PanelsTelemetry.INSTANCE.getTelemetry();
 
-        pathChain = () -> follower.pathBuilder() .addPath(
-                        new Path(new BezierLine(
-                                follower::getPose, new Pose(follower.getPose().getX() + 0.01, follower.getPose().getY() + 0.01))
-                        )) .setHeadingInterpolation(
-                        HeadingInterpolator.linearFromPoint(follower::getHeading,
-                                () -> { double robotX = follower.getPose().getX();
-                                    double robotY = follower.getPose().getY();
-                                    return Math.atan2(142 - robotY, 142 - robotX); },
-                                0.98))
+        pathChain = () -> follower.pathBuilder()
+                .addPath(new Path(new BezierLine(follower::getPose, new Pose(38.7, 33.4))))
+                .setHeadingInterpolation(HeadingInterpolator.linearFromPoint(
+                        //TODO - Edit endT Threshold
+                        follower::getHeading, Math.toRadians(90), 0.9)
+                )
                 .build();
+
     }
 
     @Override
@@ -66,69 +63,88 @@ public class ARedTele extends OpMode {
 
     @Override
     public void loop() {
-        // Update FSM
+    //Updates fsm, follower, and telemetry systems
         fsm.update();
-
-        // Update follower & telemetry
         follower.update();
         telemetryM.update();
+        telemetry.update();
 
-        Pose p = follower.getPose();
-        double x = p.getX();
-        double y = p.getY();
-        double heading = p.getHeading();
 
-        // Reset pose
+    //Robot pose from localization ---------------------------------------------------
+        Pose pose = follower.getPose();
+        double x = pose.getX();
+        double y = pose.getY();
+        double heading = pose.getHeading();
+
+    //Relocalizes robot --------------------------------------------------------------
         if (gamepad1.xWasPressed()) {
             follower.setPose(new Pose(126, 118, Math.toRadians(36)));
         }
 
-        // Heading lock / auto-turn
+    // Heading lock -------------------------------------------------------------------
+
+        // Auto-turn if not already turning if "a" is clicked
         if (gamepad1.a && !autoTurn) {
             autoTurn = true;
-            goalHeading = Math.atan2(142 - y, 142 - x);
+            goalHeading = Math.atan2(144 - y, 144 - x);
         }
 
+        //gets heading error and angle wraps it.
         double headingError = angleWrap(goalHeading - heading);
-        boolean turnFinished = Math.abs(headingError) < Math.toRadians(3);
-        if (autoTurn && turnFinished) autoTurn = false;
+        //checks if turn is finished (2 degree threshold)
+        boolean turnFinished = Math.abs(headingError) < Math.toRadians(2);
+        //turns turn mode off if its in turn mode and the turn is finished
+        if (autoTurn && turnFinished) {
+            //HOLDS THE POINT WHEN SHOOTING
+            follower.holdPoint(follower.getPose());
+            autoTurn = false;
+        }
 
-        // Driving inputs
+    // Driving inputs -------------------------------------------------------------
         double forward = -gamepad1.left_stick_y;
         double strafe  = -gamepad1.left_stick_x;
         double rotate;
 
         if (autoTurn) {
-            // Zero forward/strafe during auto-turn
+            //Makes sure robot cannot go straight or strafe when turning
             forward = 0;
             strafe = 0;
-            double Kp = 1.0;
+            //Proportional gain for turn
+            //TODO - tune this
+            double Kp = 0.8;
             rotate = headingError * Kp;
         } else {
+            //if auto turn isnt deciding the turn rate, then it just gets it fom gamepad for regular driving
             rotate = -gamepad1.right_stick_x;
         }
-
+        //Sets Drive to have driver inputs
         follower.setTeleOpDrive(forward, strafe, rotate, true);
 
-        // Automated path
-        if (gamepad1.aWasPressed()) {
+
+    // Auto park -------------------------------------------------------------------
+        if (gamepad1.startWasPressed()) {
             follower.followPath(pathChain.get());
             automatedDrive = true;
         }
+
+        //Checks if path in progress, or if "b", the cancel button is pressed
         if (automatedDrive && (gamepad1.bWasPressed() || !follower.isBusy())) {
             follower.startTeleopDrive();
             automatedDrive = false;
         }
 
-        // Telemetry
-        telemetryM.debug("pose", p);
-        telemetryM.debug("autoTurn", autoTurn);
+    //Telemetry -------------------------------------------------------------------
+        telemetry.addData("pose", pose);
         telemetry.addData("Heading", heading);
+        telemetry.addLine("--------------------------------");
+        telemetry.addData("autoTurn", autoTurn);
+        telemetry.addData("Automated Drive", automatedDrive);
+
     }
 
-    private double angleWrap(double a) {
-        while (a > Math.PI) a -= 2*Math.PI;
-        while (a < -Math.PI) a += 2*Math.PI;
-        return a;
+    private double angleWrap(double angle) {
+        while (angle > Math.PI) angle -= 2*Math.PI;
+        while (angle < -Math.PI) angle += 2*Math.PI;
+        return angle;
     }
 }
