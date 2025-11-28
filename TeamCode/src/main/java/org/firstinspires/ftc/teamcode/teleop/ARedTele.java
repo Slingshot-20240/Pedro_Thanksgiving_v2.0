@@ -147,13 +147,14 @@ public class ARedTele extends OpMode {
     }
 
     private double angleWrap(double angle) {
-        while (angle > 180) {
-            angle -= 360;
+        while (angle > Math.PI) {
+            angle -= 2 * Math.PI;
         }
-        while (angle < -180) {
-            angle += 360;
+        while (angle < -Math.PI) {
+            angle += 2 * Math.PI;
         }
         return angle;
     }
+
 
 }
