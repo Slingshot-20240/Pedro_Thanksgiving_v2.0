@@ -137,9 +137,9 @@ public class ARedTele extends OpMode {
         if (autoTurnOdo) {
             forward = 0;
             strafe = 0;
-            double Kp = 0.95;
+            double Kp = 0.8;
             rotate = odoHeadingError * Kp;
-            double minPower = 0.04;
+            double minPower = 0.11;
             if (Math.abs(rotate) < minPower && Math.abs(odoHeadingError) > Math.toRadians(0.5)) {
                 rotate = Math.signum(rotate) * minPower;
             }
@@ -148,7 +148,7 @@ public class ARedTele extends OpMode {
             strafe = 0;
             double Kp = 0.95;
             rotate = atHeadingError * Kp;
-            double minPower = 0.08;
+            double minPower = 0.11;
             if (Math.abs(rotate) < minPower && Math.abs(atHeadingError) > Math.toRadians(0.5)) {
                 rotate = Math.signum(rotate) * minPower;
             }
