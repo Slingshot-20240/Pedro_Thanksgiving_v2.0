@@ -3,6 +3,8 @@ package org.firstinspires.ftc.teamcode.teleop;
 import static org.firstinspires.ftc.teamcode.pedroPathing.Tuning.draw;
 import static org.firstinspires.ftc.teamcode.pedroPathing.Tuning.drawOnlyCurrent;
 
+import android.graphics.Point;
+
 import com.bylazar.configurables.annotations.Configurable;
 import com.bylazar.telemetry.PanelsTelemetry;
 import com.bylazar.telemetry.TelemetryManager;
@@ -97,6 +99,16 @@ public class ARedTele extends OpMode {
 
         double distance = Math.sqrt(Math.pow((137 - pose.getX()), 2) + Math.pow((137 - pose.getY()), 2));
 
+
+        if (gamepad1.x) {
+            follower.setPose(new Pose(pose.getX(),pose.getY(),Math.toRadians(0)));
+        }
+
+        boolean driverBusy =
+                Math.abs(gamepad1.left_stick_x) > 0.05
+                || Math.abs(gamepad1.left_stick_y) > 0.05
+                || Math.abs(gamepad1.right_stick_x) > 0.05;
+
         if (gamepad1.a && !autoTurnOdo) {
             autoTurnOdo = true;
             goalHeading = Math.atan2(146 - y, 146 - x);
@@ -140,6 +152,7 @@ public class ARedTele extends OpMode {
             if (Math.abs(rotate) < minPower && Math.abs(atHeadingError) > Math.toRadians(0.5)) {
                 rotate = Math.signum(rotate) * minPower;
             }
+            //follower.holdPoint(new Pose(pose.getX(),pose.getY(),pose.getHeading()));
         } else {
             rotate = -gamepad1.right_stick_x;
         }
@@ -151,7 +164,8 @@ public class ARedTele extends OpMode {
             automatedDrive = true;
         }
 
-        if (automatedDrive && (gamepad1.bWasPressed() || !follower.isBusy())) {
+        if (automatedDrive && (driverBusy || !follower.isBusy())) {
+            //follower.breakFollowing();
             follower.startTeleopDrive();
             automatedDrive = false;
         }
