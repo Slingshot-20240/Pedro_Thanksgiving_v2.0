@@ -22,7 +22,6 @@ import com.pedropathing.math.*;
 import com.pedropathing.paths.*;
 import com.pedropathing.telemetry.SelectableOpMode;
 import com.pedropathing.util.*;
-import com.qualcomm.hardware.bosch.BNO055IMU;
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 
@@ -131,7 +130,7 @@ public class Tuning extends SelectableOpMode {
 class LocalizationTest extends OpMode {
     @Override
     public void init() {
-        follower.setStartingPose(new Pose(126, 118, Math.toRadians(36)));
+        follower.setStartingPose(new Pose(72,72));
     }
 
     /** This initializes the PoseUpdater, the mecanum drive motors, and the Panels telemetry. */
@@ -161,8 +160,8 @@ class LocalizationTest extends OpMode {
 
         telemetryM.debug("x:" + follower.getPose().getX());
         telemetryM.debug("y:" + follower.getPose().getY());
-        telemetryM.debug("heading:" + Math.toDegrees(follower.getPose().getHeading()));
-        telemetryM.debug("total heading:" + Math.toDegrees(follower.getTotalHeading()));
+        telemetryM.debug("heading:" + follower.getPose().getHeading());
+        telemetryM.debug("total heading:" + follower.getTotalHeading());
         telemetryM.update(telemetry);
 
         draw();
