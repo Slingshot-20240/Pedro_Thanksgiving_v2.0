@@ -27,7 +27,15 @@ public class logi {
     final double[] resolution = new double[]{640, 480};
 
     public logi(HardwareMap hw) {
-        apriltagPipeline = new AprilTagProcessor.Builder().setTagFamily(AprilTagProcessor.TagFamily.TAG_36h11).setDrawTagID(true).setDrawTagOutline(true).setDrawAxes(true).setDrawCubeProjection(true).setOutputUnits(DistanceUnit.INCH, AngleUnit.DEGREES).build();
+        apriltagPipeline = new AprilTagProcessor.Builder()
+                .setTagFamily(AprilTagProcessor.TagFamily.TAG_36h11)
+                .setDrawTagID(true)
+                .setDrawTagOutline(true)
+                .setDrawAxes(true)
+                .setDrawCubeProjection(true)
+                .setOutputUnits(DistanceUnit.INCH, AngleUnit.DEGREES)
+                .build();
+
         ballPipeline = new ballProcessor();
 
         portal = new VisionPortal.Builder()
@@ -37,7 +45,6 @@ public class logi {
                 .setStreamFormat(VisionPortal.StreamFormat.YUY2)
                 .setAutoStopLiveView(true)
                 .enableLiveView(true)
-
                 .build();
 
         portal.setProcessorEnabled(apriltagPipeline, true);
@@ -66,7 +73,9 @@ public class logi {
             return 0.0;
 
         for (AprilTagDetection detection : apriltagPipeline.getDetections()) {
-            if (detection.id != 20 && detection.id != 24) continue;
+            if (detection.id != 20 && detection.id != 24) {
+                continue;
+            }
 
             return detection.ftcPose.range;
         }
@@ -78,7 +87,9 @@ public class logi {
             return 0.0;
 
         for (AprilTagDetection detection : apriltagPipeline.getDetections()) {
-            if (detection.id != 20 && detection.id != 24) continue;
+            if (detection.id != 20 && detection.id != 24) {
+                continue;
+            }
 
             return detection.ftcPose.bearing;
         }
