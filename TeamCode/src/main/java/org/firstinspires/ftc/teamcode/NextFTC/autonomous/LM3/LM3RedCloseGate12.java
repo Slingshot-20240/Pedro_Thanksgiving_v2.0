@@ -238,26 +238,11 @@ public class LM3RedCloseGate12 extends NextFTCOpMode {
                                 ),
                                 baseState(),
                                 Shooternf.INSTANCE.setShooterVel(-1190)
-
-
                         ),
                         transferUpFor(2.5)
-                        //new FollowPath(park)
 
 
                 )
-        );
-    }
-    private Command transferLastSet() {
-        return new ParallelGroup(
-                Transfernf.INSTANCE.on(),
-                new Delay(2.2)
-        );
-    }
-
-    private Command park_bot() {
-        return new ParallelGroup(
-                new FollowPath(park)
         );
     }
 
@@ -272,11 +257,6 @@ public class LM3RedCloseGate12 extends NextFTCOpMode {
     @Override
     public void onStartButtonPressed() {
         autonomous().schedule();
-        if (autonomous().isDone()) {
-            transferLastSet().schedule();
-        }
-
-        //park_bot().schedule();
         Shooternf.INSTANCE.enable();
     }
 }

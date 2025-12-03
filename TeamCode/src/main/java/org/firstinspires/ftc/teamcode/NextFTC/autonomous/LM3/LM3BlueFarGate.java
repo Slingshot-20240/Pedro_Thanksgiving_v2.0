@@ -149,7 +149,7 @@ public class LM3BlueFarGate extends NextFTCOpMode {
         park = PedroComponent.follower()
                 .pathBuilder()
                 .addPath(
-                        new BezierLine(scorePose, new Pose(119, 70))
+                        new BezierLine(scorePose, new Pose(25, 70))
                 )
                 .setLinearHeadingInterpolation(Math.toRadians(110), Math.toRadians(90))
                 .build();
