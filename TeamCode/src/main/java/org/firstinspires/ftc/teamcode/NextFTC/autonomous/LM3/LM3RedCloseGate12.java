@@ -3,19 +3,15 @@ package org.firstinspires.ftc.teamcode.NextFTC.autonomous.LM3;
 import com.pedropathing.geometry.BezierCurve;
 import com.pedropathing.geometry.BezierLine;
 import com.pedropathing.geometry.Pose;
-import com.pedropathing.paths.HeadingInterpolator;
-import com.pedropathing.paths.Path;
+
 import com.pedropathing.paths.PathChain;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 
 import org.firstinspires.ftc.teamcode.NextFTC.subsystems_nf.Intakenf;
-import org.firstinspires.ftc.teamcode.NextFTC.subsystems_nf.Loginf;
 import org.firstinspires.ftc.teamcode.NextFTC.subsystems_nf.Shooternf;
 import org.firstinspires.ftc.teamcode.NextFTC.subsystems_nf.Transfernf;
 import org.firstinspires.ftc.teamcode.NextFTC.subsystems_nf.Hoodnf;
 import org.firstinspires.ftc.teamcode.pedroPathing.Constants;
-
-import java.util.function.Supplier;
 
 import dev.nextftc.core.commands.Command;
 import dev.nextftc.core.commands.delays.Delay;
@@ -34,7 +30,6 @@ public class LM3RedCloseGate12 extends NextFTCOpMode {
                 new SubsystemComponent(
                         Intakenf.INSTANCE, Hoodnf.INSTANCE,
                         Shooternf.INSTANCE, Transfernf.INSTANCE
-                        //Loginf.INSTANCE
                 ),
                 new PedroComponent(Constants::createFollower),
                 BulkReadComponent.INSTANCE
@@ -51,7 +46,7 @@ public class LM3RedCloseGate12 extends NextFTCOpMode {
     public PathChain scoreSet4;
     public PathChain park;
 
-    public Pose scorePose = new Pose(86,86);
+    public Pose scorePose = new Pose(88,88);
 
     public void buildPaths() {
         PedroComponent.follower().setStartingPose(new Pose(126.2, 119, Math.toRadians(36)));
@@ -144,14 +139,6 @@ public class LM3RedCloseGate12 extends NextFTCOpMode {
                 .setLinearHeadingInterpolation(Math.toRadians(0), Math.toRadians(30))
                 .build();
 
-        park = PedroComponent.follower()
-                .pathBuilder()
-                .addPath(
-                        new BezierLine(new Pose(90, 110), new Pose(115.000, 70.000))
-                )
-                .setLinearHeadingInterpolation(Math.toRadians(30), Math.toRadians(270))
-                .build();
-
 
     }
 
@@ -239,6 +226,7 @@ public class LM3RedCloseGate12 extends NextFTCOpMode {
                                 baseState(),
                                 Shooternf.INSTANCE.setShooterVel(-1190)
                         ),
+                        new Delay(0.2),
                         transferUpFor(2.5)
 
 

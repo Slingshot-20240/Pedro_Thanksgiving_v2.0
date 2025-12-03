@@ -44,18 +44,23 @@ public class LM3BlueCloseGate12 extends NextFTCOpMode {
     public PathChain scoreSet3;
     public PathChain grabSet4;
     public PathChain scoreSet4;
-    public PathChain park;
 
-    // MIRRORED score pose: (144 - 86 = 58, 86)
-    public Pose scorePose = new Pose(58, 86);
 
     private double mx(double x) { return 144 - x; }
 
+    private double mh(double deg) {
+        if (deg == 0) return 180;
+        if (deg == 180) return 0;
+        if (deg == 90 || deg == 270) return deg;
+        return 180 - deg;
+    }
+
+    public Pose scorePose = new Pose(mx(56), 88);
+
     public void buildPaths() {
 
-        // START POSITION MIRROR: (126.2 → 17.8, 119, heading mirrored)
         PedroComponent.follower().setStartingPose(
-                new Pose(mx(126.2), 119, Math.toRadians(180 - 36))
+                new Pose(mx(126.2), 119, Math.toRadians(mh(36)))
         );
 
         // ——— PRELOADS ———
@@ -67,7 +72,7 @@ public class LM3BlueCloseGate12 extends NextFTCOpMode {
                                 scorePose
                         )
                 )
-                .setLinearHeadingInterpolation(Math.toRadians(180 - 36), Math.toRadians(180 - 45))
+                .setLinearHeadingInterpolation(Math.toRadians(mh(36)), Math.toRadians(mh(45)))
                 .build();
 
         // ——— GRAB SET 2 ———
@@ -80,7 +85,7 @@ public class LM3BlueCloseGate12 extends NextFTCOpMode {
                                 new Pose(mx(126.5), 83.4)
                         )
                 )
-                .setLinearHeadingInterpolation(Math.toRadians(180 - 45), Math.toRadians(180))
+                .setLinearHeadingInterpolation(Math.toRadians(mh(45)), Math.toRadians(mh(0)))
                 .build();
 
         // ——— HIT GATE ———
@@ -93,7 +98,7 @@ public class LM3BlueCloseGate12 extends NextFTCOpMode {
                                 new Pose(mx(130), 71)
                         )
                 )
-                .setLinearHeadingInterpolation(Math.toRadians(180), Math.toRadians(180 - 90))
+                .setLinearHeadingInterpolation(Math.toRadians(mh(0)), Math.toRadians(mh(90)))
                 .build();
 
         // ——— SCORE SET 2 ———
@@ -105,7 +110,7 @@ public class LM3BlueCloseGate12 extends NextFTCOpMode {
                                 scorePose
                         )
                 )
-                .setLinearHeadingInterpolation(Math.toRadians(180 - 90), Math.toRadians(180 - 45))
+                .setLinearHeadingInterpolation(Math.toRadians(mh(90)), Math.toRadians(mh(45)))
                 .build();
 
         // ——— GRAB SET 3 ———
@@ -119,7 +124,7 @@ public class LM3BlueCloseGate12 extends NextFTCOpMode {
                                 new Pose(mx(133), 54)
                         )
                 )
-                .setLinearHeadingInterpolation(Math.toRadians(180 - 45), Math.toRadians(180))
+                .setLinearHeadingInterpolation(Math.toRadians(mh(45)), Math.toRadians(mh(0)))
                 .build();
 
         // ——— SCORE SET 3 ———
@@ -133,7 +138,7 @@ public class LM3BlueCloseGate12 extends NextFTCOpMode {
                                 scorePose
                         )
                 )
-                .setLinearHeadingInterpolation(Math.toRadians(180), Math.toRadians(180 - 45))
+                .setLinearHeadingInterpolation(Math.toRadians(mh(0)), Math.toRadians(mh(45)))
                 .build();
 
         // ——— GRAB SET 4 ———
@@ -147,7 +152,7 @@ public class LM3BlueCloseGate12 extends NextFTCOpMode {
                                 new Pose(mx(132), 35)
                         )
                 )
-                .setLinearHeadingInterpolation(Math.toRadians(180 - 45), Math.toRadians(180))
+                .setLinearHeadingInterpolation(Math.toRadians(mh(45)), Math.toRadians(mh(0)))
                 .build();
 
         // ——— SCORE SET 4 ———
@@ -159,20 +164,9 @@ public class LM3BlueCloseGate12 extends NextFTCOpMode {
                                 new Pose(mx(90), 110)
                         )
                 )
-                .setLinearHeadingInterpolation(Math.toRadians(180), Math.toRadians(180 - 30))
+                .setLinearHeadingInterpolation(Math.toRadians(mh(0)), Math.toRadians(mh(30)))
                 .build();
 
-        // ——— PARK ———
-        park = PedroComponent.follower()
-                .pathBuilder()
-                .addPath(
-                        new BezierLine(
-                                new Pose(mx(90), 110),
-                                new Pose(mx(115), 70)
-                        )
-                )
-                .setLinearHeadingInterpolation(Math.toRadians(180 - 30), Math.toRadians(180 - 270))
-                .build();
     }
 
     private Command init_bot() {
