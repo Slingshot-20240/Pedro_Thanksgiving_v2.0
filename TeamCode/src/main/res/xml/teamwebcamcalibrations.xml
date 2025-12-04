@@ -61,7 +61,14 @@
             distortionCoefficients="-0.0449369, 1.17277, 0, 0, -3.63244, 0, 0, 0"
             />
     </Camera>
-
+<Camera>
+    <Calibration
+      size="640 480"
+      focalLength="757.115, 757.115"
+      principalPoint="322.402390128f, 245.583295435f"
+      distortionCoefficients="0.174754383148, -0.680497261617, -0.00366422360268, 0.00169518329, 0.848440835248, 0,0,0"
+      />
+</Camera>
     <!-- ======================================================================================= -->
 
     <!-- Microsoft Lifecam HD 3000 v1, Calibrated by PTC using unknown tooling -->
