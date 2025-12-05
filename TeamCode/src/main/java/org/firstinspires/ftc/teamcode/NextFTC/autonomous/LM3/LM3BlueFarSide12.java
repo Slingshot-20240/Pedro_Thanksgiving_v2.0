@@ -214,6 +214,7 @@ public class LM3BlueFarSide12 extends NextFTCOpMode {
                                 baseState(),
                                 Shooternf.INSTANCE.setShooterVel(-1500)
                         ),
+                        new Delay(0.3),
                         transferUpFor(2.5),
 
                         new ParallelGroup(

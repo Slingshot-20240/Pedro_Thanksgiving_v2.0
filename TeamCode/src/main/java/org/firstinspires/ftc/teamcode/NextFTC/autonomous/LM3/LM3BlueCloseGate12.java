@@ -44,6 +44,7 @@ public class LM3BlueCloseGate12 extends NextFTCOpMode {
     public PathChain scoreSet3;
     public PathChain grabSet4;
     public PathChain scoreSet4;
+    public PathChain park;
 
 
     private double mx(double x) { return 144 - x; }
@@ -55,13 +56,12 @@ public class LM3BlueCloseGate12 extends NextFTCOpMode {
         return 180 - deg;
     }
 
-    public Pose scorePose = new Pose(mx(56), 88);
+    public Pose scorePose = new Pose(56, 88);
 
     public void buildPaths() {
 
-        PedroComponent.follower().setStartingPose(
-                new Pose(mx(126.2), 119, Math.toRadians(mh(36)))
-        );
+        PedroComponent.follower().setStartingPose(new Pose(mx(126.2), 119, Math.toRadians(144)));
+
 
         // ——— PRELOADS ———
         scorePreloads = PedroComponent.follower()
@@ -72,7 +72,7 @@ public class LM3BlueCloseGate12 extends NextFTCOpMode {
                                 scorePose
                         )
                 )
-                .setLinearHeadingInterpolation(Math.toRadians(mh(36)), Math.toRadians(mh(45)))
+                .setLinearHeadingInterpolation(Math.toRadians(144), Math.toRadians(mh(46)))
                 .build();
 
         // ——— GRAB SET 2 ———
@@ -85,7 +85,7 @@ public class LM3BlueCloseGate12 extends NextFTCOpMode {
                                 new Pose(mx(126.5), 83.4)
                         )
                 )
-                .setLinearHeadingInterpolation(Math.toRadians(mh(45)), Math.toRadians(mh(0)))
+                .setLinearHeadingInterpolation(Math.toRadians(mh(46)), Math.toRadians(mh(0)))
                 .build();
 
         // ——— HIT GATE ———
@@ -110,7 +110,7 @@ public class LM3BlueCloseGate12 extends NextFTCOpMode {
                                 scorePose
                         )
                 )
-                .setLinearHeadingInterpolation(Math.toRadians(mh(90)), Math.toRadians(mh(45)))
+                .setLinearHeadingInterpolation(Math.toRadians(mh(90)), Math.toRadians(mh(46)))
                 .build();
 
         // ——— GRAB SET 3 ———
@@ -124,7 +124,7 @@ public class LM3BlueCloseGate12 extends NextFTCOpMode {
                                 new Pose(mx(133), 54)
                         )
                 )
-                .setLinearHeadingInterpolation(Math.toRadians(mh(45)), Math.toRadians(mh(0)))
+                .setLinearHeadingInterpolation(Math.toRadians(mh(46)), Math.toRadians(mh(0)))
                 .build();
 
         // ——— SCORE SET 3 ———
@@ -138,7 +138,7 @@ public class LM3BlueCloseGate12 extends NextFTCOpMode {
                                 scorePose
                         )
                 )
-                .setLinearHeadingInterpolation(Math.toRadians(mh(0)), Math.toRadians(mh(45)))
+                .setLinearHeadingInterpolation(Math.toRadians(mh(0)), Math.toRadians(mh(46)))
                 .build();
 
         // ——— GRAB SET 4 ———
@@ -152,7 +152,7 @@ public class LM3BlueCloseGate12 extends NextFTCOpMode {
                                 new Pose(mx(132), 35)
                         )
                 )
-                .setLinearHeadingInterpolation(Math.toRadians(mh(45)), Math.toRadians(mh(0)))
+                .setLinearHeadingInterpolation(Math.toRadians(mh(46)), Math.toRadians(mh(0)))
                 .build();
 
         // ——— SCORE SET 4 ———
@@ -167,11 +167,22 @@ public class LM3BlueCloseGate12 extends NextFTCOpMode {
                 .setLinearHeadingInterpolation(Math.toRadians(mh(0)), Math.toRadians(mh(30)))
                 .build();
 
+        park = PedroComponent.follower()
+                .pathBuilder()
+                .addPath(
+                        new BezierLine(
+                                new Pose(mx(90), 110),
+                                new Pose(mx(70), 50)
+                        )
+                )
+                .setLinearHeadingInterpolation(Math.toRadians(mh(30)), Math.toRadians(mh(20)))
+                .build();
+
     }
 
     private Command init_bot() {
         return new SequentialGroup(
-                Hoodnf.INSTANCE.setHoodPos(0.42)
+                Hoodnf.INSTANCE.setHoodPos(0.395)
         );
     }
 
@@ -185,7 +196,7 @@ public class LM3BlueCloseGate12 extends NextFTCOpMode {
     private Command baseState() {
         return new ParallelGroup(
                 Transfernf.INSTANCE.hotdog(),
-                Hoodnf.INSTANCE.setHoodPos(0.42)
+                Hoodnf.INSTANCE.setHoodPos(0.5)
         );
     }
 
@@ -239,7 +250,14 @@ public class LM3BlueCloseGate12 extends NextFTCOpMode {
                                 baseState(),
                                 Shooternf.INSTANCE.setShooterVel(-1190)
                         ),
-                        transferUpFor(2.5)
+                        Transfernf.INSTANCE.on()
+                        //transferUpFor(2.5)
+//                        new ParallelGroup(
+//                                transferUpFor(3),
+//                                Transfernf.INSTANCE.on()
+//                        ),
+//                        new FollowPath(park)
+
                 )
         );
     }

@@ -40,6 +40,8 @@ public class LM3RedFarGate extends NextFTCOpMode {
     Pose scorePose = new Pose(88, 17);
 
     public void buildPaths() {
+        PedroComponent.follower().setStartingPose(new Pose(88, 8.2, Math.toRadians(90)));
+
         scorePreloads = PedroComponent.follower()
                 .pathBuilder()
                 .addPath(new BezierLine(new Pose(88, 8), scorePose))

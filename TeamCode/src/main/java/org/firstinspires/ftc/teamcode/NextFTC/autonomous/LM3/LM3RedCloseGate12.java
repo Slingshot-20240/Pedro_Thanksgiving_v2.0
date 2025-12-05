@@ -134,9 +134,9 @@ public class LM3RedCloseGate12 extends NextFTCOpMode {
         scoreSet4 = PedroComponent.follower()
                 .pathBuilder()
                 .addPath(
-                        new BezierLine(new Pose(132, 35), new Pose(90, 110))
+                        new BezierLine(new Pose(132, 35), scorePose)
                 )
-                .setLinearHeadingInterpolation(Math.toRadians(0), Math.toRadians(30))
+                .setLinearHeadingInterpolation(Math.toRadians(0), Math.toRadians(45))
                 .build();
 
 
@@ -145,7 +145,7 @@ public class LM3RedCloseGate12 extends NextFTCOpMode {
 
     private Command init_bot() {
         return new SequentialGroup(
-                Hoodnf.INSTANCE.setHoodPos(0.42)
+                Hoodnf.INSTANCE.setHoodPos(0.4)
         );
 
     }
@@ -160,7 +160,7 @@ public class LM3RedCloseGate12 extends NextFTCOpMode {
     private Command baseState() {
         return new ParallelGroup(
                 Transfernf.INSTANCE.hotdog(),
-                Hoodnf.INSTANCE.setHoodPos(0.42)
+                Hoodnf.INSTANCE.setHoodPos(0.4)
         );
     }
 
@@ -177,7 +177,7 @@ public class LM3RedCloseGate12 extends NextFTCOpMode {
                                 new FollowPath(scorePreloads, true),
 
                                 baseState(),
-                                Shooternf.INSTANCE.setShooterVel(-1255)
+                                Shooternf.INSTANCE.setShooterVel(-1200)
                         ),
                         //Spin up time
                         new Delay(0.3),
@@ -196,7 +196,7 @@ public class LM3RedCloseGate12 extends NextFTCOpMode {
                                         new FollowPath(scoreSet2)
                                 ),
                                 baseState(),
-                                Shooternf.INSTANCE.setShooterVel(-1255)
+                                Shooternf.INSTANCE.setShooterVel(-1200)
                         ),
                         new Delay(0.2),
                         transferUpFor(2.5),
@@ -210,24 +210,23 @@ public class LM3RedCloseGate12 extends NextFTCOpMode {
                                         new FollowPath(scoreSet3, true)
                                 ),
                                 baseState(),
-                                Shooternf.INSTANCE.setShooterVel(-1255)
+                                Shooternf.INSTANCE.setShooterVel(-1200)
                         ),
                         new Delay(0.2),
                         transferUpFor(2.5),
 
 
 
-                        //SET 4
-                        new ParallelGroup(
-                                new SequentialGroup(
-                                        new FollowPath(grabSet4),
-                                        new FollowPath(scoreSet4, true)
-                                ),
-                                baseState(),
-                                Shooternf.INSTANCE.setShooterVel(-1190)
-                        ),
-                        new Delay(0.2),
-                        transferUpFor(2.5)
+                    new ParallelGroup(
+                            new SequentialGroup(
+                                    new FollowPath(grabSet4),
+                                    new FollowPath(scoreSet4, true)
+                            ),
+                            baseState(),
+                            Shooternf.INSTANCE.setShooterVel(-1200)
+                    ),
+                            new Delay(0.2),
+                            transferUpFor(2.5)
 
 
                 )
