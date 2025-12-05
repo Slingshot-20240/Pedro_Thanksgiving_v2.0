@@ -5,6 +5,7 @@ import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 import com.qualcomm.robotcore.hardware.Servo;
 
+import org.firstinspires.ftc.teamcode.subsystems.robot.Robot;
 import org.firstinspires.ftc.teamcode.teleop.ARedTele;
 
 public class Shooter {
@@ -48,7 +49,7 @@ public class Shooter {
 
     // calculates target velocity depending on the distance the robot is from the goal
     public double calculateShooterVel() {
-        double R = ARedTele.pinpointDistance;
+        double R = Robot.cam.getATdist();
         shootVel = Math.sqrt(H * g + g * Math.sqrt(Math.pow(R, 2) + Math.pow(H, 2)));
         return convertMPSToRPM(shootVel);
     }
@@ -66,10 +67,9 @@ public class Shooter {
     // ---------------------------------
     private static double hoodAngle;
 
-    // TODO: change to vision if nerd says camera no longer broken
     // returns the target angle in degrees depending on our distance from the april tag
     public double calculateHoodAngle() {
-        double R = ARedTele.pinpointDistance;
+        double R = Robot.cam.getATdist();
         hoodAngle = Math.atan(Math.pow(calculateShooterVel(), 2)/(g * R));
         return Math.toRadians(hoodAngle);
     }
