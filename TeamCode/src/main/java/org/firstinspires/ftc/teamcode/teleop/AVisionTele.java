@@ -80,27 +80,23 @@ public class AVisionTele extends OpMode {
         Pose pose = follower.getPose();
         double heading = pose.getHeading();
 
-        // Vision readings
         double atBearing = Math.toRadians(cam.getATangle());
         double atHeadingError = angleWrap(atBearing);
-        boolean visionTurnFinished = Math.abs(atHeadingError) < Math.toRadians(0.25);
+        boolean visionTurnFinished = Math.abs(atHeadingError) < Math.toRadians(0.2);
 
         boolean controllerBusy =
-                Math.abs(gamepad1.left_stick_x) > 0.05
-                        || Math.abs(gamepad1.left_stick_y) > 0.05
-                        || Math.abs(gamepad1.right_stick_x) > 0.05;
+                Math.abs( gamepad1.left_stick_x) > 0.05
+            || Math.abs(gamepad1.left_stick_y) > 0.05
+            || Math.abs(gamepad1.right_stick_x) > 0.05;
 
-        // Reset heading button
         if (gamepad1.xWasPressed()) {
             follower.setPose(new Pose(pose.getX(), pose.getY(), Math.toRadians(90)));
         }
 
-        // Vision auto-turn trigger
         if (gamepad1.dpad_down && !autoTurnVision) {
             autoTurnVision = true;
         }
 
-        // Cancel vision turn when finished or driver moves
         if ((autoTurnVision && visionTurnFinished) || controllerBusy) {
             autoTurnVision = false;
         }
@@ -127,7 +123,6 @@ public class AVisionTele extends OpMode {
 
         follower.setTeleOpDrive(forward, strafe, rotate, true);
 
-        // AUTO-PARK
         if (gamepad1.startWasPressed()) {
             follower.followPath(pathChain.get());
             automatedDrive = true;
