@@ -139,6 +139,22 @@ public class LM3RedCloseGate12 extends NextFTCOpMode {
                 .setLinearHeadingInterpolation(Math.toRadians(0), Math.toRadians(45))
                 .build();
 
+        scoreSet4 = PedroComponent.follower()
+                .pathBuilder()
+                .addPath(
+                        new BezierLine(new Pose(132, 35), scorePose)
+                )
+                .setLinearHeadingInterpolation(Math.toRadians(0), Math.toRadians(45))
+                .build();
+
+        park = PedroComponent.follower()
+                .pathBuilder()
+                .addPath(
+                        new BezierLine(new Pose(88.000, 88.000), new Pose(115.000, 70.000))
+                )
+                .setLinearHeadingInterpolation(Math.toRadians(45), Math.toRadians(90))
+                .build();
+
 
     }
 
@@ -192,7 +208,7 @@ public class LM3RedCloseGate12 extends NextFTCOpMode {
 
                                         //gate
                                         new FollowPath(hitGate),
-                                        new Delay(0.7),
+                                        new Delay(0.5),
                                         new FollowPath(scoreSet2)
                                 ),
                                 baseState(),
@@ -225,7 +241,8 @@ public class LM3RedCloseGate12 extends NextFTCOpMode {
                                 Shooternf.INSTANCE.setShooterVel(-1200)
                         ),
                         new Delay(0.2),
-                        transferUpFor(2.5)
+                        transferUpFor(2.4),
+                        new FollowPath(park)
 
 
                 )

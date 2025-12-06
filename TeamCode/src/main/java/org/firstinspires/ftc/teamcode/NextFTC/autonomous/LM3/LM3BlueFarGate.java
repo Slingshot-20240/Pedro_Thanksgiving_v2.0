@@ -67,18 +67,6 @@ public class LM3BlueFarGate extends NextFTCOpMode {
                 .setLinearHeadingInterpolation(Math.toRadians(mh(68)), Math.toRadians(mh(0)))
                 .build();
 
-//        prepareGate = PedroComponent.follower()
-//                .pathBuilder()
-//                .addPath(new BezierLine(new Pose(mx(132), 57), new Pose(27, 54)))
-//
-//                .setLinearHeadingInterpolation(Math.toRadians(mh(0)), Math.toRadians(mh(90)))
-//                .build();
-//
-//        hitGate = PedroComponent.follower()
-//                .pathBuilder()
-//                .addPath(new BezierLine( new Pose(27, 54), new Pose(mx(130), 70.3)))
-//                .setLinearHeadingInterpolation(Math.toRadians(mh(90)), Math.toRadians(mh(90)))
-//                .build();
 
         gate = PedroComponent.follower()
                 .pathBuilder()

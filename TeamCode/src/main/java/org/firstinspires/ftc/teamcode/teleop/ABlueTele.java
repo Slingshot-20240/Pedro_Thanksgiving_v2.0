@@ -123,18 +123,13 @@ public class ABlueTele extends OpMode {
             rotate = -gamepad1.right_stick_x;
         }
 
-        follower.setTeleOpDrive(forward, strafe, rotate, true);
+        follower.setTeleOpDrive(
+                -gamepad1.left_stick_y,
+                -gamepad1.left_stick_x,
+                -gamepad1.right_stick_x * 0.6,
+                true // Robot Centric
+        );
 
-        // Auto-park
-        if (gamepad1.startWasPressed()) {
-            follower.followPath(pathChain.get());
-            automatedDrive = true;
-        }
-
-        if (automatedDrive && (gamepad1.bWasPressed() || !follower.isBusy())) {
-            follower.startTeleopDrive();
-            automatedDrive = false;
-        }
 
         // Telemetry
         telemetry.addData("pose", pose);
