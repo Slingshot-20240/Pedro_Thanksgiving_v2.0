@@ -148,7 +148,7 @@ public class LM3BlueCloseGate12 extends NextFTCOpMode {
                                 scorePose,
                                 new Pose(mx(88), 39),
                                 new Pose(mx(82), 31),
-                                new Pose(mx(132), 35)
+                                new Pose(mx(132), 31)
                         )
                 )
                 .setLinearHeadingInterpolation(Math.toRadians(mh(45)), Math.toRadians(mh(0)))
@@ -157,7 +157,7 @@ public class LM3BlueCloseGate12 extends NextFTCOpMode {
         scoreSet4 = PedroComponent.follower()
                 .pathBuilder()
                 .addPath(
-                        new BezierLine(new Pose(mx(132), 35), scorePose)
+                        new BezierLine(new Pose(mx(132), 31), scorePose)
                 )
                 .setLinearHeadingInterpolation(Math.toRadians(mh(0)), Math.toRadians(mh(45)))
                 .build();

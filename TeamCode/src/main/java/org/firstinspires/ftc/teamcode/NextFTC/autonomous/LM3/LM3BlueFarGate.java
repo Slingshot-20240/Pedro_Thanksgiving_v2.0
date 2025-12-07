@@ -74,7 +74,7 @@ public class LM3BlueFarGate extends NextFTCOpMode {
                         new BezierCurve(
                                 new Pose(12.000, 57.000),
                                 new Pose(55.000, 66.000),
-                                new Pose(14.000, 70.400)
+                                new Pose(14.000, 67)
                         )
                 )
                 .setLinearHeadingInterpolation(Math.toRadians(180), Math.toRadians(90))
@@ -82,7 +82,7 @@ public class LM3BlueFarGate extends NextFTCOpMode {
 
         scoreSet2 = PedroComponent.follower()
                 .pathBuilder()
-                .addPath(new BezierCurve(new Pose(mx(130), 70.3), new Pose(mx(85), 60.5), scorePose))
+                .addPath(new BezierCurve(new Pose(mx(130), 67), new Pose(mx(85), 60.5), scorePose))
                 .setLinearHeadingInterpolation(Math.toRadians(mh(90)), Math.toRadians(mh(68)))
                 .build();
 

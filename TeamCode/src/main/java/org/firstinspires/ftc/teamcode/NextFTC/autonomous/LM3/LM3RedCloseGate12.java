@@ -150,7 +150,7 @@ public class LM3RedCloseGate12 extends NextFTCOpMode {
         park = PedroComponent.follower()
                 .pathBuilder()
                 .addPath(
-                        new BezierLine(new Pose(88.000, 88.000), new Pose(115.000, 70.000))
+                        new BezierLine(new Pose(88.000, 88.000), new Pose(108, 70.000))
                 )
                 .setLinearHeadingInterpolation(Math.toRadians(45), Math.toRadians(90))
                 .build();

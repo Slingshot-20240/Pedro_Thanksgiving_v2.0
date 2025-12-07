@@ -48,11 +48,11 @@ public class Shooter {
     private static double shootVel;
 
     // calculates target velocity depending on the distance the robot is from the goal
-    public double calculateShooterVel() {
-        double R = Robot.cam.getATdist();
-        shootVel = Math.sqrt(H * g + g * Math.sqrt(Math.pow(R, 2) + Math.pow(H, 2)));
-        return convertMPSToRPM(shootVel);
-    }
+//    public double calculateShooterVel() {
+//        double R = Robot.cam.getATdist();
+//        shootVel = Math.sqrt(H * g + g * Math.sqrt(Math.pow(R, 2) + Math.pow(H, 2)));
+//        return convertMPSToRPM(shootVel);
+//    }
 
     // converts the target velocity from meters per second to rpm for DcMotor
     public static double convertMPSToRPM(double mpsVel) {
@@ -68,11 +68,11 @@ public class Shooter {
     private static double hoodAngle;
 
     // returns the target angle in degrees depending on our distance from the april tag
-    public double calculateHoodAngle() {
-        double R = Robot.cam.getATdist();
-        hoodAngle = Math.atan(Math.pow(calculateShooterVel(), 2)/(g * R));
-        return Math.toRadians(hoodAngle);
-    }
+//    public double calculateHoodAngle() {
+//        double R = Robot.cam.getATdist();
+//        hoodAngle = Math.atan(Math.pow(calculateShooterVel(), 2)/(g * R));
+//        return Math.toRadians(hoodAngle);
+//    }
 
     // converts the target angle from calculateHoodAngle() to a servo position from 0-1
     public double convertTargetAngleToHoodPos(double targetAngle) {

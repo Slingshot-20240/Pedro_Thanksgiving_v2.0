@@ -40,15 +40,6 @@ public class LM3RedFarGate extends NextFTCOpMode {
 
     public PathChain gate;
 
-    private double mx(double x) { return 144 - x; }
-
-    private double mh(double deg) {
-        if (deg == 0) return 180;
-        if (deg == 180) return 0;
-        if (deg == 90 || deg == 268) return deg;
-        return 180 - deg;
-    }
-
     Pose scorePose = new Pose(88, 17);
 
     public void buildPaths() {
@@ -57,13 +48,13 @@ public class LM3RedFarGate extends NextFTCOpMode {
         scorePreloads = PedroComponent.follower()
                 .pathBuilder()
                 .addPath(new BezierLine(new Pose(88, 8), scorePose))
-                .setLinearHeadingInterpolation(Math.toRadians(90), Math.toRadians(68))
+                .setLinearHeadingInterpolation(Math.toRadians(90), Math.toRadians(69.6))
                 .build();
 
         grabSet2 = PedroComponent.follower()
                 .pathBuilder()
                 .addPath(new BezierCurve(scorePose, new Pose(84, 65), new Pose(132, 57)))
-                .setLinearHeadingInterpolation(Math.toRadians(68), Math.toRadians(0))
+                .setLinearHeadingInterpolation(Math.toRadians(69.6), Math.toRadians(0))
                 .build();
 
 
@@ -73,7 +64,7 @@ public class LM3RedFarGate extends NextFTCOpMode {
                         new BezierCurve(
                                 new Pose(132, 57.000),
                                 new Pose(89, 66.000),
-                                new Pose(130, 70.400)
+                                new Pose(130, 67)
                         )
                 )
                 .setLinearHeadingInterpolation(Math.toRadians(0), Math.toRadians(90))
@@ -81,27 +72,27 @@ public class LM3RedFarGate extends NextFTCOpMode {
 
         scoreSet2 = PedroComponent.follower()
                 .pathBuilder()
-                .addPath(new BezierCurve(new Pose(130, 70.4), new Pose(85, 60.5), scorePose))
-                .setLinearHeadingInterpolation(Math.toRadians(90), Math.toRadians(68))
+                .addPath(new BezierCurve(new Pose(130, 67), new Pose(85, 60.5), scorePose))
+                .setLinearHeadingInterpolation(Math.toRadians(90), Math.toRadians(69.6))
                 .build();
 
         grabSet3 = PedroComponent.follower()
                 .pathBuilder()
                 .addPath(new BezierCurve(scorePose, new Pose(87, 36), new Pose(134, 32.8)))
-                .setLinearHeadingInterpolation(Math.toRadians(68), Math.toRadians(0))
+                .setLinearHeadingInterpolation(Math.toRadians(69.6), Math.toRadians(0))
                 .build();
 
         scoreSet3 = PedroComponent.follower()
                 .pathBuilder()
                 .addPath(new BezierLine(new Pose(134, 32.8), scorePose))
-                .setLinearHeadingInterpolation(Math.toRadians(0), Math.toRadians(68))
+                .setLinearHeadingInterpolation(Math.toRadians(0), Math.toRadians(69.6))
                 .build();
 
 
         prepareHp = PedroComponent.follower()
                 .pathBuilder()
                 .addPath(new BezierLine(scorePose, new Pose(132, 50)))
-                .setLinearHeadingInterpolation(Math.toRadians(68), Math.toRadians(300))
+                .setLinearHeadingInterpolation(Math.toRadians(69.6), Math.toRadians(300))
                 .build();
 
         grabHp = PedroComponent.follower()
@@ -113,13 +104,13 @@ public class LM3RedFarGate extends NextFTCOpMode {
         scoreHp = PedroComponent.follower()
                 .pathBuilder()
                 .addPath(new BezierLine(new Pose(134, 11), scorePose))
-                .setLinearHeadingInterpolation(Math.toRadians(290), Math.toRadians(68))
+                .setLinearHeadingInterpolation(Math.toRadians(290), Math.toRadians(69.6))
                 .build();
 
         park = PedroComponent.follower()
                 .pathBuilder()
-                .addPath(new BezierLine(scorePose, new Pose(132, 68)))
-                .setLinearHeadingInterpolation(Math.toRadians(68), Math.toRadians(90))
+                .addPath(new BezierLine(scorePose, new Pose(120, 69.6)))
+                .setLinearHeadingInterpolation(Math.toRadians(69.6), Math.toRadians(90))
                 .build();
     }
 

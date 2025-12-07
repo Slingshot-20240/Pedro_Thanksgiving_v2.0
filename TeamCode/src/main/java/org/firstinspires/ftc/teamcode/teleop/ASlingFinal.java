@@ -22,7 +22,7 @@ import java.util.function.Supplier;
 
 @Configurable
 @TeleOp
-public class AVisionTele extends OpMode {
+public class ASlingFinal extends OpMode {
 
     private GamepadMapping controls;
     private FSM fsm;
@@ -84,15 +84,11 @@ public class AVisionTele extends OpMode {
         double atHeadingError = angleWrap(atBearing);
         boolean visionTurnFinished = Math.abs(atHeadingError) < Math.toRadians(0.2);
 
+
         boolean controllerBusy =
                 Math.abs( gamepad1.left_stick_x) > 0.05
-            || Math.abs(gamepad1.left_stick_y) > 0.05
-            || Math.abs(gamepad1.right_stick_x) > 0.05;
-
-        if (gamepad1.xWasPressed()) {
-            follower.setPose(new Pose(pose.getX(), pose.getY(), Math.toRadians(90)));
-        }
-
+                        || Math.abs(gamepad1.left_stick_y) > 0.05
+                        || Math.abs(gamepad1.right_stick_x) > 0.05;
         if (gamepad1.dpad_down && !autoTurnVision) {
             autoTurnVision = true;
         }
@@ -118,10 +114,23 @@ public class AVisionTele extends OpMode {
             }
 
         } else {
-            rotate = -gamepad1.right_stick_x * 0.65;
+            rotate = -gamepad1.right_stick_x*0.65;
         }
 
         follower.setTeleOpDrive(forward, strafe, rotate, true);
+
+
+//        double forward = -gamepad1.left_stick_y;
+//        double strafe  = -gamepad1.left_stick_x;
+//        double rotate = -gamepad1.right_stick_x;
+
+
+//        follower.setTeleOpDrive(
+//                forward,
+//                strafe,
+//                rotate * 0.65,
+//                true
+//        );
 
         if (gamepad1.startWasPressed()) {
             follower.followPath(pathChain.get());
@@ -135,10 +144,8 @@ public class AVisionTele extends OpMode {
 
         telemetry.addData("pose", pose);
         telemetry.addData("Heading", heading);
-        telemetry.addData("AT angle", cam.getATangle());
-        telemetry.addData("AT dist", cam.getATdist());
         telemetry.addLine("--------------------------------");
-        telemetry.addData("Vision AutoTurn", autoTurnVision);
+        //telemetry.addData("Vision AutoTurn", autoTurnVision);
         telemetry.addData("AutoPark", automatedDrive);
     }
 

@@ -5,6 +5,7 @@ import com.pedropathing.geometry.BezierLine;
 import com.pedropathing.geometry.Pose;
 import com.pedropathing.paths.PathChain;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
+import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 
 import org.firstinspires.ftc.teamcode.NextFTC.subsystems_nf.Intakenf;
 import org.firstinspires.ftc.teamcode.NextFTC.subsystems_nf.Shooternf;
@@ -24,6 +25,7 @@ import dev.nextftc.extensions.pedro.PedroComponent;
 import dev.nextftc.ftc.NextFTCOpMode;
 import dev.nextftc.ftc.components.BulkReadComponent;
 
+@Disabled
 @Autonomous(name = "12 Red Far Side")
 public class LM3RedFarSide12 extends NextFTCOpMode {
     public LM3RedFarSide12() {
