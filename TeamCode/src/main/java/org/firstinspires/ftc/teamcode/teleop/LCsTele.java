@@ -51,20 +51,7 @@ public class LCsTele extends OpMode {
 
         telemetryM = PanelsTelemetry.INSTANCE.getTelemetry();
 
-        pathChain = () -> follower.pathBuilder()
-                .addPath(new Path(new BezierLine(
-                        follower::getPose,
-                        //TODO may have to add 0.01 or any small number so it actually turns and no error
-                        new Pose(
-                                follower.getPose().getX(),
-                                follower.getPose().getY()
-                        )
-                )))
-                .setHeadingInterpolation(HeadingInterpolator.linearFromPoint(
-                        //TODO may have to make it SUBSTRACT heading error!!!
-                        follower::getHeading, Math.toRadians(follower.getHeading() + atHeadingError), 0.9)
-                )
-                .build();
+
     }
 
     @Override
@@ -76,6 +63,7 @@ public class LCsTele extends OpMode {
     @Override
     public void loop() {
 
+
         fsm.update();
         follower.update();
         telemetryM.update();
@@ -86,6 +74,22 @@ public class LCsTele extends OpMode {
 
         double atBearing = Math.toRadians(cam.getATangle());
         double atHeadingError = angleWrap(atBearing);
+
+        pathChain = () -> follower.pathBuilder()
+                .addPath(new Path(new BezierLine(
+                        follower::getPose,
+                        //TODO may have to add 0.01 or any small number so it actually turns and no error
+                        new Pose(
+                                follower.getPose().getX(),
+                                follower.getPose().getY()
+                        )
+                )))
+                .setHeadingInterpolation(HeadingInterpolator.linearFromPoint(
+                        //TODO may have to make it SUBSTRACT heading error!!!
+                        follower::getHeading, Math.toRadians(follower.getHeading() + atHeadingError), 0.96)
+                )
+                .build();
+
 
         boolean controllerBusy =
                 Math.abs( gamepad1.left_stick_x) > 0.05
