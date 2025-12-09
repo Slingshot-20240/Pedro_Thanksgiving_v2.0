@@ -21,6 +21,7 @@ public class Shooternf implements Subsystem {
 
     private final ControlSystem shooterController = ControlSystem.builder()
             .velPid(0.32,0,0.001)
+          //   .velPid(1.52,0,0)
             .build();
 
     private boolean enabled = false;

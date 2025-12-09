@@ -1,6 +1,7 @@
 package org.firstinspires.ftc.teamcode.NextFTC.config;
 
 import com.bylazar.configurables.annotations.Configurable;
+import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 
@@ -11,6 +12,7 @@ import dev.nextftc.control.feedforward.BasicFeedforwardParameters;
 import dev.nextftc.hardware.controllable.MotorGroup;
 import dev.nextftc.hardware.impl.MotorEx;
 
+@Disabled
 @Configurable
 @TeleOp
 public class NextFTCShooterPID extends OpMode {

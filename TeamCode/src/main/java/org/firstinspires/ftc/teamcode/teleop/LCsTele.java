@@ -22,7 +22,7 @@ import java.util.function.Supplier;
 
 @Configurable
 @TeleOp
-public class AVisionTele extends OpMode {
+public class LCsTele extends OpMode {
 
     private GamepadMapping controls;
     private FSM fsm;
@@ -30,8 +30,7 @@ public class AVisionTele extends OpMode {
     private logi cam;
 
     private Follower follower;
-    private boolean autoTurnVision = false;
-    private boolean automatedDrive;
+    private boolean turning;
     private Supplier<PathChain> pathChain;
     private TelemetryManager telemetryM;
     public static Pose pose;
@@ -41,8 +40,8 @@ public class AVisionTele extends OpMode {
     public void init() {
         controls = new GamepadMapping(gamepad1, gamepad2);
         robot = new Robot(hardwareMap, controls);
-        cam = new logi(hardwareMap);
         fsm = new FSM(hardwareMap, controls, robot);
+        cam = new logi(hardwareMap);
 
         follower = Constants.createFollower(hardwareMap);
         //follower.setStartingPose(new Pose(18, 118, Math.toRadians(144)));
@@ -52,15 +51,7 @@ public class AVisionTele extends OpMode {
 
         telemetryM = PanelsTelemetry.INSTANCE.getTelemetry();
 
-        pathChain = () -> follower.pathBuilder()
-                .addPath(new Path(new BezierLine(
-                        follower::getPose,
-                        new Pose(105.4, 33.4)
-                )))
-                .setHeadingInterpolation(HeadingInterpolator.linearFromPoint(
-                        follower::getHeading, Math.toRadians(90), 0.9)
-                )
-                .build();
+
     }
 
     @Override
@@ -72,6 +63,7 @@ public class AVisionTele extends OpMode {
     @Override
     public void loop() {
 
+
         fsm.update();
         follower.update();
         telemetryM.update();
@@ -82,55 +74,47 @@ public class AVisionTele extends OpMode {
 
         double atBearing = Math.toRadians(cam.getATangle());
         double atHeadingError = angleWrap(atBearing);
-        boolean visionTurnFinished = Math.abs(atHeadingError) < Math.toRadians(0.2);
+
+        pathChain = () -> follower.pathBuilder()
+                .addPath(new Path(new BezierLine(
+                        follower::getPose,
+                        //TODO may have to add 0.01 or any small number so it actually turns and no error
+                        new Pose(
+                                follower.getPose().getX(),
+                                follower.getPose().getY()
+                        )
+                )))
+                .setHeadingInterpolation(HeadingInterpolator.linearFromPoint(
+                        //TODO may have to make it SUBSTRACT heading error!!!
+                        follower::getHeading, Math.toRadians(follower.getHeading() + atHeadingError), 0.96)
+                )
+                .build();
+
 
         boolean controllerBusy =
                 Math.abs( gamepad1.left_stick_x) > 0.05
-            || Math.abs(gamepad1.left_stick_y) > 0.05
-            || Math.abs(gamepad1.right_stick_x) > 0.05;
+                        || Math.abs(gamepad1.left_stick_y) > 0.05
+                        || Math.abs(gamepad1.right_stick_x) > 0.05;
 
         if (gamepad1.xWasPressed()) {
             follower.setPose(new Pose(pose.getX(), pose.getY(), Math.toRadians(90)));
         }
 
-        if (gamepad1.dpad_down && !autoTurnVision) {
-            autoTurnVision = true;
-        }
-
-        if ((autoTurnVision && visionTurnFinished) || controllerBusy) {
-            autoTurnVision = false;
-        }
 
         double forward = -gamepad1.left_stick_y;
         double strafe  = -gamepad1.left_stick_x;
-        double rotate;
-
-        if (autoTurnVision) {
-            forward = 0;
-            strafe = 0;
-
-            double Kp = 0.95;
-            rotate = atHeadingError * Kp;
-
-            double minPower = 0.12;
-            if (Math.abs(rotate) < minPower && Math.abs(atHeadingError) > Math.toRadians(0.5)) {
-                rotate = Math.signum(rotate) * minPower;
-            }
-
-        } else {
-            rotate = -gamepad1.right_stick_x;
-        }
+        double rotate = -gamepad1.right_stick_x * 0.65;
 
         follower.setTeleOpDrive(forward, strafe, rotate, true);
 
-        if (gamepad1.startWasPressed()) {
+        if (gamepad1.dpad_down) {
             follower.followPath(pathChain.get());
-            automatedDrive = true;
+            turning = true;
         }
 
-        if (automatedDrive && (controllerBusy || !follower.isBusy())) {
+        if (turning && (controllerBusy || !follower.isBusy())) {
             follower.startTeleopDrive();
-            automatedDrive = false;
+            turning = false;
         }
 
         telemetry.addData("pose", pose);
@@ -138,8 +122,7 @@ public class AVisionTele extends OpMode {
         telemetry.addData("AT angle", cam.getATangle());
         telemetry.addData("AT dist", cam.getATdist());
         telemetry.addLine("--------------------------------");
-        telemetry.addData("Vision AutoTurn", autoTurnVision);
-        telemetry.addData("AutoPark", automatedDrive);
+        telemetry.addData("Auto Align", turning);
     }
 
     private double angleWrap(double angle) {
