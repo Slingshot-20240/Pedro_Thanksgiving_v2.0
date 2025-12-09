@@ -41,7 +41,7 @@ public class AVisionTele extends OpMode {
     public void init() {
         controls = new GamepadMapping(gamepad1, gamepad2);
         robot = new Robot(hardwareMap, controls);
-        cam = new logi(hardwareMap);
+        cam = Robot.cam;
         fsm = new FSM(hardwareMap, controls, robot);
 
         follower = Constants.createFollower(hardwareMap);
