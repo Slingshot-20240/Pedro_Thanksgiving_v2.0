@@ -113,6 +113,7 @@ public class AVisionTele extends OpMode {
             rotate = atHeadingError * Kp;
 
             double minPower = 0.08;
+            //TODO - TRY NOT EVEN HAVING THIS
             if (Math.abs(rotate) < minPower && Math.abs(atHeadingError) > Math.toRadians(3)) {
                 rotate = Math.signum(rotate) * minPower;
             }
