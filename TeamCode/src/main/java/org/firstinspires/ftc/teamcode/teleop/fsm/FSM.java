@@ -74,6 +74,9 @@ public class FSM {
 
 
 
+
+
+
                 break;
             case OUTTAKING:
                 intake.intakeReverse();
@@ -86,6 +89,7 @@ public class FSM {
             case SHOOT_BACK:
                 shooter.shootFromBack();
                 shooter.hoodToBack();
+                intake.intakeOn();
 
                 if (shooter.outtake1.getVelocity() <= Shooter.outtakeVels.HARDCODED_SHOOT_BACK.getOuttakeVel() + 50) {
                     transfer.transferOn();
@@ -97,6 +101,7 @@ public class FSM {
                 }
                 break;
             case SHOOT_FRONT:
+                intake.intakeOn();
                 shooter.shootFromFront();
 
                 transfer.transferOn();

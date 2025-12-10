@@ -1,10 +1,13 @@
 package org.firstinspires.ftc.teamcode.teleop;
 
+import android.print.PageRange;
+
 import com.bylazar.configurables.annotations.Configurable;
 import com.bylazar.telemetry.PanelsTelemetry;
 import com.bylazar.telemetry.TelemetryManager;
 import com.pedropathing.follower.Follower;
 import com.pedropathing.geometry.BezierLine;
+import com.pedropathing.geometry.BezierPoint;
 import com.pedropathing.geometry.Pose;
 import com.pedropathing.paths.HeadingInterpolator;
 import com.pedropathing.paths.Path;
@@ -75,18 +78,28 @@ public class LCsTele extends OpMode {
         double atBearing = Math.toRadians(cam.getATangle());
         double atHeadingError = angleWrap(atBearing);
 
+//        pathChain = () -> follower.pathBuilder()
+//                .addPath(new Path(new BezierLine(
+//                        follower::getPose,
+//                        //TODO may have to add 0.01 or any small number so it actually turns and no error
+//                        new Pose(
+//                                follower.getPose().getX() + 3,
+//                                follower.getPose().getY() + 3
+//                        )
+//                )))
+//                .setHeadingInterpolation(HeadingInterpolator.linearFromPoint(
+//                        //TODO may have to make it SUBSTRACT heading error!!!
+//                        follower::getHeading, Math.toRadians(follower.getHeading() + atHeadingError), 0.96)
+//                )
+//                .build();
         pathChain = () -> follower.pathBuilder()
-                .addPath(new Path(new BezierLine(
-                        follower::getPose,
-                        //TODO may have to add 0.01 or any small number so it actually turns and no error
-                        new Pose(
-                                follower.getPose().getX(),
-                                follower.getPose().getY()
-                        )
-                )))
+                .addPath(new Path(new BezierPoint(new Pose(
+                                follower.getPose().getX() + 1,
+                                follower.getPose().getY() + 1
+                        ))))
                 .setHeadingInterpolation(HeadingInterpolator.linearFromPoint(
                         //TODO may have to make it SUBSTRACT heading error!!!
-                        follower::getHeading, Math.toRadians(follower.getHeading() + atHeadingError), 0.96)
+                        follower::getHeading, Math.toRadians(follower.getHeading() - atHeadingError), 0.96)
                 )
                 .build();
 

@@ -37,7 +37,7 @@ public class Robot {
 
     public GamepadMapping controls;
 
-    public static logi cam;
+    //public logi cam;
 
     //public PythonLimelight limelight;
 
@@ -57,9 +57,8 @@ public class Robot {
         transfer = new Transfer(hardwareMap);
         shooter = new Shooter(hardwareMap);
 
-        cam = new logi(hardwareMap);
+        //cam = new logi(hardwareMap);
 
-        //ISHAAN TOOK THIS OUT SO THE REVERSING MOTORS DOES NOT CLASH WITH THE RR MOTORS
         drivetrain = new Drivetrain(hardwareMap, imu, controls);
 
         //limelight = new PythonLimelight(hardwareMap);
