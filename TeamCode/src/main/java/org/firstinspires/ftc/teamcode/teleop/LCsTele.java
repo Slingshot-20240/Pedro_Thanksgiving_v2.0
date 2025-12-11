@@ -34,7 +34,6 @@ public class LCsTele extends OpMode {
 
     private Follower follower;
     private boolean turning;
-    private Supplier<PathChain> pathChain;
     private TelemetryManager telemetryM;
     public static Pose pose;
 
@@ -65,8 +64,6 @@ public class LCsTele extends OpMode {
 
     @Override
     public void loop() {
-
-
         fsm.update();
         follower.update();
         telemetryM.update();
@@ -78,31 +75,11 @@ public class LCsTele extends OpMode {
         double atBearing = Math.toRadians(cam.getATangle());
         double atHeadingError = angleWrap(atBearing);
 
-//        pathChain = () -> follower.pathBuilder()
-//                .addPath(new Path(new BezierLine(
-//                        follower::getPose,
-//                        //TODO may have to add 0.01 or any small number so it actually turns and no error
-//                        new Pose(
-//                                follower.getPose().getX() + 3,
-//                                follower.getPose().getY() + 3
-//                        )
-//                )))
-//                .setHeadingInterpolation(HeadingInterpolator.linearFromPoint(
-//                        //TODO may have to make it SUBSTRACT heading error!!!
-//                        follower::getHeading, Math.toRadians(follower.getHeading() + atHeadingError), 0.96)
-//                )
-//                .build();
-        pathChain = () -> follower.pathBuilder()
-                .addPath(new Path(new BezierPoint(new Pose(
-                                follower.getPose().getX() + 1,
-                                follower.getPose().getY() + 1
-                        ))))
-                .setHeadingInterpolation(HeadingInterpolator.linearFromPoint(
-                        //TODO may have to make it SUBSTRACT heading error!!!
-                        follower::getHeading, Math.toRadians(follower.getHeading() - atHeadingError), 0.96)
-                )
-                .build();
-
+        if (gamepad1.dpad_down) {
+            //TODO - try true, and positive error degrees
+            follower.turnDegrees(-atHeadingError,false);
+            follower.holdPoint(pose);
+        }
 
         boolean controllerBusy =
                 Math.abs( gamepad1.left_stick_x) > 0.05
@@ -120,22 +97,17 @@ public class LCsTele extends OpMode {
 
         follower.setTeleOpDrive(forward, strafe, rotate, true);
 
-        if (gamepad1.dpad_down) {
-            follower.followPath(pathChain.get());
-            turning = true;
-        }
-
-        if (turning && (controllerBusy || !follower.isBusy())) {
+        if (controllerBusy || !follower.isBusy()) {
             follower.startTeleopDrive();
-            turning = false;
         }
 
         telemetry.addData("pose", pose);
         telemetry.addData("Heading", heading);
+        //TODO - change offset hard coded values of goal
+        telemetry.addData("Odo Distance", pose.distanceFrom(new Pose(137,137)));
+        telemetry.addLine("--------------------------------");
         telemetry.addData("AT angle", cam.getATangle());
         telemetry.addData("AT dist", cam.getATdist());
-        telemetry.addLine("--------------------------------");
-        telemetry.addData("Auto Align", turning);
     }
 
     private double angleWrap(double angle) {

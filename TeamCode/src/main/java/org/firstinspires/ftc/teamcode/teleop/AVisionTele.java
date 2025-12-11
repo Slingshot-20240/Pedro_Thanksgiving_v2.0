@@ -114,13 +114,14 @@ public class AVisionTele extends OpMode {
 
             double minPower = 0.08;
             //TODO - TRY NOT EVEN HAVING THIS
-            if (Math.abs(rotate) < minPower && Math.abs(atHeadingError) > Math.toRadians(3)) {
-                rotate = Math.signum(rotate) * minPower;
-            }
+//            if (Math.abs(rotate) < minPower && Math.abs(atHeadingError) > Math.toRadians(3)) {
+//                rotate = Math.signum(rotate) * minPower;
+//            }
 
         } else {
             rotate = -gamepad1.right_stick_x * 0.6;
         }
+
 
         follower.setTeleOpDrive(forward, strafe, rotate, true);
 
