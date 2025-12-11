@@ -98,6 +98,8 @@ public class LCsTele extends OpMode {
         follower.setTeleOpDrive(forward, strafe, rotate, true);
 
         if (controllerBusy || !follower.isBusy()) {
+            follower.resumePathFollowing();
+            follower.breakFollowing();
             follower.startTeleopDrive();
         }
 
