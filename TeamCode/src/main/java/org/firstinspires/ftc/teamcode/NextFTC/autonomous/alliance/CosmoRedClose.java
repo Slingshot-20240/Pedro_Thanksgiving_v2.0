@@ -50,6 +50,8 @@ public class CosmoRedClose extends NextFTCOpMode {
     public static Pose pose;
 
     public void buildPaths() {
+        PedroComponent.follower().setStartingPose(new Pose(126.2, 119, Math.toRadians(36)));
+
         scorePreloads = PedroComponent.follower()
                 .pathBuilder()
                 .addPath(

@@ -58,7 +58,7 @@ public class GamepadMapping {
     public void update() {
         joystickUpdate();
         // INTAKE
-         //intake.update(gamepad1.right_trigger);
+        intake.update(gamepad1.right_trigger >= 0.5);
 
         // SHOOTER
         shootBack.update(gamepad1.left_trigger >= 0.5);

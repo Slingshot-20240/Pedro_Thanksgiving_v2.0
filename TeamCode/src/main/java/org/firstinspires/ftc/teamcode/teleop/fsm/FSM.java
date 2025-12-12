@@ -57,7 +57,6 @@ public class FSM {
                 shooter.shootFromFront();
                 shooter.hoodToFront();
 
-                intake.intakeOn();
                 transfer.hotDog();
 
                 if (gamepad.outtake.locked()) {
@@ -70,6 +69,12 @@ public class FSM {
 
                 if (gamepad.shootFront.locked()) {
                     state = FSMStates.SHOOT_FRONT;
+                }
+
+                if (gamepad.intake.locked()) {
+                    intake.intakeOn();
+                } else {
+                    intake.intakeOff();
                 }
 
 
@@ -123,8 +128,7 @@ public class FSM {
         BASE_STATE,
         SHOOT_FRONT,
         SHOOT_BACK,
-        OUTTAKING,
-        TRANSFER
+        OUTTAKING
     }
 
     public enum ControlType {

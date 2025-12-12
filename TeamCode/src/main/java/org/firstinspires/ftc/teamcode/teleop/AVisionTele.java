@@ -1,5 +1,6 @@
 package org.firstinspires.ftc.teamcode.teleop;
 
+import com.acmerobotics.dashboard.config.Config;
 import com.bylazar.configurables.annotations.Configurable;
 import com.bylazar.telemetry.PanelsTelemetry;
 import com.bylazar.telemetry.TelemetryManager;
@@ -20,7 +21,7 @@ import org.firstinspires.ftc.teamcode.teleop.fsm.FSM;
 
 import java.util.function.Supplier;
 
-@Configurable
+@Config
 @TeleOp
 public class AVisionTele extends OpMode {
 
@@ -35,6 +36,13 @@ public class AVisionTele extends OpMode {
     private Supplier<PathChain> pathChain;
     private TelemetryManager telemetryM;
     public static Pose pose;
+    //auto align
+    public static double tolerance = 0.02;
+    public static double turn_kP = 0.9;
+    public static double minTurnPower = 0.08;
+    public static double toMiniTolerance = 0.02;
+
+
 
 
     @Override
@@ -82,7 +90,7 @@ public class AVisionTele extends OpMode {
 
         double atBearing = Math.toRadians(cam.getATangle());
         double atHeadingError = angleWrap(atBearing);
-        boolean visionTurnFinished = Math.abs(atHeadingError) < Math.toRadians(0.05);
+        boolean visionTurnFinished = Math.abs(atHeadingError) < tolerance;
 
         boolean controllerBusy =
                 Math.abs( gamepad1.left_stick_x) > 0.05
@@ -93,13 +101,7 @@ public class AVisionTele extends OpMode {
             follower.setPose(new Pose(pose.getX(), pose.getY(), Math.toRadians(90)));
         }
 
-        if (gamepad1.dpad_down && !autoTurnVision) {
-            autoTurnVision = true;
-        }
 
-        if ((autoTurnVision && visionTurnFinished) || controllerBusy) {
-            autoTurnVision = false;
-        }
 
         double forward = -gamepad1.left_stick_y;
         double strafe  = -gamepad1.left_stick_x;
@@ -109,14 +111,14 @@ public class AVisionTele extends OpMode {
             forward = 0;
             strafe = 0;
 
-            double Kp = 0.5;
+            double Kp = turn_kP;
             rotate = atHeadingError * Kp;
 
-            double minPower = 0.08;
+            double minPower = minTurnPower;
             //TODO - TRY NOT EVEN HAVING THIS
-//            if (Math.abs(rotate) < minPower && Math.abs(atHeadingError) > Math.toRadians(3)) {
-//                rotate = Math.signum(rotate) * minPower;
-//            }
+            if (Math.abs(rotate) < minPower && Math.abs(atHeadingError) > toMiniTolerance) {
+                rotate = Math.signum(rotate) * minPower;
+            }
 
         } else {
             rotate = -gamepad1.right_stick_x * 0.6;
@@ -135,6 +137,25 @@ public class AVisionTele extends OpMode {
             automatedDrive = false;
         }
 
+        if (gamepad1.a && !autoTurnVision) {
+            autoTurnVision = true;
+        }
+
+        if ((autoTurnVision && visionTurnFinished) || controllerBusy) {
+            autoTurnVision = false;
+        }
+
+
+        if (fsm.state.equals(FSM.FSMStates.SHOOT_FRONT) || fsm.state.equals(FSM.FSMStates.SHOOT_BACK)) {
+            follower.holdPoint(pose);
+        } else {
+            follower.breakFollowing();
+            follower.resumePathFollowing();
+            follower.update();
+            follower.startTeleopDrive();
+            follower.setTeleOpDrive(forward, strafe, rotate, true);
+        }
+
         telemetry.addData("pose", pose);
         telemetry.addData("Heading", heading);
         telemetry.addData("AT angle", cam.getATangle());
@@ -142,6 +163,10 @@ public class AVisionTele extends OpMode {
         telemetry.addLine("--------------------------------");
         telemetry.addData("Vision AutoTurn", autoTurnVision);
         telemetry.addData("AutoPark", automatedDrive);
+        telemetry.addData("Tele Drive", follower.getTeleopDrive());
+        telemetry.addData("graph AT heading error", atHeadingError);
+
+
     }
 
     private double angleWrap(double angle) {
