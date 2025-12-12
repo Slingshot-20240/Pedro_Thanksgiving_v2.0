@@ -65,9 +65,8 @@ public class CosmoRedClose extends NextFTCOpMode {
                 .addPath(
                         new BezierCurve(
                                 scorePose,
-                                new Pose(92.292, 77.000),
-                                new Pose(126.500, 83.400),
-                                new Pose(126.500, 83.400)
+                                new Pose(92.292, 77),
+                                new Pose(126.5, 83.4)
                         )
                 )
                 .setLinearHeadingInterpolation(Math.toRadians(45), Math.toRadians(0))
@@ -77,10 +76,9 @@ public class CosmoRedClose extends NextFTCOpMode {
                 .pathBuilder()
                 .addPath(
                         new BezierCurve(
-                                new Pose(126.500, 83.400),
-                                new Pose(126.500, 83.400),
-                                new Pose(112.000, 77.000),
-                                new Pose(130.000, 71.000)
+                                new Pose(126.5, 83.4),
+                                new Pose(112, 77.000),
+                                new Pose(130, 71.000)
                         )
                 )
                 .setLinearHeadingInterpolation(Math.toRadians(0), Math.toRadians(90))
@@ -133,9 +131,9 @@ public class CosmoRedClose extends NextFTCOpMode {
                 .addPath(
                         new BezierCurve(
                                 scorePose,
-                                new Pose(88.000, 39.000),
-                                new Pose(82.000, 31.000),
-                                new Pose(132.000, 35.000)
+                                new Pose(88, 39),
+                                new Pose(82, 31),
+                                new Pose(132, 35)
                         )
                 )
                 .setLinearHeadingInterpolation(Math.toRadians(45), Math.toRadians(0))

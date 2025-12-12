@@ -35,7 +35,8 @@ public class AVisionTele extends OpMode {
     private boolean automatedDrive;
     private Supplier<PathChain> pathChain;
     private TelemetryManager telemetryM;
-    public static Pose pose;
+
+    public static Pose startingPose;
     //auto align
     public static double tolerance = 0.02;
     public static double turn_kP = 0.9;
@@ -54,8 +55,7 @@ public class AVisionTele extends OpMode {
 
         follower = Constants.createFollower(hardwareMap);
         //follower.setStartingPose(new Pose(18, 118, Math.toRadians(144)));
-        pose = follower.getPose();
-        follower.setStartingPose(pose);
+        follower.setStartingPose(startingPose == null ? new Pose() : startingPose);
         follower.update();
 
         telemetryM = PanelsTelemetry.INSTANCE.getTelemetry();
