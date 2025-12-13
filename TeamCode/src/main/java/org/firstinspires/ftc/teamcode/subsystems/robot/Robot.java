@@ -37,9 +37,7 @@ public class Robot {
 
     public GamepadMapping controls;
 
-    //try static?
-    public logi cam;
-
+    public static logi cam;
 
     public Robot(HardwareMap hardwareMap, GamepadMapping controls) {
         this.controls = controls;
@@ -52,15 +50,13 @@ public class Robot {
 
         driver = hardwareMap.get(GoBildaPinpointDriver.class, "pinpoint");
 
+        cam = new logi(hardwareMap);
 
         intake = new Intake(hardwareMap);
         transfer = new Transfer(hardwareMap);
         shooter = new Shooter(hardwareMap, controls);
 
-        cam = new logi(hardwareMap);
-
         drivetrain = new Drivetrain(hardwareMap, imu, controls);
-
     }
 
     public void hardwareSoftReset() {

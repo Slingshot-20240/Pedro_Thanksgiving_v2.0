@@ -89,7 +89,7 @@ public class AVisionTele extends OpMode {
         Pose pose = follower.getPose();
         double heading = pose.getHeading();
 
-        double atBearing = Math.toRadians(robot.cam.getATangle());
+        double atBearing = Math.toRadians(Robot.cam.getATangle());
         double atHeadingError = angleWrap(atBearing);
         boolean visionTurnFinished = Math.abs(atHeadingError) < tolerance;
 
@@ -166,8 +166,8 @@ public class AVisionTele extends OpMode {
 
         telemetry.addData("pose", pose);
         telemetry.addData("Heading", heading);
-        telemetry.addData("AT angle", robot.cam.getATangle());
-        telemetry.addData("AT dist",  robot.cam.getATdist());
+        telemetry.addData("AT angle", Robot.cam.getATangle());
+        telemetry.addData("AT dist",  Robot.cam.getATdist());
         telemetry.addLine("--------------------------------");
         telemetry.addData("Vision AutoTurn", autoTurnVision);
         telemetry.addData("AutoPark", automatedDrive);

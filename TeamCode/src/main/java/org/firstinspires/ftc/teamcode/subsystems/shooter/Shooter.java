@@ -15,9 +15,6 @@ public class Shooter {
     public final DcMotorEx outtake1;
     public final DcMotorEx outtake2;
     public final Servo variableHood;
-    //public logi cam;
-
-    private Robot robot;
 
     public Shooter(HardwareMap hardwareMap, GamepadMapping controls) {
         outtake1 = hardwareMap.get(DcMotorEx.class, "outtake1");
@@ -27,8 +24,6 @@ public class Shooter {
         outtake2.setDirection(DcMotorSimple.Direction.REVERSE);
 
         variableHood = hardwareMap.get(Servo.class, "variableHood");
-
-        robot = new Robot(hardwareMap, controls);
 
     }
 
@@ -59,7 +54,7 @@ public class Shooter {
     //TODO COMMENTED OUT!!!
     // calculates target velocity depending on the distance the robot is from the goal
     public double calculateShooterVel() {
-        double R = robot.cam.getATdist();
+        double R = Robot.cam.getATdist();
         shootVel = Math.sqrt(H * g + g * Math.sqrt(Math.pow(R, 2) + Math.pow(H, 2)));
         return convertMPSToRPM(shootVel);
     }
@@ -79,7 +74,7 @@ public class Shooter {
 
     // returns the target angle in degrees depending on our distance from the april tag
     public double calculateHoodAngle() {
-        double R = robot.cam.getATdist();
+        double R = Robot.cam.getATdist();
         hoodAngle = Math.atan(Math.pow(calculateShooterVel(), 2)/(g * R));
         return Math.toRadians(hoodAngle);
     }

@@ -38,7 +38,7 @@ public class BeeBoopTest extends OpMode {
 
         dashboardTelemetry.addData("Calculated Target Velocity:", targetVelocity); // in ticks per second
         dashboardTelemetry.addData("Calculated Target Hood Angle:", targetHoodPos); // in value from 0-1
-        dashboardTelemetry.addData("AT Distance", robot.shooter.cam.getATdist()); // in value from 0-1
+        dashboardTelemetry.addData("AT Distance", Robot.cam.getATdist()); // in value from 0-1
 
     }
 }
