@@ -2,9 +2,11 @@ package org.firstinspires.ftc.teamcode.subsystems.shooter;
 
 import com.qualcomm.robotcore.hardware.DcMotorEx;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
+import com.qualcomm.robotcore.hardware.Gamepad;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 import com.qualcomm.robotcore.hardware.Servo;
 
+import org.firstinspires.ftc.teamcode.misc.gamepad.GamepadMapping;
 import org.firstinspires.ftc.teamcode.subsystems.robot.Robot;
 import org.firstinspires.ftc.teamcode.subsystems.vision.logi;
 import org.firstinspires.ftc.teamcode.teleop.ARedTele;
@@ -15,7 +17,9 @@ public class Shooter {
     public final Servo variableHood;
     //public logi cam;
 
-    public Shooter(HardwareMap hardwareMap) {
+    private Robot robot;
+
+    public Shooter(HardwareMap hardwareMap, GamepadMapping controls) {
         outtake1 = hardwareMap.get(DcMotorEx.class, "outtake1");
         outtake2 = hardwareMap.get(DcMotorEx.class, "outtake2");
         outtake1.setVelocityPIDFCoefficients(578,0,0,70);
@@ -23,6 +27,8 @@ public class Shooter {
         outtake2.setDirection(DcMotorSimple.Direction.REVERSE);
 
         variableHood = hardwareMap.get(Servo.class, "variableHood");
+
+        robot = new Robot(hardwareMap, controls);
 
     }
 

@@ -55,7 +55,7 @@ public class Robot {
 
         intake = new Intake(hardwareMap);
         transfer = new Transfer(hardwareMap);
-        shooter = new Shooter(hardwareMap);
+        shooter = new Shooter(hardwareMap, controls);
 
         cam = new logi(hardwareMap);
 
