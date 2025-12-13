@@ -37,9 +37,9 @@ public class Robot {
 
     public GamepadMapping controls;
 
-    //public logi cam;
+    //try static?
+    public logi cam;
 
-    //public PythonLimelight limelight;
 
     public Robot(HardwareMap hardwareMap, GamepadMapping controls) {
         this.controls = controls;
@@ -57,11 +57,10 @@ public class Robot {
         transfer = new Transfer(hardwareMap);
         shooter = new Shooter(hardwareMap);
 
-        //cam = new logi(hardwareMap);
+        cam = new logi(hardwareMap);
 
         drivetrain = new Drivetrain(hardwareMap, imu, controls);
 
-        //limelight = new PythonLimelight(hardwareMap);
     }
 
     public void hardwareSoftReset() {

@@ -28,7 +28,7 @@ public class AVisionTele extends OpMode {
     private GamepadMapping controls;
     private FSM fsm;
     private Robot robot;
-    private logi cam;
+    //private logi cam;
 
     private Follower follower;
     private boolean autoTurnVision = false;
@@ -51,7 +51,7 @@ public class AVisionTele extends OpMode {
     public void init() {
         controls = new GamepadMapping(gamepad1, gamepad2);
         robot = new Robot(hardwareMap, controls);
-        cam = new logi(hardwareMap);
+        //cam = new logi(hardwareMap);
         fsm = new FSM(hardwareMap, controls, robot);
 
         follower = Constants.createFollower(hardwareMap);
@@ -89,7 +89,7 @@ public class AVisionTele extends OpMode {
         Pose pose = follower.getPose();
         double heading = pose.getHeading();
 
-        double atBearing = Math.toRadians(cam.getATangle());
+        double atBearing = Math.toRadians(robot.cam.getATangle());
         double atHeadingError = angleWrap(atBearing);
         boolean visionTurnFinished = Math.abs(atHeadingError) < tolerance;
 
@@ -166,8 +166,8 @@ public class AVisionTele extends OpMode {
 
         telemetry.addData("pose", pose);
         telemetry.addData("Heading", heading);
-        telemetry.addData("AT angle", cam.getATangle());
-        telemetry.addData("AT dist", cam.getATdist());
+        telemetry.addData("AT angle", robot.cam.getATangle());
+        telemetry.addData("AT dist",  robot.cam.getATdist());
         telemetry.addLine("--------------------------------");
         telemetry.addData("Vision AutoTurn", autoTurnVision);
         telemetry.addData("AutoPark", automatedDrive);

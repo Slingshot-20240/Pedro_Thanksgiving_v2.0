@@ -31,14 +31,14 @@ public class BeeBoopTest extends OpMode {
         // TODO: RUPAL - only uncomment the actions when you're certain the values from telemetry won't damage the bot.
         // TODO: if the hood position is greater than .6 or less than .05, there's something wrong with the math
 
-//        double targetVelocity = robot.shooter.calculateShooterVel();
-//        //robot.shooter.setShooterVelocity(targetVelocity);
-//        double targetHoodPos = robot.shooter.calculateHoodAngle();
-        //robot.shooter.setHoodAngle(targetHoodPos);
+        double targetVelocity = robot.shooter.calculateShooterVel();
+        //robot.shooter.setShooterVelocity(targetVelocity);
+        double targetHoodPos = robot.shooter.calculateHoodAngle();
+        robot.shooter.setHoodAngle(targetHoodPos);
 
-//        dashboardTelemetry.addData("Calculated Target Velocity:", targetVelocity); // in ticks per second
-//        dashboardTelemetry.addData("Calculated Target Hood Angle:", targetHoodPos); // in value from 0-1
-//        dashboardTelemetry.addData("AT Distance", robot.shooter.cam.getATdist()); // in value from 0-1
+        dashboardTelemetry.addData("Calculated Target Velocity:", targetVelocity); // in ticks per second
+        dashboardTelemetry.addData("Calculated Target Hood Angle:", targetHoodPos); // in value from 0-1
+        dashboardTelemetry.addData("AT Distance", robot.shooter.cam.getATdist()); // in value from 0-1
 
     }
 }
