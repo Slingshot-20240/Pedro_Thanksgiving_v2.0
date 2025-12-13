@@ -42,6 +42,7 @@ public class AVisionTele extends OpMode {
     public static double turn_kP = 0.9;
     public static double minTurnPower = 0.08;
     public static double toMiniTolerance = 0.02;
+    public int count = 0;
 
 
 
@@ -121,7 +122,7 @@ public class AVisionTele extends OpMode {
             }
 
         } else {
-            rotate = -gamepad1.right_stick_x * 0.6;
+            rotate = -gamepad1.right_stick_x * 0.55;
         }
 
 
@@ -146,14 +147,21 @@ public class AVisionTele extends OpMode {
         }
 
 
-        if (fsm.state.equals(FSM.FSMStates.SHOOT_FRONT) || fsm.state.equals(FSM.FSMStates.SHOOT_BACK)) {
+//        if (fsm.state == FSM.FSMStates.SHOOT_BACK) {
+//            count = 1;
+//            follower.holdPoint(pose);
+//        } else if ((fsm.state == FSM.FSMStates.BASE_STATE && count == 1) || controllerBusy) {
+//            follower.startTeleopDrive();
+//            count = 0;
+//        }
+
+
+        if (gamepad1.x) {
             follower.holdPoint(pose);
-        } else {
+        } if (gamepad1.b) {
             follower.breakFollowing();
-            follower.resumePathFollowing();
-            follower.update();
+            follower.setTeleOpDrive(forward,strafe,heading);
             follower.startTeleopDrive();
-            follower.setTeleOpDrive(forward, strafe, rotate, true);
         }
 
         telemetry.addData("pose", pose);
