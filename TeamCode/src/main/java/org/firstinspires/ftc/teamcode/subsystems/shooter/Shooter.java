@@ -2,14 +2,11 @@ package org.firstinspires.ftc.teamcode.subsystems.shooter;
 
 import com.qualcomm.robotcore.hardware.DcMotorEx;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
-import com.qualcomm.robotcore.hardware.Gamepad;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 import com.qualcomm.robotcore.hardware.Servo;
 
 import org.firstinspires.ftc.teamcode.misc.gamepad.GamepadMapping;
 import org.firstinspires.ftc.teamcode.subsystems.robot.Robot;
-import org.firstinspires.ftc.teamcode.subsystems.vision.logi;
-import org.firstinspires.ftc.teamcode.teleop.ARedTele;
 
 public class Shooter {
     public final DcMotorEx outtake1;
@@ -51,12 +48,15 @@ public class Shooter {
     private static final double H = 0.360837;
     private static double shootVel;
 
-    //TODO COMMENTED OUT!!!
     // calculates target velocity depending on the distance the robot is from the goal
-    public double calculateShooterVel() {
-        double R = Robot.cam.getATdist();
+    public double calculateShooterMPS() {
+        double R = Robot.cam.getATdist() * 0.0254;
         shootVel = Math.sqrt(H * g + g * Math.sqrt(Math.pow(R, 2) + Math.pow(H, 2)));
-        return convertMPSToRPM(shootVel);
+        return shootVel;
+    }
+
+    public double calculateShooterRPM() {
+        return convertMPSToRPM(calculateShooterMPS());
     }
 
     // converts the target velocity from meters per second to rpm for DcMotor
@@ -64,8 +64,8 @@ public class Shooter {
         double c = -2.28611;
         double a = 12.79622;
         double b = 0.000790302;
-        double lnArgument = 1.0 - ((mpsVel - c)/a);
-        return -Math.log(lnArgument)/b; // Math.log is natural logarithm
+        double lnArgument = Math.abs(1.0 - ((mpsVel - c) / a));
+        return -Math.log(lnArgument) / b; // Math.log is natural logarithm
     }
 
     // HOOD ANGLE CALCULATIONS
@@ -74,16 +74,20 @@ public class Shooter {
 
     // returns the target angle in degrees depending on our distance from the april tag
     public double calculateHoodAngle() {
-        double R = Robot.cam.getATdist();
-        hoodAngle = Math.atan(Math.pow(calculateShooterVel(), 2)/(g * R));
-        return Math.toRadians(hoodAngle);
+        double R = Robot.cam.getATdist() * 0.0254;
+        hoodAngle = Math.atan(Math.pow(calculateShooterMPS(), 2) / (g * R));
+        return hoodAngle;
+    }
+
+    public double calculateHoodPos() {
+        return convertTargetAngleToHoodPos(calculateHoodAngle());
     }
 
     // converts the target angle from calculateHoodAngle() to a servo position from 0-1
     public double convertTargetAngleToHoodPos(double targetAngle) {
         double m = 42.8718;
         double b = 37.09643;
-        return (targetAngle - b)/m;
+        return (targetAngle - b) / m;
     }
 
     public static double getShootVel() {
