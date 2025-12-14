@@ -47,7 +47,6 @@ public class CosmoRedClose extends NextFTCOpMode {
     public PathChain scoreSet4;
 
     public Pose scorePose = new Pose(88,88);
-    public static Pose pose;
 
     public void buildPaths() {
         PedroComponent.follower().setStartingPose(new Pose(126.2, 119, Math.toRadians(36)));
@@ -99,7 +98,7 @@ public class CosmoRedClose extends NextFTCOpMode {
                                 scorePose,
                                 new Pose(87.760, 55.000),
                                 new Pose(79.313, 57.000),
-                                new Pose(133.000, 54.000)
+                                new Pose(132, 54.000)
                         )
                 )
                 .setLinearHeadingInterpolation(Math.toRadians(45), Math.toRadians(0))
@@ -109,7 +108,7 @@ public class CosmoRedClose extends NextFTCOpMode {
                 .pathBuilder()
                 .addPath(
                         new BezierCurve(
-                                new Pose(133.000, 54.000),
+                                new Pose(132, 54.000),
                                 new Pose(120.000, 54.000),
                                 new Pose(106.000, 74.000),
                                 new Pose(130.000, 71.000)
@@ -133,7 +132,7 @@ public class CosmoRedClose extends NextFTCOpMode {
                                 scorePose,
                                 new Pose(88, 39),
                                 new Pose(82, 31),
-                                new Pose(132, 35)
+                                new Pose(130, 35)
                         )
                 )
                 .setLinearHeadingInterpolation(Math.toRadians(45), Math.toRadians(0))
@@ -142,12 +141,11 @@ public class CosmoRedClose extends NextFTCOpMode {
         scoreSet4 = PedroComponent.follower()
                 .pathBuilder()
                 .addPath(
-                        new BezierLine(new Pose(132.000, 35.000), new Pose(90.000, 110.000))
+                        new BezierLine(new Pose(130, 35.000), new Pose(90.000, 110.000))
                 )
                 .setLinearHeadingInterpolation(Math.toRadians(0), Math.toRadians(34))
                 .build();
 
-        pose = new Pose(108, 70.000,Math.toRadians(90));
 
 
     }
