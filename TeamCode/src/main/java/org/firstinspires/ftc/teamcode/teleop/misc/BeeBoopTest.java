@@ -1,5 +1,7 @@
 package org.firstinspires.ftc.teamcode.teleop.misc;
 
+import android.util.Log;
+
 import com.acmerobotics.dashboard.FtcDashboard;
 import com.acmerobotics.dashboard.telemetry.MultipleTelemetry;
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
@@ -8,6 +10,7 @@ import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import org.firstinspires.ftc.robotcore.external.Telemetry;
 import org.firstinspires.ftc.teamcode.misc.gamepad.GamepadMapping;
 import org.firstinspires.ftc.teamcode.subsystems.robot.Robot;
+import org.firstinspires.ftc.teamcode.subsystems.shooter.Shooter;
 
 @TeleOp
 public class BeeBoopTest extends OpMode {
@@ -30,14 +33,34 @@ public class BeeBoopTest extends OpMode {
         // TODO: RUPAL - only uncomment the actions when you're certain the values from telemetry won't damage the bot.
         // TODO: if the hood position is greater than .6 or less than .05, there's something wrong with the math
 
-        double targetVelocity = robot.shooter.calculateShooterRPM();
-//        robot.shooter.setShooterVelocity(targetVelocity);
-        double targetHoodPos = robot.shooter.calculateHoodPos();
-//        robot.shooter.setHoodAngle(targetHoodPos);
+        double d = Robot.cam.getATdist();
 
-        dashboardTelemetry.addData("Calculated Target Velocity:", targetVelocity); // in ticks per second
-        dashboardTelemetry.addData("Calculated Target Hood Angle:", targetHoodPos); // in value from 0-1
-        dashboardTelemetry.addData("AT Distance", Robot.cam.getATdist()); // in value from 0-1
+        double targetMPS = Shooter.calculateShooterMPS(d);
+        double targetVelocity = Shooter.convertMPSToRPM(targetMPS);
 
+        double targetHoodAngle = Shooter.calculateHoodAngle(d);
+        double targetHoodPos = Shooter.convertTargetAngleToHoodPos(targetHoodAngle);
+
+        // TODO: ONCE FINAL, the above targetSomething declarations can be replaced with the following:
+        // double targetVelocity = robot.shooter.calculateShooterRPM(d);
+        // double targetHoodPos = robot.shooter.calculateHoodPos(d);
+
+        robot.shooter.setShooterVelocity(targetVelocity);
+        robot.shooter.setHoodAngle(targetHoodPos);
+
+        dashboardTelemetry.addData("AT Distance (in)", d);
+        dashboardTelemetry.addData("Target Velocity (ms^-1):", targetMPS);
+        dashboardTelemetry.addData("Target Velocity (ticks•s^-1):", targetVelocity);
+        dashboardTelemetry.addData("Target Hood Angle (°):", Math.toDegrees(targetHoodAngle));
+        dashboardTelemetry.addData("Target Hood Position (0-1):", targetHoodPos);
+
+
+        // why don't y'all use Log.d :(   -- jining
+        Log.d("SLINGSHOT_DEBUG_SHOOTER", "================================================================");
+        Log.d("SLINGSHOT_DEBUG_SHOOTER", "AT Distance: " + String.format("%.3f", d) + " in");
+        Log.d("SLINGSHOT_DEBUG_SHOOTER", "Target Velocity: " + String.format("%.3f", targetMPS) + " ms^-1");
+        Log.d("SLINGSHOT_DEBUG_SHOOTER", "Target Velocity: " + String.format("%.3f", targetVelocity) + " ticks•s^-1");
+        Log.d("SLINGSHOT_DEBUG_SHOOTER", "Target Hood Angle: " + String.format("%.3f", Math.toDegrees(targetHoodAngle)) + "°");
+        Log.d("SLINGSHOT_DEBUG_SHOOTER", "Target Hood Pos: " + String.format("%.3f", targetHoodPos));
     }
 }
