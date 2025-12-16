@@ -24,8 +24,8 @@ public class ShooterPID extends OpMode {
 //test
     DcMotorEx flywheel1;
     DcMotorEx flywheel2;
-    public static double p1 = 600, i1 = 0.0, d1 = 0.0, f1 = 40;
-    //public static double p2 = 578, i2 = 0.0, d2 = 0.0, f2 = 70;
+    //public static double p1 = 600, i1 = 0.0, d1 = 0.0, f1 = 40;
+    public static double p1 = 578, i1 = 0.0, d1 = 0.0, f1 = 70;
     public static int targetVel = -1095;
     private Telemetry dashboardTelemetry;
     public static double hoodPos = 0.1;
@@ -42,8 +42,8 @@ public class ShooterPID extends OpMode {
         flywheel2 = hardwareMap.get(DcMotorEx.class, "outtake2");
  
         // Set PIDF (start with defaults, tune later)
-        flywheel1.setVelocityPIDFCoefficients(600, 0, 0, 40);
-        flywheel2.setVelocityPIDFCoefficients(600, 0, 0, 40);
+        flywheel1.setVelocityPIDFCoefficients(578, 0, 0, 70);
+        flywheel2.setVelocityPIDFCoefficients(578, 0, 0, 70);
         controls = new GamepadMapping(gamepad1, gamepad2);
         robot = new Robot(hardwareMap, controls);
 

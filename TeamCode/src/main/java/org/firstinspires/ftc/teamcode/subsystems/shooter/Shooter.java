@@ -100,7 +100,7 @@ public class Shooter {
     public static double convertTargetAngleToHoodPos(double targetAngle) {
         double m = 42.8718;
         double b = 37.09643;
-        return (targetAngle - b) / m;
+        return (Math.toDegrees(targetAngle) - b) / m;
     }
 
     public static double getShootVel() {
