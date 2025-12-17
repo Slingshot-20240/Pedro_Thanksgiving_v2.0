@@ -12,6 +12,8 @@ import org.firstinspires.ftc.teamcode.NextFTC.subsystems_nf.Shooternf;
 import org.firstinspires.ftc.teamcode.NextFTC.subsystems_nf.Transfernf;
 import org.firstinspires.ftc.teamcode.NextFTC.subsystems_nf.Hoodnf;
 import org.firstinspires.ftc.teamcode.pedroPathing.Constants;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import dev.nextftc.core.commands.Command;
 import dev.nextftc.core.commands.delays.Delay;
@@ -25,6 +27,8 @@ import dev.nextftc.ftc.components.BulkReadComponent;
 
 @Autonomous(name = "12 Red Close Gate")
 public class LM3RedCloseGate12 extends NextFTCOpMode {
+    private static final Logger log = LoggerFactory.getLogger(LM3RedCloseGate12.class);
+
     public LM3RedCloseGate12() {
         addComponents(
                 new SubsystemComponent(
@@ -267,5 +271,6 @@ public class LM3RedCloseGate12 extends NextFTCOpMode {
     @Override
     public void onStop() {
         startingPose = PedroComponent.follower().getPose();
+        log.debug("Autonomous finish pose", startingPose);
     }
 }
