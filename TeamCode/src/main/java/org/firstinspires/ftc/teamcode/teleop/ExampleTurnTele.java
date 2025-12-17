@@ -29,6 +29,8 @@ public class ExampleTurnTele extends OpMode {
 
     private Follower follower;
     private boolean autoTurnVision = false;
+    private boolean autoTurnOdo = false;
+
     private boolean automatedDrive;
     private Supplier<PathChain> pathChain;
     private TelemetryManager telemetryM;
@@ -37,17 +39,16 @@ public class ExampleTurnTele extends OpMode {
 
     /* ---------------- AUTO TURN CONSTANTS ---------------- */
 
-    // vision auto turn (unchanged)
     public static double tolerance = 0.02;
+
+    // Vision
     public static double turn_kP = 0.9;
     public static double minTurnPower = 0.08;
     public static double toMiniTolerance = 0.02;
 
-    /* ---------------- ODO LOOK-AT POINT ---------------- */
-
+    // ODO
     public static double GOAL_X = 140;
     public static double GOAL_Y = 140;
-
     public static double odoTurn_kP = 1.7;
     public static double odoMinTurnPower = 0.08;
 
@@ -105,42 +106,41 @@ public class ExampleTurnTele extends OpMode {
         double strafe  = -gamepad1.left_stick_x;
         double rotate;
 
-        /* ---------------- ODOMETRY LOOK-AT POINT ---------------- */
+        /* ---------------- ODO HEADING ERROR ---------------- */
 
         double dx = GOAL_X - pose.getX();
         double dy = GOAL_Y - pose.getY();
         double targetHeading = Math.atan2(dy, dx);
         double odoHeadingError = angleWrap(targetHeading - heading);
 
-    //Rotate Logic
-        //Vision Rotate
-        if (autoTurnVision) {
+        /* ---------------- ROTATE LOGIC ---------------- */
+
+        if (autoTurnVision || autoTurnOdo) {
+
             forward = 0;
             strafe = 0;
 
-            rotate = odoHeadingError * turn_kP;
+            double error;
+            double kP;
+            double minPower;
 
-            if (Math.abs(rotate) < minTurnPower && Math.abs(odoHeadingError) > toMiniTolerance) {
-                rotate = Math.signum(rotate) * minTurnPower;
+            if (autoTurnVision) {
+                error = odoHeadingError;      // vision error would go here
+                kP = turn_kP;
+                minPower = minTurnPower;
+            } else {
+                error = odoHeadingError;
+                kP = odoTurn_kP;
+                minPower = odoMinTurnPower;
             }
 
-        }
+            rotate = error * kP;
 
-        //Odometry Rotate
-        else if (gamepad1.dpad_down) {
-            //keep commented if you don't want it to only turn in place to goal
-//            forward = 0;
-//            strafe = 0;
-
-            rotate = odoHeadingError * odoTurn_kP;
-
-            if (Math.abs(rotate) < odoMinTurnPower && Math.abs(odoHeadingError) > tolerance) {
-                rotate = Math.signum(rotate) * odoMinTurnPower;
+            if (Math.abs(rotate) < minPower && Math.abs(error) > tolerance) {
+                rotate = Math.signum(rotate) * minPower;
             }
 
-        }
-        // normal teleop rotation
-        else {
+        } else {
             rotate = -gamepad1.right_stick_x * 0.55;
         }
 
@@ -158,14 +158,24 @@ public class ExampleTurnTele extends OpMode {
             automatedDrive = false;
         }
 
-        /* ---------------- VISION AUTO TURN TOGGLE ---------------- */
+        /* ---------------- AUTO TURN TOGGLES ---------------- */
 
         if (gamepad1.a && !autoTurnVision) {
             autoTurnVision = true;
         }
 
+        if (gamepad1.dpad_down && !autoTurnOdo) {
+            autoTurnOdo = true;
+        }
+
+        /* ---------------- AUTO TURN EXIT ---------------- */
+
         if ((autoTurnVision && Math.abs(odoHeadingError) < tolerance) || controllerBusy) {
             autoTurnVision = false;
+        }
+
+        if ((autoTurnOdo && Math.abs(odoHeadingError) < tolerance) || controllerBusy) {
+            autoTurnOdo = false;
         }
 
         /* ---------------- HOLD / BREAK ---------------- */
@@ -183,10 +193,10 @@ public class ExampleTurnTele extends OpMode {
 
         telemetry.addData("Pose", pose);
         telemetry.addData("Heading (deg)", Math.toDegrees(heading));
-        telemetry.addData("ODO Target Heading", Math.toDegrees(targetHeading));
+        telemetry.addData("ODO Target Heading (deg)", Math.toDegrees(targetHeading));
         telemetry.addData("ODO Heading Error (deg)", Math.toDegrees(odoHeadingError));
-        telemetry.addData("DPAD ODO TURN", gamepad1.dpad_down);
         telemetry.addData("AutoTurn Vision", autoTurnVision);
+        telemetry.addData("AutoTurn ODO", autoTurnOdo);
         telemetry.addData("AutoPath", automatedDrive);
     }
 
