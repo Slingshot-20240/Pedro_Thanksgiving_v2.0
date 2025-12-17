@@ -23,7 +23,7 @@ public class Transfernf implements Subsystem {
 
     public Command hotdog() {
         return new ParallelGroup(
-                new SetPower(frontTransfer, -0.2),
+                new SetPower(frontTransfer, -0.1),
                 new SetPower(backTransfer, 1.0)
         );
     }

@@ -80,7 +80,7 @@ public class RedClose15 extends NextFTCOpMode {
                         new BezierCurve(
                                 new Pose(126.5, 83.4),
                                 new Pose(112, 77.000),
-                                new Pose(130, 71.000)
+                                new Pose(129.2, 71.000)
                         )
                 )
                 .setLinearHeadingInterpolation(Math.toRadians(0), Math.toRadians(90))
@@ -89,7 +89,7 @@ public class RedClose15 extends NextFTCOpMode {
         scoreSet2 = PedroComponent.follower()
                 .pathBuilder()
                 .addPath(
-                        new BezierLine(new Pose(130.000, 71.000), scorePose)
+                        new BezierLine(new Pose(129.2, 71.000), scorePose)
                 )
                 .setLinearHeadingInterpolation(Math.toRadians(90), Math.toRadians(45))
                 .build();
@@ -114,7 +114,7 @@ public class RedClose15 extends NextFTCOpMode {
                                 new Pose(132, 54.000),
                                 new Pose(120.000, 54.000),
                                 new Pose(106.000, 74.000),
-                                new Pose(130.000, 71.000)
+                                new Pose(129.2, 71.000)
                         )
                 )
                 .setLinearHeadingInterpolation(Math.toRadians(0), Math.toRadians(90))
@@ -123,7 +123,7 @@ public class RedClose15 extends NextFTCOpMode {
         scoreSet3 = PedroComponent.follower()
                 .pathBuilder()
                 .addPath(
-                        new BezierLine(new Pose(130.000, 71.000), scorePose)
+                        new BezierLine(new Pose(129.2, 71.000), scorePose)
                 )
                 .setLinearHeadingInterpolation(Math.toRadians(90), Math.toRadians(45))
                 .build();
@@ -135,7 +135,7 @@ public class RedClose15 extends NextFTCOpMode {
                                 scorePose,
                                 new Pose(88, 39),
                                 new Pose(82, 31),
-                                new Pose(130, 35)
+                                new Pose(135, 35)
                         )
                 )
                 .setLinearHeadingInterpolation(Math.toRadians(45), Math.toRadians(0))
@@ -145,7 +145,7 @@ public class RedClose15 extends NextFTCOpMode {
         scoreSet4 = PedroComponent.follower()
                 .pathBuilder()
                 .addPath(
-                        new BezierLine(new Pose(132.000, 35.000), scorePose)
+                        new BezierLine(new Pose(135, 35.000), scorePose)
                 )
                 .setLinearHeadingInterpolation(Math.toRadians(0), Math.toRadians(45))
                 .build();
@@ -153,31 +153,31 @@ public class RedClose15 extends NextFTCOpMode {
         prepareHp = PedroComponent.follower()
                 .pathBuilder()
                 .addPath(
-                        new BezierLine(scorePose, new Pose(132.000, 40.000))
+                        new BezierLine(scorePose, new Pose(127, 40.000))
                 )
-                .setLinearHeadingInterpolation(Math.toRadians(45), Math.toRadians(290))
+                .setLinearHeadingInterpolation(Math.toRadians(45), Math.toRadians(295))
                 .build();
 
         grabHp = PedroComponent.follower()
                 .pathBuilder()
                 .addPath(
-                        new BezierLine(new Pose(132.000, 40.000), new Pose(132.000, 11.000))
+                        new BezierLine(new Pose(127, 40.000), new Pose(127, 11.000))
                 )
-                .setLinearHeadingInterpolation(Math.toRadians(290), Math.toRadians(290))
+                .setLinearHeadingInterpolation(Math.toRadians(295), Math.toRadians(295))
                 .build();
 
         scoreHp = PedroComponent.follower()
                 .pathBuilder()
                 .addPath(
-                        new BezierLine(new Pose(132.000, 11.000), new Pose(90.000, 110.000))
+                        new BezierLine(new Pose(127, 11.000), new Pose(90.000, 110.000))
                 )
-                .setLinearHeadingInterpolation(Math.toRadians(290), Math.toRadians(34))
+                .setLinearHeadingInterpolation(Math.toRadians(295), Math.toRadians(34))
                 .build();
 
         scoreHp = PedroComponent.follower()
                 .pathBuilder()
                 .addPath(
-                        new BezierLine(new Pose(132.000, 11.000), new Pose(90.000, 110.000))
+                        new BezierLine(new Pose(127, 11.000), new Pose(90.000, 110.000))
                 )
                 .setLinearHeadingInterpolation(Math.toRadians(290), Math.toRadians(34))
                 .build();
@@ -224,9 +224,9 @@ public class RedClose15 extends NextFTCOpMode {
                                 Shooternf.INSTANCE.setShooterVel(-1200)
                         ),
                         //Spin up time
-                        new Delay(0.3),
+                        //new Delay(0.6),
                         //ATalign(),
-                        transferUpFor(1),
+                        transferUpFor(1.3),
 
 
                         //SET 2
@@ -236,26 +236,26 @@ public class RedClose15 extends NextFTCOpMode {
 
                                         //gate
                                         new FollowPath(gate1),
-                                        new Delay(0.6),
+                                        //new Delay(0.2),
                                         new FollowPath(scoreSet2)
                                 ),
                                 baseState(),
                                 Shooternf.INSTANCE.setShooterVel(-1200)
                         ),
-                        transferUpFor(1),
+                        transferUpFor(1.3),
 
                         //SET 3
                         new ParallelGroup(
                                 new SequentialGroup(
                                         new FollowPath(grabSet3),
                                         new FollowPath(gate2),
-                                        new Delay(0.2),
+                                        //new Delay(0.2),
                                         new FollowPath(scoreSet3, true)
                                 ),
                                 baseState(),
                                 Shooternf.INSTANCE.setShooterVel(-1200)
                         ),
-                        transferUpFor(1),
+                        transferUpFor(1.3),
 
                         //SET 4
                         new ParallelGroup(
@@ -266,7 +266,7 @@ public class RedClose15 extends NextFTCOpMode {
                                 baseState(),
                                 Shooternf.INSTANCE.setShooterVel(-1200)
                         ),
-                        transferUpFor(1),
+                        transferUpFor(1.8),
 
                         //SET 5 - Human Player
                         new ParallelGroup(

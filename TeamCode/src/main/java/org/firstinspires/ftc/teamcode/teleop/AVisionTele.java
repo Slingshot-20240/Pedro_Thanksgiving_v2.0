@@ -54,8 +54,8 @@ public class AVisionTele extends OpMode {
         fsm = new FSM(hardwareMap, controls, robot);
 
         follower = Constants.createFollower(hardwareMap);
-        //follower.setStartingPose(new Pose(18, 118, Math.toRadians(144)));
-        follower.setStartingPose(startingPose);
+        follower.setStartingPose(new Pose(18, 118, Math.toRadians(144)));
+        //follower.setStartingPose(startingPose);
         follower.update();
 
         telemetryM = PanelsTelemetry.INSTANCE.getTelemetry();
