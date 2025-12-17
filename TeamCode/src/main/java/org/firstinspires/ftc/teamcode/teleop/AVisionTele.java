@@ -56,7 +56,7 @@ public class AVisionTele extends OpMode {
 
         follower = Constants.createFollower(hardwareMap);
         //follower.setStartingPose(new Pose(18, 118, Math.toRadians(144)));
-        follower.setStartingPose(startingPose == null ? new Pose() : startingPose);
+        follower.setStartingPose(startingPose);
         follower.update();
 
         telemetryM = PanelsTelemetry.INSTANCE.getTelemetry();
@@ -98,9 +98,9 @@ public class AVisionTele extends OpMode {
             || Math.abs(gamepad1.left_stick_y) > 0.05
             || Math.abs(gamepad1.right_stick_x) > 0.05;
 
-        if (gamepad1.xWasPressed()) {
-            follower.setPose(new Pose(pose.getX(), pose.getY(), Math.toRadians(90)));
-        }
+//        if (gamepad1.xWasPressed()) {
+//            follower.setPose(new Pose(pose.getX(), pose.getY(), Math.toRadians(90)));
+//        }
 
 
 
