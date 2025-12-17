@@ -47,7 +47,7 @@ public class LM3RedCloseGate12 extends NextFTCOpMode {
     public PathChain park;
 
     public Pose scorePose = new Pose(88,88);
-    public static Pose startingPose;
+    public static Pose startingPose = new Pose();
 
     public void buildPaths() {
         PedroComponent.follower().setStartingPose(new Pose(126.2, 119, Math.toRadians(36)));
