@@ -1,4 +1,4 @@
-package org.firstinspires.ftc.teamcode.NextFTC.autonomous.alliance;
+package org.firstinspires.ftc.teamcode.NextFTC.autonomous.test;
 
 import com.pedropathing.geometry.BezierCurve;
 import com.pedropathing.geometry.BezierLine;
@@ -23,9 +23,9 @@ import dev.nextftc.extensions.pedro.PedroComponent;
 import dev.nextftc.ftc.NextFTCOpMode;
 import dev.nextftc.ftc.components.BulkReadComponent;
 
-@Autonomous(name = "CosmoRedClose")
-public class CosmoRedClose extends NextFTCOpMode {
-    public CosmoRedClose() {
+@Autonomous(name = "15 ball red close")
+public class RedClose15 extends NextFTCOpMode {
+    public RedClose15() {
         addComponents(
                 new SubsystemComponent(
                         Intakenf.INSTANCE, Hoodnf.INSTANCE,
@@ -45,6 +45,9 @@ public class CosmoRedClose extends NextFTCOpMode {
     public PathChain scoreSet3;
     public PathChain grabSet4;
     public PathChain scoreSet4;
+    public PathChain prepareHp;
+    public PathChain grabHp;
+    public PathChain scoreHp;
 
     public Pose scorePose = new Pose(88,88);
 
@@ -138,20 +141,45 @@ public class CosmoRedClose extends NextFTCOpMode {
                 .setLinearHeadingInterpolation(Math.toRadians(45), Math.toRadians(0))
                 .build();
 
-        scoreSet4 = PedroComponent.follower()
-                .pathBuilder()
-                .addPath(
-                        new BezierLine(new Pose(130, 35.000), new Pose(90.000, 110.000))
-                )
-                .setLinearHeadingInterpolation(Math.toRadians(0), Math.toRadians(34))
-                .build();
 
         scoreSet4 = PedroComponent.follower()
                 .pathBuilder()
                 .addPath(
-                        new BezierLine(new Pose(130, 35.000), new Pose(90.000, 110.000))
+                        new BezierLine(new Pose(132.000, 35.000), new Pose(88.000, 88.000))
                 )
-                .setLinearHeadingInterpolation(Math.toRadians(0), Math.toRadians(34))
+                .setLinearHeadingInterpolation(Math.toRadians(0), Math.toRadians(45))
+                .build();
+
+        prepareHp = PedroComponent.follower()
+                .pathBuilder()
+                .addPath(
+                        new BezierLine(new Pose(88.000, 88.000), new Pose(132.000, 40.000))
+                )
+                .setLinearHeadingInterpolation(Math.toRadians(45), Math.toRadians(290))
+                .build();
+
+        grabHp = PedroComponent.follower()
+                .pathBuilder()
+                .addPath(
+                        new BezierLine(new Pose(132.000, 40.000), new Pose(132.000, 11.000))
+                )
+                .setLinearHeadingInterpolation(Math.toRadians(290), Math.toRadians(290))
+                .build();
+
+        scoreHp = PedroComponent.follower()
+                .pathBuilder()
+                .addPath(
+                        new BezierLine(new Pose(132.000, 11.000), new Pose(90.000, 110.000))
+                )
+                .setLinearHeadingInterpolation(Math.toRadians(290), Math.toRadians(34))
+                .build();
+
+        scoreHp = PedroComponent.follower()
+                .pathBuilder()
+                .addPath(
+                        new BezierLine(new Pose(132.000, 11.000), new Pose(90.000, 110.000))
+                )
+                .setLinearHeadingInterpolation(Math.toRadians(290), Math.toRadians(34))
                 .build();
 
 
@@ -198,7 +226,7 @@ public class CosmoRedClose extends NextFTCOpMode {
                         //Spin up time
                         new Delay(0.3),
                         //ATalign(),
-                        transferUpFor(2.2),
+                        transferUpFor(1),
 
 
                         //SET 2
@@ -214,8 +242,7 @@ public class CosmoRedClose extends NextFTCOpMode {
                                 baseState(),
                                 Shooternf.INSTANCE.setShooterVel(-1200)
                         ),
-                        new Delay(0.2),
-                        transferUpFor(2.5),
+                        transferUpFor(1),
 
 
 
@@ -230,8 +257,7 @@ public class CosmoRedClose extends NextFTCOpMode {
                                 baseState(),
                                 Shooternf.INSTANCE.setShooterVel(-1200)
                         ),
-                        new Delay(0.2),
-                        transferUpFor(2.5),
+                        transferUpFor(1),
 
                         //SET 4
                         new ParallelGroup(
@@ -242,7 +268,18 @@ public class CosmoRedClose extends NextFTCOpMode {
                                 baseState(),
                                 Shooternf.INSTANCE.setShooterVel(-1200)
                         ),
-                        new Delay(0.2),
+                        transferUpFor(1),
+
+                        //SET 5 - Human Player
+                        new ParallelGroup(
+                                new SequentialGroup(
+                                        new FollowPath(prepareHp),
+                                        new FollowPath(grabHp),
+                                        new FollowPath(scoreHp, true)
+                                ),
+                                baseState(),
+                                Shooternf.INSTANCE.setShooterVel(-1200)
+                        ),
                         transferUpFor(5)
 
 
