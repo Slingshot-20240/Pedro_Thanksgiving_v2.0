@@ -1,4 +1,4 @@
-package org.firstinspires.ftc.teamcode.teleop.fsm;
+package org.firstinspires.ftc.teamcode.teleop.fsm.practice;
 
 import com.qualcomm.robotcore.hardware.HardwareMap;
 
@@ -8,7 +8,6 @@ import org.firstinspires.ftc.teamcode.subsystems.robot.Robot;
 import org.firstinspires.ftc.teamcode.subsystems.shooter.Shooter;
 import org.firstinspires.ftc.teamcode.subsystems.transfer.Transfer;
 import org.firstinspires.ftc.teamcode.subsystems.intake.Intake;
-import org.firstinspires.ftc.teamcode.subsystems.vision.PythonLimelight;
 
 public class IshaanFSM {
     // GENERAL ROBOT STATES + CLASSES

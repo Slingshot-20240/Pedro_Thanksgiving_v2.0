@@ -13,45 +13,29 @@ public class FSM {
     // GENERAL ROBOT STATES + CLASSES
     public Robot robot;
     public FSMStates state = FSMStates.BASE_STATE;
-    public ControlType type = ControlType.HARDCODED_CONTROL;
+    public ControlType type = ControlType.PID_CONTROL;
     private final GamepadMapping gamepad;
-
 
     // SUBSYSTEMS
     private final Intake intake;
-    //private Turret turret;
     private final Transfer transfer;
     private final Shooter shooter;
-    //private final Drivetrain drivetrain;
-
 
     public FSM(HardwareMap hardwareMap, GamepadMapping gamepad, Robot robot) {
         this.robot = robot;
         this.gamepad = robot.controls;
 
         intake = robot.intake;
-        //turret = robot.turret;
         transfer = robot.transfer;
 
         shooter = robot.shooter;
-
-//        drivetrain = robot.drivetrain;
-        //limelight = robot.limelight;
     }
 
     public void update() {
-        // Updates driver controls here as well
-
-        // Updates all other controls
         gamepad.update();
-
-        // drive.update();
-        // pose = drive.getPose();
-        // TODO - Get robot pos from localization
 
         switch (state) {
             case BASE_STATE:
-                // TODO: still keep always running depending on spin up time
                 shooter.shootFromFront();
                 shooter.hoodToFront();
 
@@ -61,11 +45,11 @@ public class FSM {
                     state = FSMStates.OUTTAKING;
                 }
 
-                if (gamepad.shootBack.locked()) {
+                if (gamepad.shootBack.locked() && type == ControlType.HARDCODED_CONTROL) {
                     state = FSMStates.SHOOT_BACK;
                 }
 
-                if (gamepad.shootFront.locked()) {
+                if (gamepad.shootFront.locked() && type == ControlType.HARDCODED_CONTROL) {
                     state = FSMStates.SHOOT_FRONT;
                 }
 
@@ -75,10 +59,9 @@ public class FSM {
                     intake.intakeOff();
                 }
 
-
-
-
-
+                if (gamepad.transfer.locked() && type == ControlType.PID_CONTROL) {
+                    state = FSMStates.PID_SHOOT;
+                }
 
                 break;
             case OUTTAKING:
@@ -115,10 +98,23 @@ public class FSM {
                 }
                 break;
 
-//            case TURRET:
-                // intake on
-                // TODO: FIX THIS FOR TURRET
-                //turret.setTurretPos(turret.calcTurretVal(pose.getX(), pose.getY(), pose.getX(), pose.getY(), pose.getHeading()), 1);
+            case PID_SHOOT:
+                intake.intakeOn();
+
+                double distance = Robot.cam.getTargetArtifactTravelDistanceX();
+
+                double targetVelocity = robot.shooter.calculateShooterRPM(distance);
+                double targetHoodPos = robot.shooter.calculateHoodPos(distance);
+
+                robot.shooter.setShooterVelocity(-targetVelocity);
+                robot.shooter.setHoodAngle(targetHoodPos);
+
+                transfer.transferOn();
+
+                if (!gamepad.transfer.locked()) {
+                    state = FSMStates.BASE_STATE;
+                    gamepad.resetMultipleControls(gamepad.transfer, gamepad.outtake);
+                }
         }
     }
 
@@ -126,7 +122,8 @@ public class FSM {
         BASE_STATE,
         SHOOT_FRONT,
         SHOOT_BACK,
-        OUTTAKING
+        OUTTAKING,
+        PID_SHOOT
     }
 
     public enum ControlType {

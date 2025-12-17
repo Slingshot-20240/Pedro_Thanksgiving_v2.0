@@ -1,4 +1,4 @@
-package org.firstinspires.ftc.teamcode.teleop.fsm;
+package org.firstinspires.ftc.teamcode.teleop.fsm.practice;
 
 import com.qualcomm.robotcore.hardware.Gamepad;
 import com.qualcomm.robotcore.hardware.HardwareMap;
