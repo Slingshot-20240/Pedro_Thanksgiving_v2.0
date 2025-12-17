@@ -58,7 +58,7 @@ public class Shooter {
 
     // calculates target velocity with CURRENT distance away from the goal
     public double calculateShooterMPS() {
-        return calculateShooterRPM(Robot.cam.getATdist());
+        return calculateShooterRPM(Robot.cam.getTargetArtifactTravelDistanceX());
     }
 
     // calculates target velocity in TICKS PER SECOND instead of meters per second
@@ -88,7 +88,7 @@ public class Shooter {
 
     // returns the target angle in RADIANS depending on CURRENT distance from the april tag
     public double calculateHoodAngle() {
-        return calculateHoodAngle(Robot.cam.getATdist());
+        return calculateHoodAngle(Robot.cam.getTargetArtifactTravelDistanceX());
     }
 
     // returns the target angle in HOOD POS (0-1) instead of radians

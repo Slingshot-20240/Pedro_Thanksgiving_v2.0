@@ -96,6 +96,11 @@ public class logi {
         }
         return 0.0;
     }
+
+    // extra 4" for cam-to-flywheel, 18" for AT-to-back-of-goal
+    public double getTargetArtifactTravelDistanceX() {
+        return getATdist() + 22;
+    }
 }
 
 //Not done yet sdadge
