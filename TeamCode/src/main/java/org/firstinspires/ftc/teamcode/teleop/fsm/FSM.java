@@ -2,6 +2,7 @@ package org.firstinspires.ftc.teamcode.teleop.fsm;
 
 
 import com.qualcomm.robotcore.hardware.HardwareMap;
+import com.qualcomm.robotcore.util.ElapsedTime;
 
 import org.firstinspires.ftc.teamcode.misc.gamepad.GamepadMapping;
 import org.firstinspires.ftc.teamcode.subsystems.intake.Intake;
@@ -21,6 +22,10 @@ public class FSM {
     private final Transfer transfer;
     private final Shooter shooter;
 
+    private final ElapsedTime loopTime;
+
+    double startTime = 0;
+
     public FSM(HardwareMap hardwareMap, GamepadMapping gamepad, Robot robot) {
         this.robot = robot;
         this.gamepad = robot.controls;
@@ -29,6 +34,10 @@ public class FSM {
         transfer = robot.transfer;
 
         shooter = robot.shooter;
+
+        loopTime = new ElapsedTime(ElapsedTime.Resolution.SECONDS);
+
+        startTime = loopTime.seconds();
     }
 
     public void update() {
@@ -61,6 +70,7 @@ public class FSM {
 
                 if (gamepad.transfer.locked() && type == ControlType.PID_CONTROL) {
                     state = FSMStates.PID_SHOOT;
+                    startTime = loopTime.seconds();
                 }
 
                 break;
@@ -107,7 +117,11 @@ public class FSM {
                 double targetHoodPos = robot.shooter.calculateHoodPos(distance);
 
                 robot.shooter.setShooterVelocity(-targetVelocity);
-                robot.shooter.setHoodAngle(targetHoodPos);
+
+                // This should prevent the shooter from changing hood pos if it can't see the AprilTag (so if it cuts out it's fine)
+                if (Robot.cam.getTargetArtifactTravelDistanceX() == 0) {
+                    robot.shooter.setHoodAngle(shooter.variableHood.getPosition());
+                }
 
                 transfer.transferOn();
 
