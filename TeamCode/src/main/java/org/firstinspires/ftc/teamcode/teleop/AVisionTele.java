@@ -51,7 +51,6 @@ public class AVisionTele extends OpMode {
     public void init() {
         controls = new GamepadMapping(gamepad1, gamepad2);
         robot = new Robot(hardwareMap, controls);
-        //cam = new logi(hardwareMap);
         fsm = new FSM(hardwareMap, controls, robot);
 
         follower = Constants.createFollower(hardwareMap);
@@ -156,13 +155,13 @@ public class AVisionTele extends OpMode {
 //        }
 
 
-        if (gamepad1.x) {
-            follower.holdPoint(pose);
-        } if (gamepad1.b) {
-            follower.breakFollowing();
-            follower.setTeleOpDrive(forward,strafe,heading);
-            follower.startTeleopDrive();
-        }
+//        if (gamepad1.x) {
+//            follower.holdPoint(pose);
+//        } if (gamepad1.b) {
+//            follower.breakFollowing();
+//            follower.setTeleOpDrive(forward,strafe,heading);
+//            follower.startTeleopDrive();
+//        }
 
         telemetry.addData("pose", pose);
         telemetry.addData("Heading", heading);

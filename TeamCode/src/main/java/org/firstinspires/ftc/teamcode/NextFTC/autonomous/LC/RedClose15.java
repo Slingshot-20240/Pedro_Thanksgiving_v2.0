@@ -1,4 +1,4 @@
-package org.firstinspires.ftc.teamcode.NextFTC.autonomous.test;
+package org.firstinspires.ftc.teamcode.NextFTC.autonomous.LC;
 
 import com.pedropathing.geometry.BezierCurve;
 import com.pedropathing.geometry.BezierLine;
@@ -145,7 +145,7 @@ public class RedClose15 extends NextFTCOpMode {
         scoreSet4 = PedroComponent.follower()
                 .pathBuilder()
                 .addPath(
-                        new BezierLine(new Pose(132.000, 35.000), new Pose(88.000, 88.000))
+                        new BezierLine(new Pose(132.000, 35.000), scorePose)
                 )
                 .setLinearHeadingInterpolation(Math.toRadians(0), Math.toRadians(45))
                 .build();
@@ -153,7 +153,7 @@ public class RedClose15 extends NextFTCOpMode {
         prepareHp = PedroComponent.follower()
                 .pathBuilder()
                 .addPath(
-                        new BezierLine(new Pose(88.000, 88.000), new Pose(132.000, 40.000))
+                        new BezierLine(scorePose, new Pose(132.000, 40.000))
                 )
                 .setLinearHeadingInterpolation(Math.toRadians(45), Math.toRadians(290))
                 .build();
@@ -244,8 +244,6 @@ public class RedClose15 extends NextFTCOpMode {
                         ),
                         transferUpFor(1),
 
-
-
                         //SET 3
                         new ParallelGroup(
                                 new SequentialGroup(
@@ -299,6 +297,6 @@ public class RedClose15 extends NextFTCOpMode {
     public void onStartButtonPressed() {
         autonomous().schedule();
         Shooternf.INSTANCE.enable();
-
     }
+
 }
