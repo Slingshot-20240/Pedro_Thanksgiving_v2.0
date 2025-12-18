@@ -16,6 +16,7 @@ import org.firstinspires.ftc.teamcode.pedroPathing.Constants;
 
 import dev.nextftc.core.commands.Command;
 import dev.nextftc.core.commands.delays.Delay;
+import dev.nextftc.core.commands.delays.WaitUntil;
 import dev.nextftc.core.commands.groups.ParallelGroup;
 import dev.nextftc.core.commands.groups.SequentialGroup;
 import dev.nextftc.core.components.SubsystemComponent;
@@ -234,16 +235,22 @@ public class RedClose15 extends NextFTCOpMode {
                         new ParallelGroup(
                                 new SequentialGroup(
                                         new FollowPath(grabSet2),
-
                                         //gate
                                         new FollowPath(gate1),
                                         //new Delay(0.2),
-                                        new FollowPath(scoreSet2)
+                                        new ParallelGroup(
+                                                new FollowPath(scoreSet2),
+                                                new SequentialGroup(
+                                                        //TODO - tune this value
+                                                        new WaitUntil(() -> PedroComponent.follower().getDistanceRemaining() < 6),
+                                                        transferUpFor(1.3)
+                                                )
+
+                                        )
                                 ),
                                 baseState(),
                                 Shooternf.INSTANCE.setShooterVel(-1200)
                         ),
-                        transferUpFor(1.3),
 
                         //SET 3
                         new ParallelGroup(
