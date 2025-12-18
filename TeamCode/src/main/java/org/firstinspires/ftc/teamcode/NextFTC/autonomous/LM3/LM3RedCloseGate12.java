@@ -7,6 +7,7 @@ import com.pedropathing.geometry.Pose;
 import com.pedropathing.paths.PathChain;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 
+import org.firstinspires.ftc.teamcode.NextFTC.autonomous.PoseStorage;
 import org.firstinspires.ftc.teamcode.NextFTC.subsystems_nf.Intakenf;
 import org.firstinspires.ftc.teamcode.NextFTC.subsystems_nf.Shooternf;
 import org.firstinspires.ftc.teamcode.NextFTC.subsystems_nf.Transfernf;
@@ -27,7 +28,6 @@ import dev.nextftc.ftc.components.BulkReadComponent;
 
 @Autonomous(name = "12 Red Close Gate")
 public class LM3RedCloseGate12 extends NextFTCOpMode {
-    private static final Logger log = LoggerFactory.getLogger(LM3RedCloseGate12.class);
 
     public LM3RedCloseGate12() {
         addComponents(
@@ -270,7 +270,6 @@ public class LM3RedCloseGate12 extends NextFTCOpMode {
     }
     @Override
     public void onStop() {
-        startingPose = PedroComponent.follower().getPose();
-        log.debug("Autonomous finish pose", startingPose);
+        PoseStorage.startingPose = PedroComponent.follower().getPose();
     }
 }

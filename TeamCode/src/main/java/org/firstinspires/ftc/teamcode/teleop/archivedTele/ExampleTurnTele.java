@@ -12,6 +12,7 @@ import com.pedropathing.paths.PathChain;
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 
+import org.firstinspires.ftc.teamcode.NextFTC.autonomous.PoseStorage;
 import org.firstinspires.ftc.teamcode.misc.gamepad.GamepadMapping;
 import org.firstinspires.ftc.teamcode.pedroPathing.Constants;
 import org.firstinspires.ftc.teamcode.subsystems.robot.Robot;
@@ -61,7 +62,8 @@ public class ExampleTurnTele extends OpMode {
         fsm = new FSM(hardwareMap, controls, robot);
 
         follower = Constants.createFollower(hardwareMap);
-        follower.setStartingPose(new Pose(126.2, 119, Math.toRadians(36)));
+        follower.setStartingPose(PoseStorage.startingPose);
+        //follower.setStartingPose(new Pose(126.2, 119, Math.toRadians(36)));
         follower.update();
 
         telemetryM = PanelsTelemetry.INSTANCE.getTelemetry();

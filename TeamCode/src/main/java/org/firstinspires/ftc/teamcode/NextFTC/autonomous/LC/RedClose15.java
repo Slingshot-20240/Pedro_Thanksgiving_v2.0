@@ -7,6 +7,7 @@ import com.pedropathing.geometry.Pose;
 import com.pedropathing.paths.PathChain;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 
+import org.firstinspires.ftc.teamcode.NextFTC.autonomous.PoseStorage;
 import org.firstinspires.ftc.teamcode.NextFTC.subsystems_nf.Intakenf;
 import org.firstinspires.ftc.teamcode.NextFTC.subsystems_nf.Shooternf;
 import org.firstinspires.ftc.teamcode.NextFTC.subsystems_nf.Transfernf;
@@ -299,4 +300,8 @@ public class RedClose15 extends NextFTCOpMode {
         Shooternf.INSTANCE.enable();
     }
 
+    @Override
+    public void onStop() {
+        PoseStorage.startingPose = PedroComponent.follower().getPose();
+    }
 }
