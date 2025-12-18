@@ -1,7 +1,6 @@
 package org.firstinspires.ftc.teamcode.NextFTC.subsystems_nf;
 
 import com.bylazar.configurables.annotations.Configurable;
-import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 
 import dev.nextftc.control.ControlSystem;
 import dev.nextftc.core.commands.Command;
@@ -17,7 +16,6 @@ public class Shooternf implements Subsystem {
 
     public MotorEx outtake1, outtake2;
     public MotorGroup shooter;
-
 
     private final ControlSystem shooterController = ControlSystem.builder()
             .velPid(0.32,0,0.001)
@@ -56,6 +54,33 @@ public class Shooternf implements Subsystem {
     public void disable() {
         enabled = false;
         shooter.setPower(0); //prevents shooter on in init
+    }
+
+    private boolean ball1detected, ball2detected, ball3detected;
+    private boolean isRecovered = true;
+    public boolean rpmDraw(double requestedVel, double dipThreshold) {
+        double currentVel = shooter.getVelocity();
+        double recoveryThreshold = requestedVel + 50;
+
+        //check if the shooter has recovered speed since the last shot
+        if (!isRecovered && currentVel <= recoveryThreshold) {
+            isRecovered = true;
+        }
+
+        //only look for a dip if we have recovered from the previous shot
+        if (isRecovered && currentVel > (requestedVel + dipThreshold)) {
+            if (!ball1detected) {
+                ball1detected = true;
+            } else if (!ball2detected) {
+                ball2detected = true;
+            } else if (!ball3detected) {
+                ball3detected = true;
+            }
+
+            isRecovered = false;
+        }
+
+        return ball3detected;
     }
 
     @Override

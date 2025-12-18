@@ -20,6 +20,7 @@ import dev.nextftc.core.commands.Command;
 import dev.nextftc.core.commands.delays.Delay;
 import dev.nextftc.core.commands.delays.WaitUntil;
 import dev.nextftc.core.commands.groups.ParallelGroup;
+import dev.nextftc.core.commands.groups.ParallelRaceGroup;
 import dev.nextftc.core.commands.groups.SequentialGroup;
 import dev.nextftc.core.components.SubsystemComponent;
 import dev.nextftc.extensions.pedro.FollowPath;
@@ -335,7 +336,10 @@ public class RedClose15 extends NextFTCOpMode {
                                 baseState(),
                                 Shooternf.INSTANCE.setShooterVel(-1200)
                         ),
-                        transferUpFor(1.8),
+                        new ParallelRaceGroup(
+                                new WaitUntil(() -> Shooternf.INSTANCE.rpmDraw(-1200,50)),
+                                transferUpFor(5)
+                        ),
 
                         //SET 5 - Human Player
                         new ParallelGroup(
@@ -348,7 +352,6 @@ public class RedClose15 extends NextFTCOpMode {
                                 Shooternf.INSTANCE.setShooterVel(-1200)
                         ),
                         transferUpFor(5)
-
 
                 )
         );
