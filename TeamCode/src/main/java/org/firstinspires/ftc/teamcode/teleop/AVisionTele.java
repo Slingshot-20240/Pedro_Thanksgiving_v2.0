@@ -13,6 +13,7 @@ import com.pedropathing.paths.PathChain;
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 
+import org.firstinspires.ftc.teamcode.NextFTC.autonomous.PoseStorage;
 import org.firstinspires.ftc.teamcode.misc.gamepad.GamepadMapping;
 import org.firstinspires.ftc.teamcode.pedroPathing.Constants;
 import org.firstinspires.ftc.teamcode.subsystems.robot.Robot;
@@ -38,7 +39,6 @@ public class AVisionTele extends OpMode {
     private Supplier<PathChain> pathChain;
     private TelemetryManager telemetryM;
 
-    public static Pose startingPose;
     //auto align
     public static double tolerance = 0.02;
     public static double turn_kP = 0.9;
@@ -57,8 +57,8 @@ public class AVisionTele extends OpMode {
         fsm = new FSM(hardwareMap, controls, robot);
 
         follower = Constants.createFollower(hardwareMap);
-        follower.setStartingPose(new Pose(126.2, 119, Math.toRadians(36)));
-        //follower.setStartingPose(startingPose);
+        //follower.setStartingPose(new Pose(126.2, 119, Math.toRadians(36)));
+        follower.setStartingPose(PoseStorage.startingPose);
         follower.update();
 
         telemetryM = PanelsTelemetry.INSTANCE.getTelemetry();
