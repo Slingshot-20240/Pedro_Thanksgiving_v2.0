@@ -1,9 +1,11 @@
 package org.firstinspires.ftc.teamcode.NextFTC.autonomous.LC;
 
+import com.acmerobotics.dashboard.config.Config;
 import com.pedropathing.geometry.BezierCurve;
 import com.pedropathing.geometry.BezierLine;
 import com.pedropathing.geometry.Pose;
 
+import com.pedropathing.paths.HeadingInterpolator;
 import com.pedropathing.paths.PathChain;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 
@@ -25,6 +27,7 @@ import dev.nextftc.extensions.pedro.PedroComponent;
 import dev.nextftc.ftc.NextFTCOpMode;
 import dev.nextftc.ftc.components.BulkReadComponent;
 
+@Config
 @Autonomous(name = "15 ball red close")
 public class RedClose15 extends NextFTCOpMode {
     public RedClose15() {
@@ -52,6 +55,7 @@ public class RedClose15 extends NextFTCOpMode {
     public PathChain scoreHp;
 
     public Pose scorePose = new Pose(88,88);
+    public static double proximityThreshold = 6;
 
     public void buildPaths() {
         PedroComponent.follower().setStartingPose(new Pose(126.2, 119, Math.toRadians(36)));
@@ -64,6 +68,10 @@ public class RedClose15 extends NextFTCOpMode {
                 .setLinearHeadingInterpolation(Math.toRadians(36), Math.toRadians(45))
                 .build();
 
+
+
+
+
         grabSet2 = PedroComponent.follower()
                 .pathBuilder()
                 .addPath(
@@ -74,10 +82,8 @@ public class RedClose15 extends NextFTCOpMode {
                         )
                 )
                 .setLinearHeadingInterpolation(Math.toRadians(45), Math.toRadians(0))
-                .build();
 
-        gate1 = PedroComponent.follower()
-                .pathBuilder()
+
                 .addPath(
                         new BezierCurve(
                                 new Pose(126.5, 83.4),
@@ -86,15 +92,48 @@ public class RedClose15 extends NextFTCOpMode {
                         )
                 )
                 .setLinearHeadingInterpolation(Math.toRadians(0), Math.toRadians(90))
-                .build();
 
-        scoreSet2 = PedroComponent.follower()
-                .pathBuilder()
+
+
                 .addPath(
                         new BezierLine(new Pose(129.2, 71.000), scorePose)
                 )
-                .setLinearHeadingInterpolation(Math.toRadians(90), Math.toRadians(45))
+//                .setLinearHeadingInterpolation(Math.toRadians(90), Math.toRadians(45))
+                //TODO - may need to tune this. if you make y lower, it should account for robot movement for shooting
+                .setHeadingInterpolation(
+                        HeadingInterpolator.facingPoint(new Pose(144,144))
+                )
+                .addParametricCallback(0.8, transferUpFor(2))
                 .build();
+
+//        gate1 = PedroComponent.follower()
+//                .pathBuilder()
+//                .addPath(
+//                        new BezierCurve(
+//                                new Pose(126.5, 83.4),
+//                                new Pose(112, 77.000),
+//                                new Pose(129.2, 71.000)
+//                        )
+//                )
+//                .setLinearHeadingInterpolation(Math.toRadians(0), Math.toRadians(90))
+//                .build();
+
+//        scoreSet2 = PedroComponent.follower()
+//                .pathBuilder()
+//                .addPath(
+//                        new BezierLine(new Pose(129.2, 71.000), scorePose)
+//                )
+////                .setLinearHeadingInterpolation(Math.toRadians(90), Math.toRadians(45))
+//                //TODO - may need to tune this. if you make y lower, it should account for robot movement for shooting
+//                .setHeadingInterpolation(
+//                        HeadingInterpolator.facingPoint(new Pose(144,144))
+//                )
+//
+//                .build();
+
+
+
+
 
         grabSet3 = PedroComponent.follower()
                 .pathBuilder()
@@ -107,10 +146,10 @@ public class RedClose15 extends NextFTCOpMode {
                         )
                 )
                 .setLinearHeadingInterpolation(Math.toRadians(45), Math.toRadians(0))
-                .build();
 
-        gate2 = PedroComponent.follower()
-                .pathBuilder()
+
+
+
                 .addPath(
                         new BezierCurve(
                                 new Pose(132, 54.000),
@@ -120,14 +159,33 @@ public class RedClose15 extends NextFTCOpMode {
                         )
                 )
                 .setLinearHeadingInterpolation(Math.toRadians(0), Math.toRadians(90))
+
+
+
                 .build();
+
+//        gate2 = PedroComponent.follower()
+//                .pathBuilder()
+//                .addPath(
+//                        new BezierCurve(
+//                                new Pose(132, 54.000),
+//                                new Pose(120.000, 54.000),
+//                                new Pose(106.000, 74.000),
+//                                new Pose(129.2, 71.000)
+//                        )
+//                )
+//                .setLinearHeadingInterpolation(Math.toRadians(0), Math.toRadians(90))
+//                .build();
 
         scoreSet3 = PedroComponent.follower()
                 .pathBuilder()
                 .addPath(
                         new BezierLine(new Pose(129.2, 71.000), scorePose)
                 )
-                .setLinearHeadingInterpolation(Math.toRadians(90), Math.toRadians(45))
+//                .setLinearHeadingInterpolation(Math.toRadians(90), Math.toRadians(45))
+                .setHeadingInterpolation(
+                        HeadingInterpolator.facingPoint(new Pose(144,144))
+                )
                 .build();
 
         grabSet4 = PedroComponent.follower()
@@ -234,19 +292,13 @@ public class RedClose15 extends NextFTCOpMode {
                         //SET 2
                         new ParallelGroup(
                                 new SequentialGroup(
-                                        new FollowPath(grabSet2),
-                                        //gate
-                                        new FollowPath(gate1),
-                                        //new Delay(0.2),
-                                        new ParallelGroup(
-                                                new FollowPath(scoreSet2),
-                                                new SequentialGroup(
-                                                        //TODO - tune this value
-                                                        new WaitUntil(() -> PedroComponent.follower().getDistanceRemaining() < 6),
-                                                        transferUpFor(1.3)
-                                                )
-
-                                        )
+                                        new FollowPath(grabSet2)
+//                                        //gate
+//                                        new FollowPath(gate1),
+//                                        //new Delay(0.2),
+//                                        new FollowPath(scoreSet2),
+//
+//                                   )
                                 ),
                                 baseState(),
                                 Shooternf.INSTANCE.setShooterVel(-1200)
@@ -256,9 +308,18 @@ public class RedClose15 extends NextFTCOpMode {
                         new ParallelGroup(
                                 new SequentialGroup(
                                         new FollowPath(grabSet3),
+                                        //gate
                                         new FollowPath(gate2),
                                         //new Delay(0.2),
-                                        new FollowPath(scoreSet3, true)
+                                        new ParallelGroup(
+                                                new FollowPath(scoreSet3),
+                                                new SequentialGroup(
+                                                        //TODO - tune this value
+                                                        new WaitUntil(() -> PedroComponent.follower().getDistanceRemaining() < proximityThreshold),
+                                                        transferUpFor(1.3)
+                                                )
+
+                                        )
                                 ),
                                 baseState(),
                                 Shooternf.INSTANCE.setShooterVel(-1200)
