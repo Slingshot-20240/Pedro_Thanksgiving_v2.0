@@ -338,6 +338,7 @@ public class RedClose15 extends NextFTCOpMode {
                         ),
                         new ParallelRaceGroup(
                                 new WaitUntil(() -> Shooternf.INSTANCE.rpmDraw(-1200,50)),
+                                //TODO, tune race group value (max time for transfer)
                                 transferUpFor(5)
                         ),
 
