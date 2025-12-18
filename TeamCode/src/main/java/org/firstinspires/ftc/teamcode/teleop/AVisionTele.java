@@ -90,10 +90,9 @@ public class AVisionTele extends OpMode {
 
         Pose pose = follower.getPose();
         double heading = pose.getHeading();
-        //odoDistance = Math.sqrt(Math.pow(pose.getX()-137, 2) + Math.pow(pose.getY()-137, 2));
 
         // TODO BEE DO THE THING
-        odoDistance = pose.distanceFrom(new Pose(137,137));
+        odoDistance = pose.distanceFrom(new Pose(140,140));
         double atBearing = Math.toRadians(Robot.cam.getATangle());
         double atHeadingError = angleWrap(atBearing);
         boolean visionTurnFinished = Math.abs(atHeadingError) < tolerance;
@@ -169,7 +168,7 @@ public class AVisionTele extends OpMode {
 //            follower.startTeleopDrive();
 //        }
 
-        telemetry.addData("pose", pose);
+        telemetry.addData("pose", pose.toString());
         telemetry.addData("Odo Distance", odoDistance);
 
         telemetry.addData("Heading", heading);

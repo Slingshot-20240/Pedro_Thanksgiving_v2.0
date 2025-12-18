@@ -28,27 +28,28 @@ public class ExampleTurnTele extends OpMode {
     private Robot robot;
 
     private Follower follower;
+
     private boolean autoTurnVision = false;
     private boolean autoTurnOdo = false;
 
     private boolean automatedDrive;
     private Supplier<PathChain> pathChain;
     private TelemetryManager telemetryM;
+    public static double odoDistance;
 
-    public static Pose startingPose;
-
-    /* ---------------- AUTO TURN CONSTANTS ---------------- */
 
     public static double tolerance = 0.02;
 
-    // Vision
-    public static double turn_kP = 0.9;
-    public static double minTurnPower = 0.08;
-    public static double toMiniTolerance = 0.02;
+    // Vision tuning
+    public static double visionTurn_kP = 0.9;
+    public static double visionMinTurnPower = 0.08;
+    public static double visionMiniTolerance = 0.02;
 
-    // ODO
+    // ODO target
     public static double GOAL_X = 140;
     public static double GOAL_Y = 140;
+
+    // ODO tuning
     public static double odoTurn_kP = 1.7;
     public static double odoMinTurnPower = 0.08;
 
@@ -60,7 +61,7 @@ public class ExampleTurnTele extends OpMode {
         fsm = new FSM(hardwareMap, controls, robot);
 
         follower = Constants.createFollower(hardwareMap);
-        follower.setStartingPose(startingPose);
+        follower.setStartingPose(new Pose(126.2, 119, Math.toRadians(36)));
         follower.update();
 
         telemetryM = PanelsTelemetry.INSTANCE.getTelemetry();
@@ -74,7 +75,7 @@ public class ExampleTurnTele extends OpMode {
                         HeadingInterpolator.linearFromPoint(
                                 follower::getHeading,
                                 Math.toRadians(90),
-                                0.96
+                                0.98
                         )
                 )
                 .build();
@@ -96,6 +97,8 @@ public class ExampleTurnTele extends OpMode {
 
         Pose pose = follower.getPose();
         double heading = pose.getHeading();
+        odoDistance = pose.distanceFrom(new Pose(140,140));
+
 
         boolean controllerBusy =
                 Math.abs(gamepad1.left_stick_x) > 0.05 ||
@@ -106,14 +109,24 @@ public class ExampleTurnTele extends OpMode {
         double strafe  = -gamepad1.left_stick_x;
         double rotate;
 
-        /* ---------------- ODO HEADING ERROR ---------------- */
 
+
+        //------------- error calculation -------------\\
+    // Vision error
+        double visionBearing = Math.toRadians(Robot.cam.getATangle());
+        double visionHeadingError = angleWrap(visionBearing);
+        boolean visionTurnFinished =
+                Math.abs(visionHeadingError) < tolerance;
+
+    // ODO error
         double dx = GOAL_X - pose.getX();
         double dy = GOAL_Y - pose.getY();
         double targetHeading = Math.atan2(dy, dx);
         double odoHeadingError = angleWrap(targetHeading - heading);
+        boolean odoTurnFinished =
+                Math.abs(odoHeadingError) < tolerance;
 
-        /* ---------------- ROTATE LOGIC ---------------- */
+        //------------- rotate logic -------------\\
 
         if (autoTurnVision || autoTurnOdo) {
 
@@ -123,20 +136,23 @@ public class ExampleTurnTele extends OpMode {
             double error;
             double kP;
             double minPower;
+            double miniTolerance;
 
             if (autoTurnVision) {
-                error = odoHeadingError;      // vision error would go here
-                kP = turn_kP;
-                minPower = minTurnPower;
+                error = visionHeadingError;
+                kP = visionTurn_kP;
+                minPower = visionMinTurnPower;
+                miniTolerance = visionMiniTolerance;
             } else {
                 error = odoHeadingError;
                 kP = odoTurn_kP;
                 minPower = odoMinTurnPower;
+                miniTolerance = tolerance;
             }
 
             rotate = error * kP;
 
-            if (Math.abs(rotate) < minPower && Math.abs(error) > tolerance) {
+            if (Math.abs(rotate) < minPower && Math.abs(error) > miniTolerance) {
                 rotate = Math.signum(rotate) * minPower;
             }
 
@@ -146,7 +162,7 @@ public class ExampleTurnTele extends OpMode {
 
         follower.setTeleOpDrive(forward, strafe, rotate, true);
 
-        /* ---------------- PATH FOLLOWING ---------------- */
+        // Path following
 
         if (gamepad1.startWasPressed()) {
             follower.followPath(pathChain.get());
@@ -168,33 +184,23 @@ public class ExampleTurnTele extends OpMode {
             autoTurnOdo = true;
         }
 
-        /* ---------------- AUTO TURN EXIT ---------------- */
+        // Turn cancellation
 
-        if ((autoTurnVision && Math.abs(odoHeadingError) < tolerance) || controllerBusy) {
+        if ((autoTurnVision && visionTurnFinished) || controllerBusy) {
             autoTurnVision = false;
         }
 
-        if ((autoTurnOdo && Math.abs(odoHeadingError) < tolerance) || controllerBusy) {
+        if ((autoTurnOdo && odoTurnFinished) || controllerBusy) {
             autoTurnOdo = false;
         }
 
-        /* ---------------- HOLD / BREAK ---------------- */
-
-        if (gamepad1.x) {
-            follower.holdPoint(pose);
-        }
-
-        if (gamepad1.b) {
-            follower.breakFollowing();
-            follower.startTeleopDrive();
-        }
-
-        /* ---------------- TELEMETRY ---------------- */
+        // Telemetry
 
         telemetry.addData("Pose", pose);
         telemetry.addData("Heading (deg)", Math.toDegrees(heading));
-        telemetry.addData("ODO Target Heading (deg)", Math.toDegrees(targetHeading));
-        telemetry.addData("ODO Heading Error (deg)", Math.toDegrees(odoHeadingError));
+        telemetry.addLine("---- AUTO TURN ----");
+        telemetry.addData("Vision Error (deg)", Math.toDegrees(visionHeadingError));
+        telemetry.addData("ODO Error (deg)", Math.toDegrees(odoHeadingError));
         telemetry.addData("AutoTurn Vision", autoTurnVision);
         telemetry.addData("AutoTurn ODO", autoTurnOdo);
         telemetry.addData("AutoPath", automatedDrive);
