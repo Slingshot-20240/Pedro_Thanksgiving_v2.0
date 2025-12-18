@@ -270,6 +270,12 @@ public class RedClose15 extends NextFTCOpMode {
     }
 
     private Command autonomous() {
+
+        //Preloads, normal
+        //Set 2, face pose interpolator + parametric, t value, callback
+        //Set 3, wait until + distance remaining
+        //Set 4, rpm draw race group
+        //Hp, normal
         return new ParallelGroup(
                 //INTAKE ALWAYS ON
                 Intakenf.INSTANCE.in(),
