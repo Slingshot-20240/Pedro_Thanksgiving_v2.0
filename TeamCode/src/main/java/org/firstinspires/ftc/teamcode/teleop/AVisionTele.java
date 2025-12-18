@@ -21,6 +21,8 @@ import org.firstinspires.ftc.teamcode.teleop.fsm.FSM;
 
 import java.util.function.Supplier;
 
+import dev.nextftc.extensions.pedro.PedroComponent;
+
 @Config
 @TeleOp
 public class AVisionTele extends OpMode {
@@ -43,6 +45,7 @@ public class AVisionTele extends OpMode {
     public static double minTurnPower = 0.08;
     public static double toMiniTolerance = 0.02;
     public int count = 0;
+    static double odoDistance;
 
 
 
@@ -54,7 +57,7 @@ public class AVisionTele extends OpMode {
         fsm = new FSM(hardwareMap, controls, robot);
 
         follower = Constants.createFollower(hardwareMap);
-        follower.setStartingPose(new Pose(18, 118, Math.toRadians(144)));
+        follower.setStartingPose(new Pose(126.2, 119, Math.toRadians(36)));
         //follower.setStartingPose(startingPose);
         follower.update();
 
@@ -87,7 +90,10 @@ public class AVisionTele extends OpMode {
 
         Pose pose = follower.getPose();
         double heading = pose.getHeading();
+        //odoDistance = Math.sqrt(Math.pow(pose.getX()-137, 2) + Math.pow(pose.getY()-137, 2));
 
+        // TODO BEE DO THE THING
+        odoDistance = pose.distanceFrom(new Pose(137,137));
         double atBearing = Math.toRadians(Robot.cam.getATangle());
         double atHeadingError = angleWrap(atBearing);
         boolean visionTurnFinished = Math.abs(atHeadingError) < tolerance;
@@ -164,6 +170,8 @@ public class AVisionTele extends OpMode {
 //        }
 
         telemetry.addData("pose", pose);
+        telemetry.addData("Odo Distance", odoDistance);
+
         telemetry.addData("Heading", heading);
         telemetry.addData("AT angle", Robot.cam.getATangle());
         telemetry.addData("AT dist",  Robot.cam.getATdist());

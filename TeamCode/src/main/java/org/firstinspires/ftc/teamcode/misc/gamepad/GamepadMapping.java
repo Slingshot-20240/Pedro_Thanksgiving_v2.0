@@ -57,7 +57,7 @@ public class GamepadMapping {
         shootFront.update(gamepad1.left_bumper);
 
         // TRANSFER
-        transfer.update(gamepad1.dpad_up);
+        transfer.update(gamepad1.left_bumper);
 
         // OUTTAKE
         outtake.update(gamepad1.y);

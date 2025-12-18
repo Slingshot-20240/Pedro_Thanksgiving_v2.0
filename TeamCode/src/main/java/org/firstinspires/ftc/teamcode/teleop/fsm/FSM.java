@@ -45,8 +45,11 @@ public class FSM {
 
         switch (state) {
             case BASE_STATE:
-                shooter.shootFromFront();
-                shooter.hoodToFront();
+
+                if (type == ControlType.HARDCODED_CONTROL) {
+                    shooter.shootFromFront();
+                    shooter.hoodToFront();
+                }
 
                 transfer.hotDog();
 
@@ -71,6 +74,22 @@ public class FSM {
                 if (gamepad.transfer.locked() && type == ControlType.PID_CONTROL) {
                     state = FSMStates.PID_SHOOT;
                     startTime = loopTime.seconds();
+                }
+
+                if (type == ControlType.PID_CONTROL) {
+                    double distance = Robot.cam.getTargetArtifactTravelDistanceX();
+
+                    double targetVelocity = robot.shooter.calculateShooterRPM(distance);
+                    double targetHoodPos = robot.shooter.calculateHoodPos(distance);
+
+                    robot.shooter.setShooterVelocity(-targetVelocity);
+
+                    // This should prevent the shooter from changing hood pos if it can't see the AprilTag (so if it cuts out it's fine)
+                    if (Robot.cam.getTargetArtifactTravelDistanceX() == 0) {
+                        robot.shooter.setHoodAngle(shooter.variableHood.getPosition());
+                    } else {
+                        robot.shooter.setHoodAngle(targetHoodPos);
+                    }
                 }
 
                 break;
@@ -110,18 +129,6 @@ public class FSM {
 
             case PID_SHOOT:
                 intake.intakeOn();
-
-                double distance = Robot.cam.getTargetArtifactTravelDistanceX();
-
-                double targetVelocity = robot.shooter.calculateShooterRPM(distance);
-                double targetHoodPos = robot.shooter.calculateHoodPos(distance);
-
-                robot.shooter.setShooterVelocity(-targetVelocity);
-
-                // This should prevent the shooter from changing hood pos if it can't see the AprilTag (so if it cuts out it's fine)
-                if (Robot.cam.getTargetArtifactTravelDistanceX() == 0) {
-                    robot.shooter.setHoodAngle(shooter.variableHood.getPosition());
-                }
 
                 transfer.transferOn();
 
