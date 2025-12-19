@@ -346,6 +346,7 @@ public class RedClose15 extends NextFTCOpMode {
                                 new WaitUntil(() -> Shooternf.INSTANCE.rpmDraw(-1200,50)),
                                 //TODO, tune race group value (max time for transfer)
                                 transferUpFor(5)
+                                //you can use .asDeadline() at end of command also
                         ),
 
                         //SET 5 - Human Player
