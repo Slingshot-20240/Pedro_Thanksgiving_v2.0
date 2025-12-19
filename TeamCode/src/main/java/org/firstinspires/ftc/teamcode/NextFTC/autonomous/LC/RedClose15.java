@@ -56,7 +56,7 @@ public class RedClose15 extends NextFTCOpMode {
     public PathChain scoreHp;
 
     public Pose scorePose = new Pose(88,88);
-    public static double proximityThreshold = 6;
+    public static double proximityThreshold = 5;
 
     public void buildPaths() {
         PedroComponent.follower().setStartingPose(new Pose(126.2, 119, Math.toRadians(36)));
@@ -248,30 +248,34 @@ public class RedClose15 extends NextFTCOpMode {
     }
 
 
+    //TODO - figure out the max and min pos of servo! Does increasing bring hood up or down?
     private Command init_bot() {
         return new SequentialGroup(
+                Hoodnf.INSTANCE.setHoodPos(0.4),
                 Hoodnf.INSTANCE.setHoodPos(0.4)
         );
 
     }
 
     private Command transferUpFor(double time) {
-        return new ParallelGroup(
-                Transfernf.INSTANCE.on(),
-                new Delay(time)
-        );
+        return Transfernf.INSTANCE.on().endAfter(time);
+//        return new ParallelGroup(
+//                Transfernf.INSTANCE.on(),
+//                new Delay(time)
+//        );
     }
 
     private Command baseState() {
         return new ParallelGroup(
                 Transfernf.INSTANCE.hotdog(),
-                Hoodnf.INSTANCE.setHoodPos(0.4)
+                Hoodnf.INSTANCE.setHoodPos(0.4),
+                Hoodnf.INSTANCE.closeSide()
         );
     }
 
     private Command autonomous() {
 
-        //Preloads, normal
+        //Preloads, shoot while moving, transfer (after time)
         //Set 2, face pose interpolator + parametric, t value, callback
         //Set 3, wait until + distance remaining
         //Set 4, rpm draw race group
@@ -288,12 +292,14 @@ public class RedClose15 extends NextFTCOpMode {
                                 new FollowPath(scorePreloads, true),
 
                                 baseState(),
-                                Shooternf.INSTANCE.setShooterVel(-1200)
+                                Shooternf.INSTANCE.setShooterVel(-1200),
+                                //TODO - tune when to start shooting
+                                transferUpFor(1.3).afterTime(0.8)
                         ),
                         //Spin up time
                         //new Delay(0.6),
                         //ATalign(),
-                        transferUpFor(1.3),
+
 
 
                         //SET 2
