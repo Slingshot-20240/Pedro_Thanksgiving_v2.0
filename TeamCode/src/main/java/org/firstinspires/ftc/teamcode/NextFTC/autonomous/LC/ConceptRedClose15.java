@@ -29,9 +29,9 @@ import dev.nextftc.ftc.NextFTCOpMode;
 import dev.nextftc.ftc.components.BulkReadComponent;
 
 @Config
-@Autonomous(name = "15 ball red close")
-public class RedClose15 extends NextFTCOpMode {
-    public RedClose15() {
+@Autonomous(name = "Concept red close 15")
+public class ConceptRedClose15 extends NextFTCOpMode {
+    public ConceptRedClose15() {
         addComponents(
                 new SubsystemComponent(
                         Intakenf.INSTANCE, Hoodnf.INSTANCE,
