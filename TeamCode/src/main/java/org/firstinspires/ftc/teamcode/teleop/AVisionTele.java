@@ -45,10 +45,7 @@ public class AVisionTele extends OpMode {
     public static double minTurnPower = 0.08;
     public static double toMiniTolerance = 0.02;
     public int count = 0;
-    static double odoDistance;
-
-
-
+    public static double odoDistance;
 
     @Override
     public void init() {
@@ -106,8 +103,6 @@ public class AVisionTele extends OpMode {
 //            follower.setPose(new Pose(pose.getX(), pose.getY(), Math.toRadians(90)));
 //        }
 
-
-
         double forward = -gamepad1.left_stick_y;
         double strafe  = -gamepad1.left_stick_x;
         double rotate;
@@ -128,7 +123,6 @@ public class AVisionTele extends OpMode {
         } else {
             rotate = -gamepad1.right_stick_x * 0.55;
         }
-
 
         follower.setTeleOpDrive(forward, strafe, rotate, true);
 

@@ -9,6 +9,7 @@ import org.firstinspires.ftc.teamcode.subsystems.intake.Intake;
 import org.firstinspires.ftc.teamcode.subsystems.robot.Robot;
 import org.firstinspires.ftc.teamcode.subsystems.shooter.Shooter;
 import org.firstinspires.ftc.teamcode.subsystems.transfer.Transfer;
+import org.firstinspires.ftc.teamcode.teleop.AVisionTele;
 
 public class FSM {
     // GENERAL ROBOT STATES + CLASSES
@@ -22,9 +23,8 @@ public class FSM {
     private final Transfer transfer;
     private final Shooter shooter;
 
-    private final ElapsedTime loopTime;
-
-    double startTime = 0;
+    // Everyone ignore this horrendous OOP
+    private double odoDistance = AVisionTele.odoDistance;
 
     public FSM(HardwareMap hardwareMap, GamepadMapping gamepad, Robot robot) {
         this.robot = robot;
@@ -34,10 +34,6 @@ public class FSM {
         transfer = robot.transfer;
 
         shooter = robot.shooter;
-
-        loopTime = new ElapsedTime(ElapsedTime.Resolution.SECONDS);
-
-        startTime = loopTime.seconds();
     }
 
     public void update() {
@@ -73,7 +69,6 @@ public class FSM {
 
                 if (gamepad.transfer.locked() && type == ControlType.PID_CONTROL) {
                     state = FSMStates.PID_SHOOT;
-                    startTime = loopTime.seconds();
                 }
 
                 if (type == ControlType.PID_CONTROL) {
@@ -87,6 +82,7 @@ public class FSM {
                     // This should prevent the shooter from changing hood pos if it can't see the AprilTag (so if it cuts out it's fine)
                     if (Robot.cam.getTargetArtifactTravelDistanceX() == 0) {
                         robot.shooter.setHoodAngle(shooter.variableHood.getPosition());
+                        robot.shooter.setShooterPower(robot.shooter.calculateShooterRPM(odoDistance));
                     } else {
                         robot.shooter.setHoodAngle(targetHoodPos);
                     }

@@ -21,11 +21,9 @@ public class Shooter {
         outtake2.setDirection(DcMotorSimple.Direction.REVERSE);
 
         variableHood = hardwareMap.get(Servo.class, "variableHood");
-
     }
 
     public enum outtakeVels {
-        PID_SHOOT(shootVel),
         // 5.059
         HARDCODED_SHOOT_FRONT(-1120),
         // 5.954
