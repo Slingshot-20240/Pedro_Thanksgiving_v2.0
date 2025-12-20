@@ -20,6 +20,8 @@ import org.firstinspires.ftc.teamcode.teleop.fsm.FSM;
 
 import java.util.function.Supplier;
 
+import dev.nextftc.extensions.pedro.PedroComponent;
+
 @Config
 @TeleOp
 public class ExampleTurnTele extends OpMode {
@@ -51,7 +53,7 @@ public class ExampleTurnTele extends OpMode {
     public static double GOAL_Y = 140;
 
     // ODO tuning
-    public static double odoTurn_kP = 1.7;
+    public static double odoTurn_kP = 0.65;
     public static double odoMinTurnPower = 0.08;
 
     @Override
@@ -71,13 +73,13 @@ public class ExampleTurnTele extends OpMode {
         pathChain = () -> follower.pathBuilder()
                 .addPath(new Path(new BezierLine(
                         follower::getPose,
-                        new Pose(105.4, 33.4)
+                        new Pose(104, 32)
                 )))
                 .setHeadingInterpolation(
                         HeadingInterpolator.linearFromPoint(
                                 follower::getHeading,
                                 Math.toRadians(90),
-                                0.98
+                                0.99
                         )
                 )
                 .build();
@@ -208,6 +210,10 @@ public class ExampleTurnTele extends OpMode {
         telemetry.addData("AutoPath", automatedDrive);
     }
 
+    @Override
+    public void stop() {
+        PoseStorage.startingPose = follower.getPose();
+    }
     private double angleWrap(double angle) {
         while (angle > Math.PI) angle -= 2 * Math.PI;
         while (angle < -Math.PI) angle += 2 * Math.PI;

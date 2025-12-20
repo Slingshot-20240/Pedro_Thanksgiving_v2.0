@@ -118,7 +118,7 @@ public class RedClose15Final extends NextFTCOpMode {
                                         0.3,
                                         1.0,
                                         //TODO - tune the y value to make ball go in center due to newtons first law
-                                        HeadingInterpolator.facingPoint(new Pose(144,144))
+                                        HeadingInterpolator.facingPoint(new Pose(144,142))
                                 )
                         )
                 )
@@ -135,7 +135,7 @@ public class RedClose15Final extends NextFTCOpMode {
                                 scorePose,
                                 new Pose(87.760, 55.000),
                                 new Pose(79.313, 57.000),
-                                new Pose(132, 54.000)
+                                new Pose(130, 54.000)
                         )
                 )
                 .setLinearHeadingInterpolation(Math.toRadians(45), Math.toRadians(0))
@@ -145,17 +145,17 @@ public class RedClose15Final extends NextFTCOpMode {
                 //Gate 2
                 .addPath(
                         new BezierCurve(
-                                new Pose(132, 54.000),
+                                new Pose(130, 54.000),
                                 new Pose(120.000, 54.000),
                                 new Pose(106.000, 74.000),
-                                new Pose(129.2, 71.000)
+                                new Pose(129, 71.000)
                         )
                 )
                 .setLinearHeadingInterpolation(Math.toRadians(0), Math.toRadians(90))
 
             //Score set 3
                 .addPath(
-                        new BezierLine(new Pose(129.2, 71.000), scorePose)
+                        new BezierLine(new Pose(129, 71.000), scorePose)
                 )
                 .setHeadingInterpolation(
                         HeadingInterpolator.piecewise(
@@ -168,7 +168,7 @@ public class RedClose15Final extends NextFTCOpMode {
                                         0.4,
                                         1.0,
                                         //TODO - tune the y value to make ball go in center due to newtons first law
-                                        HeadingInterpolator.facingPoint(new Pose(144,144))
+                                        HeadingInterpolator.facingPoint(new Pose(144,142))
                                 )
                         )
                 )
@@ -184,24 +184,24 @@ public class RedClose15Final extends NextFTCOpMode {
                                 scorePose,
                                 new Pose(88, 39),
                                 new Pose(82, 31),
-                                new Pose(133, 35)
+                                new Pose(128, 35)
                         )
                 )
                 .setLinearHeadingInterpolation(Math.toRadians(45), Math.toRadians(0))
 
 
                 .addPath(
-                        new BezierLine(new Pose(133, 35.000), scorePose)
+                        new BezierLine(new Pose(128, 35), scorePose)
                 )
                 .setHeadingInterpolation(
                         HeadingInterpolator.piecewise(
                                 new HeadingInterpolator.PiecewiseNode(
                                         0,
-                                        0.15,
+                                        0.08,
                                         HeadingInterpolator.linear(Math.toRadians(0), Math.toRadians(311))
                                 ),
                                 new HeadingInterpolator.PiecewiseNode(
-                                        0.15,
+                                        0.08,
                                         0.7,
                                         HeadingInterpolator.linear(Math.toRadians(311), Math.toRadians(311))
                                 ),
@@ -209,7 +209,7 @@ public class RedClose15Final extends NextFTCOpMode {
                                         0.7,
                                         1.0,
                                         //TODO - tune the y value to make ball go in center due to newtons first law
-                                        HeadingInterpolator.facingPoint(new Pose(144,144))
+                                        HeadingInterpolator.facingPoint(new Pose(144,142))
                                 )
                         )
                 )
@@ -297,22 +297,20 @@ public class RedClose15Final extends NextFTCOpMode {
     }
 
     private Command transferUpFor(double time) {
-        return new SequentialGroup(
+        return new ParallelGroup(
                 Transfernf.INSTANCE.on(),
-                new Delay(time),
-                Transfernf.INSTANCE.hotdog()
+                new Delay(time)
         );
-
     }
 
     private Command transferSequence(double proximity, double transferTime) {
         return new SequentialGroup(
                 Transfernf.INSTANCE.hotdog(),
-                new WaitUntil(() -> PedroComponent.follower().getCurrentPathChain().lastPath().getDistanceRemaining() < proximity),
+//                new WaitUntil(() -> PedroComponent.follower().getCurrentPathChain().lastPath().getDistanceRemaining() < proximity),
 //                                        //OR time based
 //                                        new Delay(0.8),
 //                                        //OR parametric end
-//                                        new WaitUntil(() -> PedroComponent.follower().atParametricEnd()),
+                                        new WaitUntil(() -> PedroComponent.follower().atParametricEnd()),
                 transferUpFor(transferTime)
         );
     }
@@ -339,10 +337,13 @@ public class RedClose15Final extends NextFTCOpMode {
                     new ParallelGroup(
                             new FollowPath(scorePreloads),
                             baseState(-1200),
+//                            Transfernf.INSTANCE.on().afterTime(0.7)
+
+
 
                             transferSequence(proximityThreshold,1.3)
                     ),
-
+                    new Delay(0.5),
 
                     //SET 2
                     new ParallelGroup(
@@ -364,17 +365,17 @@ public class RedClose15Final extends NextFTCOpMode {
                     //SET 4
                     new ParallelGroup(
                             new FollowPath(set4),
-                            baseState(-1200)
+                            baseState(-1200),
 
-                            //transferSequence(proximityThreshold,1.3)
+                            transferSequence(proximityThreshold,1.3)
                     ),
 
-                    new ParallelRaceGroup(
-                            new WaitUntil(() -> Shooternf.INSTANCE.rpmDraw(-1200,50)),
-                            //TODO, tune time (max time for transfer)
-                            transferUpFor(4)
-                            //you can use .asDeadline() at end of command also
-                    ),
+//                    new ParallelRaceGroup(
+//                            new WaitUntil(() -> Shooternf.INSTANCE.rpmDraw(-1200,50)),
+//                            //TODO, tune time (max time for transfer)
+//                            transferUpFor(4)
+//                            //you can use .asDeadline() at end of command also
+//                    ),
 
                     //SET 5 - Human Player
                     new ParallelGroup(
