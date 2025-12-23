@@ -20,13 +20,15 @@ import dev.nextftc.core.commands.Command;
 import dev.nextftc.core.commands.delays.Delay;
 import dev.nextftc.core.commands.delays.WaitUntil;
 import dev.nextftc.core.commands.groups.ParallelGroup;
-import dev.nextftc.core.commands.groups.ParallelRaceGroup;
 import dev.nextftc.core.commands.groups.SequentialGroup;
 import dev.nextftc.core.components.SubsystemComponent;
 import dev.nextftc.extensions.pedro.FollowPath;
 import dev.nextftc.extensions.pedro.PedroComponent;
 import dev.nextftc.ftc.NextFTCOpMode;
 import dev.nextftc.ftc.components.BulkReadComponent;
+
+import static dev.nextftc.extensions.pedro.PedroComponent.follower;
+
 
 @Config
 @Autonomous(name = "15 Final Red Close")
@@ -53,9 +55,9 @@ public class RedClose15Final extends NextFTCOpMode {
     public static double proximityThreshold = 5;
 
     public void buildPaths() {
-        PedroComponent.follower().setStartingPose(new Pose(126.2, 119, Math.toRadians(36)));
+        follower().setStartingPose(new Pose(126.2, 119, Math.toRadians(36)));
 
-        scorePreloads = PedroComponent.follower()
+        scorePreloads = follower()
                 .pathBuilder()
                 .addPath(
                         new BezierLine(new Pose(126.2, 119), scorePose)
@@ -65,7 +67,7 @@ public class RedClose15Final extends NextFTCOpMode {
 
 
 
-        set2 = PedroComponent.follower()
+        set2 = follower()
                 .pathBuilder()
 
             //Grab set 2
@@ -126,7 +128,7 @@ public class RedClose15Final extends NextFTCOpMode {
 
 
 
-        set3 = PedroComponent.follower()
+        set3 = follower()
                 .pathBuilder()
 
             //Grab set 3
@@ -176,7 +178,7 @@ public class RedClose15Final extends NextFTCOpMode {
                 .build();
 
 
-        set4 = PedroComponent.follower()
+        set4 = follower()
                 .pathBuilder()
 
                 .addPath(
@@ -217,7 +219,7 @@ public class RedClose15Final extends NextFTCOpMode {
 
 
 
-        grabHp = PedroComponent.follower()
+        grabHp = follower()
                 .pathBuilder()
 
             //prepareHp
@@ -234,7 +236,7 @@ public class RedClose15Final extends NextFTCOpMode {
                 .build();
 
 
-        scoreHp = PedroComponent.follower()
+        scoreHp = follower()
                 .pathBuilder()
                 .addPath(
                         new BezierLine(new Pose(127, 11.000), new Pose(90.000, 110.000))
@@ -258,7 +260,7 @@ public class RedClose15Final extends NextFTCOpMode {
                 )
                 .build();
 
-        scoreHp = PedroComponent.follower()
+        scoreHp = follower()
                 .pathBuilder()
                 .addPath(
                         new BezierLine(new Pose(127, 11.000), new Pose(90.000, 110.000))
@@ -306,11 +308,11 @@ public class RedClose15Final extends NextFTCOpMode {
     private Command transferSequence(double proximity, double transferTime) {
         return new SequentialGroup(
                 Transfernf.INSTANCE.hotdog(),
-//                new WaitUntil(() -> PedroComponent.follower().getCurrentPathChain().lastPath().getDistanceRemaining() < proximity),
+//                new WaitUntil(() -> follower().getCurrentPathChain().lastPath().getDistanceRemaining() < proximity),
 //                                        //OR time based
 //                                        new Delay(0.8),
 //                                        //OR parametric end
-                new WaitUntil(() -> PedroComponent.follower().atParametricEnd()),
+                new WaitUntil(() -> follower().atParametricEnd()),
                 transferUpFor(transferTime)
         );
     }
@@ -408,6 +410,6 @@ public class RedClose15Final extends NextFTCOpMode {
 
     @Override
     public void onStop() {
-        PoseStorage.startingPose = PedroComponent.follower().getPose();
+        PoseStorage.startingPose = follower().getPose();
     }
 }
