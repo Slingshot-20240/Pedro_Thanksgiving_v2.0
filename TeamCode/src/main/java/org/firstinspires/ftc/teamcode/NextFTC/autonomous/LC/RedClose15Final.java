@@ -310,7 +310,7 @@ public class RedClose15Final extends NextFTCOpMode {
 //                                        //OR time based
 //                                        new Delay(0.8),
 //                                        //OR parametric end
-                                        new WaitUntil(() -> PedroComponent.follower().atParametricEnd()),
+                new WaitUntil(() -> PedroComponent.follower().atParametricEnd()),
                 transferUpFor(transferTime)
         );
     }
