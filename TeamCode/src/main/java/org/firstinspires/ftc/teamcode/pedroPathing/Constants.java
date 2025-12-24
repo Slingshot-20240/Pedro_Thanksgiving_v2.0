@@ -16,19 +16,19 @@ import org.firstinspires.ftc.robotcore.external.navigation.DistanceUnit;
 
 public class Constants {
     public static FollowerConstants followerConstants = new FollowerConstants()
-            .mass(9.07)
-            .forwardZeroPowerAcceleration(-46)
-            .lateralZeroPowerAcceleration(-85.6)
+            .mass(10.79555) //me -98.6, w bot, 122.4
+            .forwardZeroPowerAcceleration(-41)
+            .lateralZeroPowerAcceleration(-67.6)
 
 // TRANSLATIONAL
-//            .useSecondaryTranslationalPIDF(true)
-            .translationalPIDFCoefficients(new PIDFCoefficients(0.27, 0, 0.028, 0))
-//            .secondaryTranslationalPIDFCoefficients(new PIDFCoefficients(0.1,0,0.01,0))
+            .useSecondaryTranslationalPIDF(true)
+            .translationalPIDFCoefficients(new PIDFCoefficients(0.296, 0, 0.032, 0))
+            .secondaryTranslationalPIDFCoefficients(new PIDFCoefficients(0.1,0,0.012,0))
 
 // HEADING
-            .headingPIDFCoefficients(new PIDFCoefficients(2.6, 0, 0.11, 0))
+            .headingPIDFCoefficients(new PIDFCoefficients(2.8, 0, 0.15, 0))
 //            .useSecondaryHeadingPIDF(true)
-//            .secondaryHeadingPIDFCoefficients(new PIDFCoefficients(0.1,0,0.01,0))
+//            .secondaryHeadingPIDFCoefficients(new PIDFCoefficients(0.17,0,0.006,0))
 
 
 //DRIVE
@@ -38,8 +38,8 @@ public class Constants {
             ;
 
 
-    //public static PathConstraints pathConstraints = new PathConstraints(0.992, 50, 1.4, 1.8);
-    public static PathConstraints pathConstraints = new PathConstraints(0.995, 40, 1.55, 1.6);
+    public static PathConstraints pathConstraints = new PathConstraints(0.992, 50, 1.4, 1.7);
+//    public static PathConstraints pathConstraints = new PathConstraints(0.995, 40, 1.55, 1.6);
 
     public static MecanumConstants driveConstants = new MecanumConstants()
             .maxPower(1)
@@ -51,8 +51,8 @@ public class Constants {
             .leftRearMotorDirection(DcMotorSimple.Direction.REVERSE)
             .rightFrontMotorDirection(DcMotorSimple.Direction.FORWARD)
             .rightRearMotorDirection(DcMotorSimple.Direction.FORWARD)
-            .xVelocity(70.5)
-            .yVelocity(58);
+            .xVelocity(73.5)
+            .yVelocity(62);
 
     public static Follower createFollower(HardwareMap hardwareMap) {
         return new FollowerBuilder(followerConstants, hardwareMap)
