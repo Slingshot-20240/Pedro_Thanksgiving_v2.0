@@ -1,7 +1,9 @@
 package org.firstinspires.ftc.teamcode.NextFTC.subsystems_nf;
 
 import dev.nextftc.core.commands.Command;
+import dev.nextftc.core.commands.delays.Delay;
 import dev.nextftc.core.commands.groups.ParallelGroup;
+import dev.nextftc.core.commands.groups.SequentialGroup;
 import dev.nextftc.core.subsystems.Subsystem;
 import dev.nextftc.hardware.impl.CRServoEx;
 import dev.nextftc.hardware.powerable.SetPower;
@@ -18,6 +20,21 @@ public class Transfernf implements Subsystem {
         return new ParallelGroup(
                 new SetPower(frontTransfer, -1.0),
                 new SetPower(backTransfer, -1.0)
+        );
+    }
+
+    public Command stepOn() {
+        return new SequentialGroup(
+                new ParallelGroup(
+                        new SetPower(frontTransfer, -0.6),
+                        new SetPower(backTransfer, -0.6)
+                ),
+                new Delay(0.1),
+                new ParallelGroup(
+                        new SetPower(frontTransfer, -1.0),
+                        new SetPower(backTransfer, -1.0)
+                )
+
         );
     }
 
