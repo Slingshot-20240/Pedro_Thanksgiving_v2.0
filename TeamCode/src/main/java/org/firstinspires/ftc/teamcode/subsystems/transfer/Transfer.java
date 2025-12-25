@@ -17,7 +17,7 @@ public class Transfer {
 
     public void transferOn() {
         backTransfer.setPower(-1.0);
-        frontTransfer.setPower(-1.0);
+        frontTransfer.setPower(-.6);
     }
 
     public void transferOff() {
