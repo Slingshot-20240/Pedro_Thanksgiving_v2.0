@@ -74,7 +74,8 @@ public class FSM {
                     double distance = Robot.cam.getTargetArtifactTravelDistanceX();
 
                     double targetVelocity = robot.shooter.calculateShooterRPM(distance);
-                    double targetHoodPos = robot.shooter.calculateHoodPos(distance);
+                    //TODO - TUNE THIS OFFSET VALUE
+                    double targetHoodPos = robot.shooter.calculateHoodPos(distance) + 0.1;
 
                     robot.shooter.setShooterVelocity(-targetVelocity);
 //

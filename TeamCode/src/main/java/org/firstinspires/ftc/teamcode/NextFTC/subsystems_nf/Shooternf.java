@@ -18,7 +18,7 @@ public class Shooternf implements Subsystem {
     public MotorGroup shooter;
 
     private final ControlSystem shooterController = ControlSystem.builder()
-            .velPid(0.32,0,0.001)
+            .velPid(0.342,0,0.001)
             //.velPid(1.52,0,0)
             .build();
 

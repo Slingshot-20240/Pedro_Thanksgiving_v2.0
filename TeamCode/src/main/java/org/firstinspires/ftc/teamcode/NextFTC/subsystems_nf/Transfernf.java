@@ -48,8 +48,8 @@ public class Transfernf implements Subsystem {
 
     public Command idle() {
         return new ParallelGroup(
-                new SetPower(frontTransfer, -0.05),
-                new SetPower(backTransfer, -1.0)
+                new SetPower(frontTransfer, 0),
+                new SetPower(backTransfer, 0)
         );
     }
 
