@@ -52,11 +52,13 @@ public class RedClose15Final extends NextFTCOpMode {
 
     public PathChain grabSet3;
     public PathChain scoreSet3;
-    public PathChain set4;
+
+    public PathChain grabSet4;
+    public PathChain scoreSet4;
     public PathChain grabHp;
     public PathChain scoreHp;
 
-    public Pose scorePose = new Pose(88,88);
+    public Pose scorePose = new Pose(89,89);
 
     public void buildPaths() {
         follower().setStartingPose(new Pose(126.2, 119, Math.toRadians(36)));
@@ -67,6 +69,7 @@ public class RedClose15Final extends NextFTCOpMode {
                         new BezierLine(new Pose(126.2, 119), scorePose)
                 )
                 .setLinearHeadingInterpolation(Math.toRadians(36), Math.toRadians(45))
+//                .setTangentHeadingInterpolation().setReversed()
                 .build();
 
 
@@ -77,7 +80,7 @@ public class RedClose15Final extends NextFTCOpMode {
                         new BezierCurve(
                                 scorePose,
                                 new Pose(92.292, 77),
-                                new Pose(126, 83.4)
+                                new Pose(126, 82)
                         )
                 )
                 .setLinearHeadingInterpolation(Math.toRadians(45), Math.toRadians(0))
@@ -86,7 +89,7 @@ public class RedClose15Final extends NextFTCOpMode {
             //Gate 1
                 .addPath(
                         new BezierCurve(
-                                new Pose(126, 83.4),
+                                new Pose(126, 82),
                                 new Pose(112, 77.000),
                                 new Pose(129, 71.000)
                         )
@@ -101,7 +104,7 @@ public class RedClose15Final extends NextFTCOpMode {
                 .addPath(
                         new BezierLine(new Pose(130, 71.000), scorePose)
                 )
-                .setLinearHeadingInterpolation(Math.toRadians(90), Math.toRadians(45))
+                .setLinearHeadingInterpolation(Math.toRadians(90), Math.toRadians(44))
                 .build();
 
 
@@ -120,7 +123,8 @@ public class RedClose15Final extends NextFTCOpMode {
                                 new Pose(132.4, 54.000)
                         )
                 )
-                .setLinearHeadingInterpolation(Math.toRadians(45), Math.toRadians(0))
+                .setLinearHeadingInterpolation(Math.toRadians(44), Math.toRadians(0))
+//                .setTangentHeadingInterpolation()
 
 
 
@@ -162,7 +166,7 @@ public class RedClose15Final extends NextFTCOpMode {
                 .build();
 
 
-        set4 = follower()
+        grabSet4 = follower()
                 .pathBuilder()
 
                 .addPath(
@@ -170,36 +174,36 @@ public class RedClose15Final extends NextFTCOpMode {
                                 scorePose,
                                 new Pose(88, 39),
                                 new Pose(82, 31),
-                                new Pose(127, 35)
+                                new Pose(131, 35)
                         )
                 )
-                .setLinearHeadingInterpolation(Math.toRadians(45), Math.toRadians(0))
+//                .setLinearHeadingInterpolation(Math.toRadians(45), Math.toRadians(0))
+                .setTangentHeadingInterpolation()
 
+
+                .build();
+
+
+        scoreSet4 = follower()
+                .pathBuilder()
 
                 .addPath(
-                        new BezierLine(new Pose(127, 35), scorePose)
+                        new BezierLine(new Pose(131, 35), scorePose)
                 )
                 .setHeadingInterpolation(
                         HeadingInterpolator.piecewise(
-//                                new HeadingInterpolator.PiecewiseNode(
-//                                        0.0,
-//                                        0.1,
-//                                        HeadingInterpolator.constant(Math.toRadians(289.1))
-//                                ),
 
                                 new HeadingInterpolator.PiecewiseNode(
                                         0,
-                                        0.7,
+                                        0.6,
                                         HeadingInterpolator.tangent.reverse()
                                 ),
 
+
                                 new HeadingInterpolator.PiecewiseNode(
-                                        0.7,
+                                        0.6,
                                         1.0,
-                                        HeadingInterpolator.linear(
-                                                Math.toRadians(289.1),
-                                                Math.toRadians(31)
-                                        )
+                                        HeadingInterpolator.constant(Math.toRadians(42))
                                 )
                         )
                 )
@@ -207,42 +211,28 @@ public class RedClose15Final extends NextFTCOpMode {
 
 
 
+
         grabHp = follower()
                 .pathBuilder()
 
-                // prepareHp
+                //grab
                 .addPath(
-                        new BezierLine(scorePose, new Pose(127, 40.000))
+                        new BezierLine(scorePose, new Pose(126.5,13))
                 )
-                .setLinearHeadingInterpolation(Math.toRadians(45), Math.toRadians(300))
+                .setTangentHeadingInterpolation()
 
-                // grabHp
+
+                //assure backup
                 .addPath(
-                        new BezierLine(
-                                new Pose(127, 40.000),
-                                new Pose(127, 11.000)
-                        )
+                        new BezierLine(new Pose(126.5,13), new Pose(122,15))
                 )
-                .setLinearHeadingInterpolation(Math.toRadians(285), Math.toRadians(285))
-//
-                 //IF YOU ACTUALLY DO THIS MAKE SURE TO USE TANGENT INSTEAD!!!!! may have to reverse it
-//                // assure backUp
-//                .addPath(
-//                        new BezierLine(
-//                                new Pose(127, 11.000),
-//                                new Pose(125, 15.000)
-//                        )
-//                )
-//                .setLinearHeadingInterpolation(Math.toRadians(285), Math.toRadians(285))
-//
-//                //assure grab
-//                .addPath(
-//                        new BezierLine(
-//                                new Pose(125, 15.000),
-//                                new Pose(125, 11.000)
-//                        )
-//                )
-//                .setLinearHeadingInterpolation(Math.toRadians(285), Math.toRadians(300))
+                .setTangentHeadingInterpolation().setReversed()
+
+                //assure pickup
+                .addPath(
+                        new BezierLine(new Pose(122,15), new Pose(126.5,13))
+                )
+                .setTangentHeadingInterpolation()
 
                 .build();
 
@@ -252,17 +242,12 @@ public class RedClose15Final extends NextFTCOpMode {
                 .pathBuilder()
                 .addPath(
                         new BezierLine(
-                                new Pose(125, 11.000),
+                                new Pose(126.5, 13),
                                 new Pose(90.000, 110.000)
                         )
                 )
                 .setHeadingInterpolation(
                         HeadingInterpolator.piecewise(
-//                                new HeadingInterpolator.PiecewiseNode(
-//                                        0.0,
-//                                        0.1,
-//                                        HeadingInterpolator.constant(Math.toRadians(289.1))
-//                                ),
 
                                 new HeadingInterpolator.PiecewiseNode(
                                         0,
@@ -274,8 +259,8 @@ public class RedClose15Final extends NextFTCOpMode {
                                         0.7,
                                         1.0,
                                         HeadingInterpolator.linear(
-                                                Math.toRadians(289.1),
-                                                Math.toRadians(29)
+                                                follower().getHeading(),
+                                                Math.toRadians(28.4)
                                         )
                                 )
                         )
@@ -314,7 +299,7 @@ public class RedClose15Final extends NextFTCOpMode {
         return new SequentialGroup(
                 Transfernf.INSTANCE.hotdog(),
                 new WaitUntil(() -> pathChain.lastPath().getDistanceRemaining() < proximity),
-                transferUpFor(transferTime)
+                transferUpFor(transferTime).afterTime(0.07)
         );
     }
 
@@ -336,24 +321,24 @@ public class RedClose15Final extends NextFTCOpMode {
     private Command autonomous() {
         return new SequentialGroup(
 
-                    //Preloads
+
                     new ParallelGroup(
                             new FollowPath(scorePreloads),
-                            baseState(-1250),
-
-                            transferSequence(scorePreloads,1.4)
+                            baseState(-1240),
+                            Transfernf.INSTANCE.hotdog()
                     ),
-                    new Delay(0.33),
+                    transferUpFor(1.5),
+
 
                     //SET 2
                     new ParallelGroup(
                             new SequentialGroup(
                                     new FollowPath(grabSet2),
-                                    new Delay(0.1),
+                                    new Delay(0.14),
                                     new FollowPath(scoreSet2)
 
                             ),
-                            baseState(-1215),
+                            baseState(-1240),
 
                             transferSequence(scoreSet2,1.3)
                     ),
@@ -363,39 +348,40 @@ public class RedClose15Final extends NextFTCOpMode {
                     new ParallelGroup(
                             new SequentialGroup(
                                     new FollowPath(grabSet3),
-                                    new Delay(0.5),
+                                    new Delay(0.7),
                                     new FollowPath(scoreSet3)
 
                             ),
-                            baseState(-1215),
+                            baseState(-1240),
 
                             transferSequence(scoreSet3,1.3)
                     ),
 
                     //SET 4
                     new ParallelGroup(
-                            new FollowPath(set4),
-                            baseState(-1215),
+                            new SequentialGroup(
+                                    new FollowPath(grabSet4),
+                                    new Delay(0.2),
+                                    new FollowPath(scoreSet4)
 
-                            transferSequence(set4,1.3)
+                            ),
+                            baseState(-1240),
+
+                            transferSequence(scoreSet4,1.3)
                     ),
 
-//                    new ParallelRaceGroup(
-//                            new WaitUntil(() -> Shooternf.INSTANCE.rpmDraw(-1215,50)),
-//                            //TODO, tune time (max time for transfer)
-//                            transferUpFor(4)
-//                            //you can use .asDeadline() at end of command also
-//                    ),
+
 
                     //SET 5 - Human Player
                     new ParallelGroup(
                             new SequentialGroup(
                                     new FollowPath(grabHp),
+                                    new Delay(0.35),
                                     new FollowPath(scoreHp)
                             ),
-                            baseState(-1215,0.5),
+                            baseState(-1200,0.37),
 
-                            transferSequenceDistance(scoreHp,5, 1.5)
+                            transferSequenceDistance(scoreHp,5, 2.6)
                     )
 
 

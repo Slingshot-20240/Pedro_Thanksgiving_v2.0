@@ -86,7 +86,8 @@ public class Shooter {
 
     // returns the target angle in RADIANS depending on CURRENT distance from the april tag
     public double calculateHoodAngle() {
-        return calculateHoodAngle(Robot.cam.getTargetArtifactTravelDistanceX());
+        //TODO - tune this offset value
+        return calculateHoodAngle(Robot.cam.getTargetArtifactTravelDistanceX()) + 0.1;
     }
 
     // returns the target angle in HOOD POS (0-1) instead of radians
