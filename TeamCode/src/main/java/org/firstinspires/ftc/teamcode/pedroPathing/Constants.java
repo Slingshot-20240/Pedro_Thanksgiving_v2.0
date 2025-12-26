@@ -32,7 +32,8 @@ public class Constants {
 
 
 //DRIVE
-            .drivePIDFCoefficients(new FilteredPIDFCoefficients(0.87,0.0,0.02,0.6,0.0))
+            //TODO - P USED TO BE 0.87
+            .drivePIDFCoefficients(new FilteredPIDFCoefficients(0.835,0.0,0.02,0.6,0.0))
 //            .useSecondaryDrivePIDF(true)
 //            .secondaryDrivePIDFCoefficients(new FilteredPIDFCoefficients(0.1,0,0.01,0.6,0.01))
             ;
