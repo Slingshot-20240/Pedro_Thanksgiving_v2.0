@@ -164,6 +164,8 @@ public class AVisionTele extends OpMode {
 
         telemetry.addData("pose", pose.toString());
         telemetry.addData("Odo Distance", odoDistance);
+        telemetry.addData("Shooter Vel", robot.shooter.outtake1.getVelocity());
+        telemetry.addData("Hood Pos", robot.shooter.variableHood.getPosition());
 
         telemetry.addData("Heading", heading);
         telemetry.addData("AT angle", Robot.cam.getATangle());
