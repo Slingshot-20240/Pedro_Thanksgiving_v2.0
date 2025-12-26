@@ -274,8 +274,9 @@ public class RedClose15Final extends NextFTCOpMode {
 
     //TODO - figure out the max and min pos of servo! Does increasing bring hood up or down?
     private Command init_bot() {
-        return new SequentialGroup(
-                Hoodnf.INSTANCE.setHoodPos(0.37)
+        return new ParallelGroup(
+                Hoodnf.INSTANCE.setHoodPos(0.37),
+                Transfernf.INSTANCE.idle()
         );
 
     }
