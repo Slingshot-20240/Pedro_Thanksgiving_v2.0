@@ -9,7 +9,8 @@ public class Hoodnf implements Subsystem {
     public static final Hoodnf INSTANCE = new Hoodnf();
     private Hoodnf() {}
 
-    private final ServoEx variableHood = new ServoEx("variableHood");
+    private final ServoEx variableHood = new ServoEx("variableHood",-0.1);
+    //------- The more the hood position, to more arc -------\\
 
     public Command closeSide() {
         return new SetPosition(variableHood, 0.4).requires(this);
