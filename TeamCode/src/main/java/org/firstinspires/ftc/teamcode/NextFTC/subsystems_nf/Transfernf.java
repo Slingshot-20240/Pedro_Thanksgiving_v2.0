@@ -29,7 +29,7 @@ public class Transfernf implements Subsystem {
                         new SetPower(frontTransfer, -0.6),
                         new SetPower(backTransfer, -0.6)
                 ),
-                new Delay(0.1),
+                new Delay(0.2),
                 new ParallelGroup(
                         new SetPower(frontTransfer, -1.0),
                         new SetPower(backTransfer, -1.0)
@@ -50,6 +50,12 @@ public class Transfernf implements Subsystem {
         return new ParallelGroup(
                 new SetPower(frontTransfer, 0),
                 new SetPower(backTransfer, 0)
+        );
+    }
+
+    public Command forceBackOn() {
+        return new ParallelGroup(
+                new SetPower(backTransfer, -1.0)
         );
     }
 
