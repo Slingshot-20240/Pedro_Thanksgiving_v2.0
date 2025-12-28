@@ -80,7 +80,7 @@ public class RedClose15Final extends NextFTCOpMode {
                         new BezierCurve(
                                 scorePose,
                                 new Pose(92.292, 77),
-                                new Pose(126, 82)
+                                new Pose(126, 80)
                         )
                 )
                 .setLinearHeadingInterpolation(Math.toRadians(45), Math.toRadians(0))
@@ -89,7 +89,7 @@ public class RedClose15Final extends NextFTCOpMode {
             //Gate 1
                 .addPath(
                         new BezierCurve(
-                                new Pose(126, 82),
+                                new Pose(126, 80),
                                 new Pose(112, 77.000),
                                 new Pose(129, 71.000)
                         )
@@ -174,7 +174,7 @@ public class RedClose15Final extends NextFTCOpMode {
                                 scorePose,
                                 new Pose(88, 39),
                                 new Pose(82, 31),
-                                new Pose(131, 35)
+                                new Pose(131, 33.3)
                         )
                 )
 //                .setLinearHeadingInterpolation(Math.toRadians(45), Math.toRadians(0))
@@ -188,7 +188,7 @@ public class RedClose15Final extends NextFTCOpMode {
                 .pathBuilder()
 
                 .addPath(
-                        new BezierLine(new Pose(131, 35), scorePose)
+                        new BezierLine(new Pose(131, 33.3), scorePose)
                 )
                 .setHeadingInterpolation(
                         HeadingInterpolator.piecewise(

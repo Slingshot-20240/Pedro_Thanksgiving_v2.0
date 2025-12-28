@@ -19,6 +19,7 @@ public class Shooternf implements Subsystem {
 
     private final ControlSystem shooterController = ControlSystem.builder()
             .velPid(0.342,0,0.001)
+            .basicFF(0.001)
             //.velPid(1.52,0,0)
             .build();
 
@@ -26,22 +27,22 @@ public class Shooternf implements Subsystem {
 
     private enum shooterStates {
         IDLE (0),
-        CLOSE_SIDE (-1167),
+        CLOSE_SIDE (-1210),
         FAR_SIDE (-1420);
 
         private final double shooterState;
         shooterStates(double state) { this.shooterState = state; }
-        public double getState() { return shooterState; }
+        public double getVel() { return shooterState; }
     }
 
     public Command closeSide() {
-        return new RunToVelocity(shooterController, shooterStates.CLOSE_SIDE.getState());
+        return new RunToVelocity(shooterController, shooterStates.CLOSE_SIDE.getVel()).requires(shooter);
     }
     public Command farSide() {
-        return new RunToVelocity(shooterController, shooterStates.FAR_SIDE.getState());
+        return new RunToVelocity(shooterController, shooterStates.FAR_SIDE.getVel()).requires(shooter);
     }
     public Command idle() {
-        return new RunToVelocity(shooterController, shooterStates.IDLE.getState());
+        return new RunToVelocity(shooterController, shooterStates.IDLE.getVel()).requires(shooter);
     }
     public Command setShooterVel(double shooterVel) {
         return new RunToVelocity(shooterController, shooterVel).requires(shooter);
@@ -56,32 +57,8 @@ public class Shooternf implements Subsystem {
         shooter.setPower(0); //prevents shooter on in init
     }
 
-    private boolean ball1detected, ball2detected, ball3detected;
-    private boolean isRecovered = true;
-    public boolean rpmDraw(double requestedVel, double dipThreshold) {
-        double currentVel = shooter.getVelocity();
-        double recoveryThreshold = requestedVel + 50;
 
-        //check if the shooter has recovered speed since the last shot
-        if (!isRecovered && currentVel <= recoveryThreshold) {
-            isRecovered = true;
-        }
 
-        //only look for a dip if we have recovered from the previous shot
-        if (isRecovered && currentVel > (requestedVel + dipThreshold)) {
-            if (!ball1detected) {
-                ball1detected = true;
-            } else if (!ball2detected) {
-                ball2detected = true;
-            } else if (!ball3detected) {
-                ball3detected = true;
-            }
-
-            isRecovered = false;
-        }
-
-        return ball3detected;
-    }
 
     @Override
     public void initialize() {
