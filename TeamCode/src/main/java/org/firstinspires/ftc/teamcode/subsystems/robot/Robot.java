@@ -62,7 +62,9 @@ public class Robot {
         drivetrain = new Drivetrain(hardwareMap, imu, controls);
 
         ledBoard0 = hardwareMap.get(DigitalChannel.class, "ledBoard0");
+        ledBoard0.setMode(DigitalChannel.Mode.OUTPUT);
         ledBoard1 = hardwareMap.get(DigitalChannel.class, "ledBoard1");
+        ledBoard1.setMode(DigitalChannel.Mode.OUTPUT);
     }
 
     public void hardwareSoftReset() {
