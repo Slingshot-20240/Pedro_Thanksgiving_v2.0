@@ -23,6 +23,19 @@ public class Transfernf implements Subsystem {
         );
     }
 
+    public Command gateIntake() {
+        return new SequentialGroup(
+                new ParallelGroup(
+                        new SetPower(frontTransfer, -0.3),
+                        new SetPower(backTransfer, -1.0)
+                ),
+                new Delay(0.4),
+                new ParallelGroup(
+                        new SetPower(frontTransfer, -0.15),
+                        new SetPower(backTransfer, -1.0)
+                )
+        );
+    }
     public Command stepOn() {
         return new SequentialGroup(
                 new ParallelGroup(

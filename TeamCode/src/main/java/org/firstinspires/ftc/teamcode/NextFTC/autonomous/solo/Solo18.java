@@ -331,13 +331,21 @@ public class Solo18 extends NextFTCOpMode {
                 new ParallelGroup(
                         new SequentialGroup(
                                 new FollowPath(grabGate),
+                                Transfernf.INSTANCE.gateIntake(),
                                 new Delay(1.3),
                                 new FollowPath(scoreGate)
 
                         ),
                         baseState(-1240),
 
-                        transferSequence(scoreGate,0.9)
+                        new SequentialGroup(
+                                Transfernf.INSTANCE.hotdog(),
+                                new WaitUntil(() -> scoreGate.lastPath().isAtParametricEnd()),
+                                transferUpFor(0.9)
+                        )
+
+                        //transferSequence(scoreGate,0.9)
+
                 ),
 
                 //SET

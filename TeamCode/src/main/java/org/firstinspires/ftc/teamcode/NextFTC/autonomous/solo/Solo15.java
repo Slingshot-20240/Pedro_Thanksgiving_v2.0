@@ -333,6 +333,7 @@ public class Solo15 extends NextFTCOpMode {
         buildPaths();
         init_bot().schedule();
         Shooternf.INSTANCE.disable();
+
     }
 
     @Override

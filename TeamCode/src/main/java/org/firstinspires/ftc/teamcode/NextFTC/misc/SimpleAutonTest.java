@@ -1,29 +1,41 @@
 package org.firstinspires.ftc.teamcode.NextFTC.misc;
 
+import static dev.nextftc.extensions.pedro.PedroComponent.follower;
+
+import com.acmerobotics.dashboard.config.Config;
 import com.pedropathing.geometry.BezierCurve;
 import com.pedropathing.geometry.BezierLine;
 import com.pedropathing.geometry.Pose;
+
+import com.pedropathing.paths.HeadingInterpolator;
 import com.pedropathing.paths.PathChain;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
+import com.qualcomm.robotcore.hardware.HardwareMap;
 
+import org.firstinspires.ftc.teamcode.NextFTC.autonomous.PoseStorage;
 import org.firstinspires.ftc.teamcode.NextFTC.subsystems_nf.Intakenf;
 import org.firstinspires.ftc.teamcode.NextFTC.subsystems_nf.Shooternf;
 import org.firstinspires.ftc.teamcode.NextFTC.subsystems_nf.Transfernf;
 import org.firstinspires.ftc.teamcode.NextFTC.subsystems_nf.Hoodnf;
 import org.firstinspires.ftc.teamcode.pedroPathing.Constants;
+import org.firstinspires.ftc.teamcode.subsystems.vision.logi;
 
 import dev.nextftc.core.commands.Command;
 import dev.nextftc.core.commands.delays.Delay;
+import dev.nextftc.core.commands.delays.WaitUntil;
 import dev.nextftc.core.commands.groups.ParallelGroup;
-import dev.nextftc.core.commands.groups.ParallelRaceGroup;
 import dev.nextftc.core.commands.groups.SequentialGroup;
 import dev.nextftc.core.components.SubsystemComponent;
+import dev.nextftc.core.units.Angle;
 import dev.nextftc.extensions.pedro.FollowPath;
 import dev.nextftc.extensions.pedro.PedroComponent;
+import dev.nextftc.extensions.pedro.TurnBy;
 import dev.nextftc.ftc.NextFTCOpMode;
 import dev.nextftc.ftc.components.BulkReadComponent;
 
-@Autonomous(name = "NextFTC Autonomous Program Java")
+
+@Config
+@Autonomous(name = "15 Logi Test")
 public class SimpleAutonTest extends NextFTCOpMode {
     public SimpleAutonTest() {
         addComponents(
@@ -35,211 +47,285 @@ public class SimpleAutonTest extends NextFTCOpMode {
                 BulkReadComponent.INSTANCE
         );
     }
+    public logi cam;
+    double bearing;
+
     public PathChain scorePreloads;
-    public PathChain prepareSet2;
-    public PathChain grabSet2;
-    public PathChain prepareGate;
-    public PathChain hitGate;
-    public PathChain scoreSet2;
-    public PathChain prepareSet3;
-    public PathChain grabSet3;
-    public PathChain scoreSet3;
-    public PathChain prepareSet4;
-    public PathChain grabSet4;
-    public PathChain scoreSet4;
+
+    public PathChain grabMiddleSet, scoreMiddleSet;
+    public PathChain grabGate, scoreGate;
+    public PathChain grabGate2, scoreGate2;
+    public PathChain grabGate3, scoreGate3;
+    public PathChain grabSet4, scoreSet4;
+
+    public PathChain grabSet2, scoreSet2;
+
+    public Pose scorePose = new Pose(87,87);
+    //TODO - try different types, public private regular etc.
 
     public void buildPaths() {
-        PedroComponent.follower().setStartingPose(new Pose(126, 118, Math.toRadians(36)));
+        double gateHeading = 18;
 
-        scorePreloads = PedroComponent.follower()
-                .pathBuilder()
+        PedroComponent.follower().setStartingPose(new Pose(126.2, 119, Math.toRadians(36)));
+
+        scorePreloads = PedroComponent.follower().pathBuilder()
                 .addPath(
-                        new BezierLine(new Pose(126, 118.300), new Pose(97,97))
+                        new BezierLine(new Pose(126.2, 119), scorePose)
                 )
-                .setLinearHeadingInterpolation(Math.toRadians(36), Math.toRadians(45))
+                .setLinearHeadingInterpolation(Math.toRadians(36), Math.toRadians(50))
                 .build();
 
-        prepareSet2 = PedroComponent.follower()
-                .pathBuilder()
+        grabMiddleSet = PedroComponent.follower().pathBuilder()
+
+                //Grab Middle Set
                 .addPath(
-                        new BezierLine(new Pose(97,97), new Pose(96.500, 83.800))
+                        new BezierCurve(
+                                scorePose,
+                                new Pose(87.760, 55.000),
+                                new Pose(79.313, 57.000),
+                                new Pose(132.4, 54.000)
+                        )
                 )
-                .setLinearHeadingInterpolation(Math.toRadians(45), Math.toRadians(0))
+                .setHeadingInterpolation(
+                        HeadingInterpolator.piecewise(
+
+                                new HeadingInterpolator.PiecewiseNode(
+                                        0,
+                                        0.4,
+                                        HeadingInterpolator.linear(Math.toRadians(43.5), Math.toRadians(0))
+                                ),
+
+                                new HeadingInterpolator.PiecewiseNode(
+                                        0.4,
+                                        1.0,
+                                        HeadingInterpolator.constant(0)
+                                )
+                        )
+                )
+
+
+                .build();
+
+        scoreMiddleSet = PedroComponent.follower().pathBuilder()
+                .addPath(
+                        new BezierCurve(
+                                new Pose(132.4, 54.000),
+                                new Pose(97.500, 60.000),
+                                scorePose
+                        )
+                )
+                .setLinearHeadingInterpolation(Math.toRadians(0), Math.toRadians(43.5))
+                .build();
+
+
+        //----------- GATES ------------\\
+        grabGate = PedroComponent.follower().pathBuilder()
+                .addPath(
+                        new BezierCurve(
+                                scorePose,
+                                new Pose(82.000, 58.000),
+                                new Pose(131.5, 60.2)
+                        )
+                )
+                .setLinearHeadingInterpolation(Math.toRadians(43.5), Math.toRadians(gateHeading))
+                .build();
+
+        scoreGate = PedroComponent.follower().pathBuilder()
+                .addPath(
+                        new BezierCurve(
+                                new Pose(131.5, 60.2),
+                                new Pose(94.000, 64.000),
+                                scorePose
+                        )
+                )
+                .setLinearHeadingInterpolation(Math.toRadians(gateHeading), Math.toRadians(43.5))
+                .build();
+
+
+
+        //----------- Done ------------\\
+
+
+        grabSet4 = follower()
+                .pathBuilder()
+
+                .addPath(
+                        new BezierCurve(
+                                scorePose,
+                                new Pose(88, 39),
+                                new Pose(82, 31),
+                                new Pose(131, 33.3)
+                        )
+                )
+//                .setLinearHeadingInterpolation(Math.toRadians(43.5), Math.toRadians(0))
+                .setTangentHeadingInterpolation()
+
+
+                .build();
+
+
+        scoreSet4 = follower()
+                .pathBuilder()
+
+                .addPath(
+                        new BezierLine(new Pose(131, 33.3), scorePose)
+                )
+                .setHeadingInterpolation(
+                        HeadingInterpolator.piecewise(
+
+                                new HeadingInterpolator.PiecewiseNode(
+                                        0,
+                                        0.6,
+                                        HeadingInterpolator.tangent.reverse()
+                                ),
+
+
+                                new HeadingInterpolator.PiecewiseNode(
+                                        0.6,
+                                        1.0,
+                                        HeadingInterpolator.constant(Math.toRadians(42))
+                                )
+                        )
+                )
                 .build();
 
         grabSet2 = PedroComponent.follower()
                 .pathBuilder()
                 .addPath(
-                        new BezierLine(new Pose(96.500, 83.800), new Pose(124, 83.800))
-                )
-                .setLinearHeadingInterpolation(Math.toRadians(0), Math.toRadians(0))
-                .build();
-
-        prepareGate = PedroComponent.follower()
-                .pathBuilder()
-                .addPath(
-                        new BezierLine(new Pose(124, 83.800), new Pose(123.000, 70.000))
-                )
-                .setLinearHeadingInterpolation(Math.toRadians(0), Math.toRadians(90))
-                .build();
-
-        hitGate = PedroComponent.follower()
-                .pathBuilder()
-                .addPath(
-                        new BezierLine(new Pose(123.000, 70.000), new Pose(125, 70.000))
-                )
-                .setLinearHeadingInterpolation(Math.toRadians(90), Math.toRadians(90))
-                .build();
-
-        scoreSet2 = PedroComponent.follower()
-                .pathBuilder()
-                .addPath(
-                        new BezierLine(new Pose(125, 70.000), new Pose(97,97))
-                )
-                .setLinearHeadingInterpolation(Math.toRadians(90), Math.toRadians(45))
-                .build();
-
-        prepareSet3 = PedroComponent.follower()
-                .pathBuilder()
-                .addPath(
-                        new BezierLine(new Pose(97,97), new Pose(96.500, 58.000))
-                )
-                .setLinearHeadingInterpolation(Math.toRadians(45), Math.toRadians(0))
-                .build();
-
-        grabSet3 = PedroComponent.follower()
-                .pathBuilder()
-                .addPath(
-                        new BezierLine(new Pose(96.500, 58), new Pose(131, 59.5))
-                )
-                .setLinearHeadingInterpolation(Math.toRadians(0), Math.toRadians(0))
-                .build();
-
-        scoreSet3 = PedroComponent.follower()
-                .pathBuilder()
-                .addPath(
                         new BezierCurve(
-                                new Pose(131, 59.5),
-                                new Pose(91.262, 56.240),
-                                new Pose(95.176, 82.815),
-                                new Pose(97,97)
+                                scorePose,
+                                new Pose(92.292, 77),
+                                new Pose(126, 80)
                         )
                 )
-                .setLinearHeadingInterpolation(Math.toRadians(0), Math.toRadians(45))
+                .setLinearHeadingInterpolation(Math.toRadians(43.5), Math.toRadians(0))
+
+
                 .build();
 
-        prepareSet4 = PedroComponent.follower()
-                .pathBuilder()
+
+        scoreSet2 = PedroComponent.follower().pathBuilder()
+                //Score Set 2
                 .addPath(
-                        new BezierLine(new Pose(97,97), new Pose(96.000, 38))
+                        new BezierLine(new Pose(126, 80), new Pose(90,110))
                 )
-                .setLinearHeadingInterpolation(Math.toRadians(45), Math.toRadians(0))
+                .setLinearHeadingInterpolation(Math.toRadians(0), Math.toRadians(28.4))
                 .build();
 
-        grabSet4 = PedroComponent.follower()
-                .pathBuilder()
-                .addPath(
-                        new BezierLine(new Pose(96.000, 38), new Pose(130, 37))
-                )
-                .setLinearHeadingInterpolation(Math.toRadians(0), Math.toRadians(0))
-                .build();
-
-        scoreSet4 = PedroComponent.follower()
-                .pathBuilder()
-                .addPath(
-                        new BezierLine(new Pose(130, 37), new Pose(90.000, 110.000))
-                )
-                .setLinearHeadingInterpolation(Math.toRadians(0), Math.toRadians(29))
-                .build();
 
     }
-    private Command autonomous() {
+
+
+    //TODO - figure out the max and min pos of servo! Does increasing bring hood up or down?
+    private Command init_bot() {
         return new ParallelGroup(
-            //INTAKE ALWAYS ON
-            Intakenf.INSTANCE.in(),
+                Hoodnf.INSTANCE.setHoodPos(0.33),
+                Transfernf.INSTANCE.idle()
+        );
 
-            //MAIN SEQUENCE
-            new SequentialGroup(
+    }
 
-                new ParallelGroup(
-                        new FollowPath(scorePreloads),
-
-                        Transfernf.INSTANCE.hotdog(),
-                        Hoodnf.INSTANCE.closeSide(),
-                        Shooternf.INSTANCE.closeSide()
-                ),
-                //Spin up time
-                new Delay(1),
-                new ParallelRaceGroup(
-                        Transfernf.INSTANCE.on(),
-                        new Delay(2.5)
-                ),
-
-
-
-            //SET 2
-                new ParallelGroup(
-                        new FollowPath(grabSet2),
-                        Transfernf.INSTANCE.hotdog(),
-                        //SET 2 Shooter vel
-                        Shooternf.INSTANCE.setShooterVel(-1100)
-                ),
-                new SequentialGroup(
-                        new FollowPath(prepareGate),
-                        new FollowPath(hitGate),
-                        new Delay(1.5),
-                        new FollowPath(scoreSet2)
-                ),
-                new ParallelRaceGroup(
-                        Transfernf.INSTANCE.on(),
-                        new Delay(2.5)
-                ),
-
-
-            //SET 3
-                new ParallelGroup(
-                        new SequentialGroup(
-                                new FollowPath(grabSet3),
-                                new FollowPath(scoreSet3)
-                        ),
-                        Transfernf.INSTANCE.hotdog(),
-                        //SET 3 Shooter vel
-                        Shooternf.INSTANCE.setShooterVel(-1100)
-                ),
-
-                new ParallelRaceGroup(
-                        Transfernf.INSTANCE.on(),
-                        new Delay(2.5)
-                ),
-
-                //SET 4
-                new ParallelGroup(
-                        new SequentialGroup(
-                                new FollowPath(grabSet4),
-                                new FollowPath(scoreSet4)
-                        ),
-                        Transfernf.INSTANCE.hotdog(),
-                        //SET 4 Shooter vel
-                        Shooternf.INSTANCE.setShooterVel(-1100)
-                ),
-
-                new ParallelRaceGroup(
-                        Transfernf.INSTANCE.on(),
-                        new Delay(2.5)
-                )
-
-
-            )
+    private Command transferUpFor(double time) {
+        return new ParallelGroup(
+                Transfernf.INSTANCE.stepOn(),
+                new Delay(time)
         );
     }
 
+    private Command transferSequence(PathChain pathChain, double transferTime) {
+        return new SequentialGroup(
+                Transfernf.INSTANCE.hotdog(),
+                new WaitUntil(() -> pathChain.lastPath().isAtParametricEnd()),
+                transferUpFor(transferTime)
+        );
+    }
+
+    private Command transferSequenceDistance(PathChain pathChain, double transferTime, double proximity) {
+        return new SequentialGroup(
+                Transfernf.INSTANCE.hotdog(),
+                new WaitUntil(() -> pathChain.lastPath().getDistanceRemaining() < proximity),
+                transferUpFor(transferTime)
+        );
+    }
+
+    private Command baseState(double shooterVel) {
+        return new ParallelGroup(
+                Intakenf.INSTANCE.in(),
+                Shooternf.INSTANCE.setShooterVel(shooterVel),
+                Hoodnf.INSTANCE.setHoodPos(0.33)
+        );
+    }
+    private Command baseState(double shooterVel, double hoodPos) {
+        return new ParallelGroup(
+                Intakenf.INSTANCE.in(),
+                Shooternf.INSTANCE.setShooterVel(shooterVel),
+                Hoodnf.INSTANCE.setHoodPos(hoodPos)
+        );
+    }
+
+    private Command autonomous() {
+        return new SequentialGroup(
+
+
+                new ParallelGroup(
+                        new FollowPath(scorePreloads),
+                        baseState(-1240),
+                        Transfernf.INSTANCE.hotdog()
+                ),
+                new Delay(1)
+
+
+        );
+    }
+    private Command vision() {
+        return new SequentialGroup(
+
+                // Grab the angle at runtime
+                new WaitUntil(() -> {
+                    bearing = cam.getATangle();
+                    return true;
+                }),
+
+                // Now use it
+                new TurnBy(Angle.fromDeg(bearing)),
+
+                transferUpFor(2)
+        );
+    }
 
     @Override
     public void onInit() {
+        cam = new logi(hardwareMap);
+
         buildPaths();
+        init_bot().schedule();
+        Shooternf.INSTANCE.disable();
     }
+
     @Override
     public void onStartButtonPressed() {
+        cam.enableAT();
         autonomous().schedule();
+        Shooternf.INSTANCE.enable();
+        //vision().schedule();
+
     }
+
+    @Override
+    public void onUpdate() {
+        telemetry.addData("ATangle", cam.getATangle());
+        telemetry.update();
+        bearing = cam.getATangle();
+        new SequentialGroup(
+                new TurnBy(Angle.fromDeg(cam.getATangle()))
+        ).schedule();
+    }
+
+
+    @Override
+    public void onStop() {
+        PoseStorage.startingPose = PedroComponent.follower().getPose();
+    }
+
+
 }
