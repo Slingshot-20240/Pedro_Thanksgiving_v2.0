@@ -39,7 +39,7 @@ public class Constants {
             ;
 
 
-    public static PathConstraints pathConstraints = new PathConstraints(0.992, 50, 1.4, 1.7);
+    public static PathConstraints pathConstraints = new PathConstraints(0.992, 50, 1.4, 1.8);
 //    public static PathConstraints pathConstraints = new PathConstraints(0.995, 40, 1.55, 1.6);
 
     public static MecanumConstants driveConstants = new MecanumConstants()

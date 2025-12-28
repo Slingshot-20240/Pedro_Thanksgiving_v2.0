@@ -9,6 +9,7 @@ import com.pedropathing.geometry.Pose;
 
 import com.pedropathing.paths.HeadingInterpolator;
 import com.pedropathing.paths.PathChain;
+import com.pedropathing.paths.PathConstraints;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 
 import org.firstinspires.ftc.teamcode.NextFTC.autonomous.PoseStorage;
@@ -47,14 +48,15 @@ public class Solo18 extends NextFTCOpMode {
     public PathChain scorePreloads;
 
     public PathChain grabMiddleSet, scoreMiddleSet;
-    public PathChain grabGate, scoreGate;
-    public PathChain grabGate2, scoreGate2;
+    public PathChain grabGate, backAssureGate, assureGate, scoreGate;
+
+    public PathChain grabGate2, backAssureGate2, assureGate2, scoreGate2;
     public PathChain grabGate3, scoreGate3;
     public PathChain grabSet4, scoreSet4;
 
     public PathChain grabSet2, scoreSet2;
 
-    public Pose scorePose = new Pose(87,87);
+    public Pose scorePose = new Pose(89,89);
     //TODO - try different types, public private regular etc.
 
     public void buildPaths() {
@@ -77,7 +79,7 @@ public class Solo18 extends NextFTCOpMode {
                                 scorePose,
                                 new Pose(87.760, 55.000),
                                 new Pose(79.313, 57.000),
-                                new Pose(132.4, 54.000)
+                                new Pose(132, 54.000)
                         )
                 )
                 .setHeadingInterpolation(
@@ -103,7 +105,7 @@ public class Solo18 extends NextFTCOpMode {
         scoreMiddleSet = PedroComponent.follower().pathBuilder()
                 .addPath(
                         new BezierCurve(
-                                new Pose(132.4, 54.000),
+                                new Pose(132, 54.000),
                                 new Pose(97.500, 60.000),
                                 scorePose
                         )
@@ -124,15 +126,43 @@ public class Solo18 extends NextFTCOpMode {
                 .setLinearHeadingInterpolation(Math.toRadians(43.5), Math.toRadians(gateHeading))
                 .build();
 
+        backAssureGate = PedroComponent.follower().pathBuilder()
+                //back assure gate
+                .addPath(
+                        new BezierCurve(
+                                new Pose(131.5,60.38),
+                                new Pose(125, 58)
+                        )
+                )
+                .setLinearHeadingInterpolation(Math.toRadians(gateHeading), Math.toRadians(10))
+
+                //assure gate
+                .addPath(
+                        new BezierCurve(
+                                new Pose(125, 58),
+                                new Pose(131, 56)
+                        )
+                )
+                .setConstantHeadingInterpolation(Math.toRadians(10))
+//                .addPath(
+//                        new BezierCurve(
+//                                new Pose(131, 58),
+//                                new Pose(131, 55)
+//                        )
+//                )
+//                .setConstantHeadingInterpolation(Math.toRadians(10))
+                .build();
+
+
         scoreGate = PedroComponent.follower().pathBuilder()
                 .addPath(
                         new BezierCurve(
-                                new Pose(131.5, 60.38),
+                                new Pose(131, 56),
                                 new Pose(94.000, 64.000),
                                 scorePose
                         )
                 )
-                .setLinearHeadingInterpolation(Math.toRadians(gateHeading), Math.toRadians(43.5))
+                .setLinearHeadingInterpolation(Math.toRadians(10), Math.toRadians(43.5))
                 .build();
 
         grabGate2 = PedroComponent.follower().pathBuilder()
@@ -146,38 +176,43 @@ public class Solo18 extends NextFTCOpMode {
                 .setLinearHeadingInterpolation(Math.toRadians(43.5), Math.toRadians(gateHeading))
                 .build();
 
+        backAssureGate2 = PedroComponent.follower().pathBuilder()
+                .addPath(
+                        new BezierCurve(
+                                new Pose(131.5,60.38),
+                                new Pose(125, 58)
+                        )
+                )
+                .setLinearHeadingInterpolation(Math.toRadians(gateHeading), Math.toRadians(10))
+                .addPath(
+                        new BezierCurve(
+                                new Pose(125, 58),
+                                new Pose(131, 56)
+                        )
+                )
+                .setConstantHeadingInterpolation(Math.toRadians(10))
+//                .addPath(
+//                        new BezierCurve(
+//                                new Pose(131, 58),
+//                                new Pose(131, 55)
+//                        )
+//                )
+//                .setConstantHeadingInterpolation(Math.toRadians(10))
+                .build();
+
+
         scoreGate2 = follower().pathBuilder()
                 .addPath(
                         new BezierCurve(
-                                new Pose(131.5, 60.38),
+                                new Pose(131, 56),
                                 new Pose(94.000, 64.000),
                                 scorePose
                         )
                 )
-                .setLinearHeadingInterpolation(Math.toRadians(gateHeading), Math.toRadians(43.5))
+                .setLinearHeadingInterpolation(Math.toRadians(10), Math.toRadians(43.5))
                 .build();
 
-        grabGate3 = follower().pathBuilder()
-                .addPath(
-                        new BezierCurve(
-                                scorePose,
-                                new Pose(82.000, 58.000),
-                                new Pose(131.5, 60.1)
-                        )
-                )
-                .setLinearHeadingInterpolation(Math.toRadians(43.5), Math.toRadians(gateHeading))
-                .build();
 
-        scoreGate3 = follower().pathBuilder()
-                .addPath(
-                        new BezierCurve(
-                                new Pose(131.5, 60.1),
-                                new Pose(94.000, 64.000),
-                                scorePose
-                        )
-                )
-                .setLinearHeadingInterpolation(Math.toRadians(gateHeading), Math.toRadians(43.5))
-                .build();
 
 
 
@@ -308,9 +343,9 @@ public class Solo18 extends NextFTCOpMode {
                 new ParallelGroup(
                         new FollowPath(scorePreloads),
                         baseState(-1240),
-                        Transfernf.INSTANCE.hotdog()
+                        //Transfernf.INSTANCE.hotdog()
+                        transferSequence(scorePreloads,0.9)
                 ),
-                transferUpFor(1),
 
 
                 //SET 2
@@ -323,7 +358,7 @@ public class Solo18 extends NextFTCOpMode {
                         ),
                         baseState(-1240),
 
-                        transferSequence(scoreMiddleSet,0.9)
+                        transferSequence(scoreMiddleSet,0.8)
                 ),
 
 
@@ -331,20 +366,17 @@ public class Solo18 extends NextFTCOpMode {
                 new ParallelGroup(
                         new SequentialGroup(
                                 new FollowPath(grabGate),
-                                Transfernf.INSTANCE.gateIntake(),
-                                new Delay(1.3),
+//                                Transfernf.INSTANCE.gateIntake(),
+//                                new Delay(0.1),
+                                new FollowPath(backAssureGate),
+//                                new Delay(0.2),
                                 new FollowPath(scoreGate)
 
                         ),
                         baseState(-1240),
 
-                        new SequentialGroup(
-                                Transfernf.INSTANCE.hotdog(),
-                                new WaitUntil(() -> scoreGate.lastPath().isAtParametricEnd()),
-                                transferUpFor(0.9)
-                        )
 
-                        //transferSequence(scoreGate,0.9)
+                        transferSequence(scoreGate,0.8)
 
                 ),
 
@@ -352,13 +384,15 @@ public class Solo18 extends NextFTCOpMode {
                 new ParallelGroup(
                         new SequentialGroup(
                                 new FollowPath(grabGate2),
-                                new Delay(1.3),
+//                                new Delay(0.1),
+                                new FollowPath(backAssureGate2),
+//                                new Delay(0.2),
                                 new FollowPath(scoreGate2)
 
                         ),
                         baseState(-1240),
 
-                        transferSequence(scoreGate2,0.9)
+                        transferSequence(scoreGate2,0.8)
                 ),
 
                 //SET 4
@@ -371,7 +405,7 @@ public class Solo18 extends NextFTCOpMode {
                         ),
                         baseState(-1240),
 
-                        transferSequence(scoreSet4,0.9)
+                        transferSequence(scoreSet4,0.8)
                 ),
 
 

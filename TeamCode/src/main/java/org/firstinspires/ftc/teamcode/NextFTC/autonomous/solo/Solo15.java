@@ -48,11 +48,11 @@ public class Solo15 extends NextFTCOpMode {
 
     public PathChain grabMiddleSet, scoreMiddleSet;
     public PathChain grabGate, scoreGate;
-    public PathChain grabGate2, scoreGate2;
-    public PathChain grabGate3, scoreGate3;
+    public PathChain backAssureGate, assureGate;
     public PathChain grabSet4, scoreSet4;
 
     public PathChain grabSet2, scoreSet2;
+    public PathChain park;
 
     public Pose scorePose = new Pose(87,87);
     //TODO - try different types, public private regular etc.
@@ -124,15 +124,38 @@ public class Solo15 extends NextFTCOpMode {
                 .setLinearHeadingInterpolation(Math.toRadians(43.5), Math.toRadians(gateHeading))
                 .build();
 
+        backAssureGate = PedroComponent.follower().pathBuilder()
+                .addPath(
+                        new BezierCurve(
+                                new Pose(131.5,60.2),
+                                new Pose(120, 58)
+                        )
+                )
+                .setLinearHeadingInterpolation(Math.toRadians(gateHeading), Math.toRadians(0))
+                .build();
+
+        assureGate = PedroComponent.follower().pathBuilder()
+                .addPath(
+                        new BezierCurve(
+                                new Pose(120, 58),
+                                new Pose(132, 58)
+                        )
+                )
+                .setLinearHeadingInterpolation(Math.toRadians(0), Math.toRadians(0))
+//                .setTimeoutConstraint(1)
+                .build();
+
+
+
         scoreGate = PedroComponent.follower().pathBuilder()
                 .addPath(
                         new BezierCurve(
-                                new Pose(131.5, 60.2),
+                                new Pose(132, 58),
                                 new Pose(94.000, 64.000),
                                 scorePose
                         )
                 )
-                .setLinearHeadingInterpolation(Math.toRadians(gateHeading), Math.toRadians(43.5))
+                .setLinearHeadingInterpolation(Math.toRadians(0), Math.toRadians(43.5))
                 .build();
 
 
@@ -201,9 +224,18 @@ public class Solo15 extends NextFTCOpMode {
         scoreSet2 = PedroComponent.follower().pathBuilder()
                 //Score Set 2
                 .addPath(
-                        new BezierLine(new Pose(126, 80), new Pose(90,110))
+//                        new BezierLine(new Pose(126, 80), new Pose(90,110))
+                        new BezierLine(new Pose(126, 80), scorePose)
                 )
-                .setLinearHeadingInterpolation(Math.toRadians(0), Math.toRadians(28.4))
+                .setLinearHeadingInterpolation(Math.toRadians(0), Math.toRadians(43.5))
+                .build();
+
+        park = PedroComponent.follower()
+                .pathBuilder()
+                .addPath(
+                        new BezierLine(scorePose, new Pose(108, 70.000))
+                )
+                .setLinearHeadingInterpolation(Math.toRadians(43.5), Math.toRadians(90))
                 .build();
 
 
@@ -213,7 +245,7 @@ public class Solo15 extends NextFTCOpMode {
     //TODO - figure out the max and min pos of servo! Does increasing bring hood up or down?
     private Command init_bot() {
         return new ParallelGroup(
-                Hoodnf.INSTANCE.setHoodPos(0.33),
+                Hoodnf.INSTANCE.setHoodPos(0.35),
                 Transfernf.INSTANCE.idle()
         );
 
@@ -246,7 +278,7 @@ public class Solo15 extends NextFTCOpMode {
         return new ParallelGroup(
                 Intakenf.INSTANCE.in(),
                 Shooternf.INSTANCE.setShooterVel(shooterVel),
-                Hoodnf.INSTANCE.setHoodPos(0.33)
+                Hoodnf.INSTANCE.setHoodPos(0.35)
         );
     }
     private Command baseState(double shooterVel, double hoodPos) {
@@ -287,7 +319,10 @@ public class Solo15 extends NextFTCOpMode {
                 new ParallelGroup(
                         new SequentialGroup(
                                 new FollowPath(grabGate),
-                                new Delay(3),
+                                new Delay(2.3),
+                                new FollowPath(backAssureGate),
+                                new Delay(0.3),
+                                new FollowPath(assureGate),
                                 new FollowPath(scoreGate)
 
                         ),
@@ -318,10 +353,11 @@ public class Solo15 extends NextFTCOpMode {
 //                                new Delay(0.9),
                                 new FollowPath(scoreSet2)
                         ),
-                        baseState(-1200,0.38),
+                        baseState(-1240),
 
-                        transferSequence(scoreSet2,5)
-                )
+                        transferSequence(scoreSet2,1.3)
+                ),
+                new FollowPath(park)
 
 
         );

@@ -39,8 +39,8 @@ public class Robot {
 
     public static logi cam;
 
-//    public DigitalChannel ledBoard0;
-//    public DigitalChannel ledBoard1;
+    public DigitalChannel ledBoard0;
+    public DigitalChannel ledBoard1;
 
     public Robot(HardwareMap hardwareMap, GamepadMapping controls) {
         this.controls = controls;
@@ -61,8 +61,8 @@ public class Robot {
 
         drivetrain = new Drivetrain(hardwareMap, imu, controls);
 
-//        ledBoard0 = hardwareMap.get(DigitalChannel.class, "ledBoard0");
-//        ledBoard1 = hardwareMap.get(DigitalChannel.class, "ledBoard1");
+        ledBoard0 = hardwareMap.get(DigitalChannel.class, "ledBoard0");
+        ledBoard1 = hardwareMap.get(DigitalChannel.class, "ledBoard1");
     }
 
     public void hardwareSoftReset() {

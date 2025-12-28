@@ -19,10 +19,9 @@ import org.firstinspires.ftc.teamcode.pedroPathing.Constants;
 import org.firstinspires.ftc.teamcode.subsystems.robot.Robot;
 import org.firstinspires.ftc.teamcode.subsystems.vision.logi;
 import org.firstinspires.ftc.teamcode.teleop.fsm.FSM;
+import org.firstinspires.ftc.teamcode.teleop.fsm.practice.IshaanFSM;
 
 import java.util.function.Supplier;
-
-import dev.nextftc.extensions.pedro.PedroComponent;
 
 @Config
 @TeleOp
