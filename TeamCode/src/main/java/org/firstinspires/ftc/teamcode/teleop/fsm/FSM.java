@@ -22,8 +22,7 @@ public class FSM {
     private final Transfer transfer;
     private final Shooter shooter;
 
-    // Everyone ignore this horrendous OOP
-    private double odoDistance = AVisionTele.odoDistance;
+    private double lastVelo = 0;
 
     public FSM(HardwareMap hardwareMap, GamepadMapping gamepad, Robot robot) {
         this.robot = robot;
@@ -74,25 +73,28 @@ public class FSM {
                     double distance = Robot.cam.getTargetArtifactTravelDistanceX();
 
                     double targetVelocity = robot.shooter.calculateShooterRPM(distance);
+
+                    if (targetVelocity != 0) {
+                        lastVelo = targetVelocity;
+                    }
                     //TODO - TUNE THIS OFFSET VALUE
                     double targetHoodPos = robot.shooter.calculateHoodPos(distance) + 0.1;
-
-                    robot.shooter.setShooterVelocity(-targetVelocity);
-
-                    if (targetVelocity >= robot.shooter.outtake1.getVelocity() - 50 || targetVelocity <= robot.shooter.outtake1.getVelocity() + 50) {
-                        robot.ledBoard0.setState(true);
-                        robot.ledBoard1.setState(true);
-                    } else {
-                        robot.ledBoard0.setState(false);
-                        robot.ledBoard1.setState(false);
-                    }
+//
+//                    if (targetVelocity >= robot.shooter.outtake1.getVelocity() - 50 || targetVelocity <= robot.shooter.outtake1.getVelocity() + 50) {
+//                        robot.ledBoard0.setState(true);
+//                        robot.ledBoard1.setState(true);
+//                    } else {
+//                        robot.ledBoard0.setState(false);
+//                        robot.ledBoard1.setState(false);
+//                    }
 
                     // This should prevent the shooter from changing hood pos if it can't see the AprilTag (so if it cuts out it's fine)
                     if (Robot.cam.getTargetArtifactTravelDistanceX() == 0) {
                         robot.shooter.setHoodAngle(shooter.variableHood.getPosition());
-                        robot.shooter.setShooterPower(robot.shooter.calculateShooterRPM(odoDistance));
+                        robot.shooter.setShooterPower(robot.shooter.calculateShooterRPM(lastVelo));
                     } else {
                         robot.shooter.setHoodAngle(targetHoodPos);
+                        robot.shooter.setShooterPower(-targetVelocity);
                     }
                 }
 
