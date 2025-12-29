@@ -4,6 +4,7 @@ import dev.nextftc.core.commands.Command;
 import dev.nextftc.core.commands.delays.Delay;
 import dev.nextftc.core.commands.groups.ParallelGroup;
 import dev.nextftc.core.commands.groups.SequentialGroup;
+import dev.nextftc.core.commands.utility.InstantCommand;
 import dev.nextftc.core.subsystems.Subsystem;
 import dev.nextftc.hardware.impl.CRServoEx;
 import dev.nextftc.hardware.powerable.SetPower;
@@ -14,12 +15,14 @@ public class Transfernf implements Subsystem {
 
     public CRServoEx frontTransfer;
     public CRServoEx backTransfer;
+    public boolean isTransfering = false;
 
 
     public Command on() {
         return new ParallelGroup(
                 new SetPower(frontTransfer, -1.0),
-                new SetPower(backTransfer, -1.0)
+                new SetPower(backTransfer, -1.0),
+                new InstantCommand(() -> isTransfering = true)
         );
     }
 
@@ -27,7 +30,8 @@ public class Transfernf implements Subsystem {
         return new SequentialGroup(
                 new ParallelGroup(
                         new SetPower(frontTransfer, -0.2),
-                        new SetPower(backTransfer, -1.0)
+                        new SetPower(backTransfer, -1.0),
+                        new InstantCommand(() -> isTransfering = false)
                 ),
                 new Delay(0.2),
                 new ParallelGroup(
@@ -40,7 +44,8 @@ public class Transfernf implements Subsystem {
         return new SequentialGroup(
                 new ParallelGroup(
                         new SetPower(frontTransfer, -0.6),
-                        new SetPower(backTransfer, -0.6)
+                        new SetPower(backTransfer, -0.6),
+                        new InstantCommand(() -> isTransfering = false)
                 ),
                 new Delay(0.2),
                 new ParallelGroup(
@@ -54,7 +59,8 @@ public class Transfernf implements Subsystem {
     public Command hotdog() {
         return new ParallelGroup(
                 new SetPower(frontTransfer, -0.11),
-                new SetPower(backTransfer, 1.0)
+                new SetPower(backTransfer, 1.0),
+                new InstantCommand(() -> isTransfering = false)
         );
     }
 
@@ -62,7 +68,8 @@ public class Transfernf implements Subsystem {
     public Command idle() {
         return new ParallelGroup(
                 new SetPower(frontTransfer, 0),
-                new SetPower(backTransfer, 0)
+                new SetPower(backTransfer, 0),
+                new InstantCommand(() -> isTransfering = false)
         );
     }
 
