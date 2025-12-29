@@ -53,7 +53,9 @@ public class Constants {
             .rightFrontMotorDirection(DcMotorSimple.Direction.FORWARD)
             .rightRearMotorDirection(DcMotorSimple.Direction.FORWARD)
             .xVelocity(73.5)
-            .yVelocity(62);
+            .yVelocity(62)
+            .useVoltageCompensation(true)
+            .nominalVoltage(13.5);
 
     public static Follower createFollower(HardwareMap hardwareMap) {
         return new FollowerBuilder(followerConstants, hardwareMap)
