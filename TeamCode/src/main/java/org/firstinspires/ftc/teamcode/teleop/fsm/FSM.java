@@ -74,7 +74,7 @@ public class FSM {
 
                     double targetVelocity = robot.shooter.calculateShooterRPM(distance);
 
-                    if (targetVelocity != 0) {
+                    if (targetVelocity != robot.shooter.calculateShooterRPM(22)) {
                         lastVelo = targetVelocity;
                     }
                     //TODO - TUNE THIS OFFSET VALUE

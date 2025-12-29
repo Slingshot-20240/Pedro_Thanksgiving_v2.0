@@ -80,10 +80,9 @@ public class IshaanFSM {
                     //TODO - TUNE THIS OFFSET VALUE
                     double targetHoodPos = robot.shooter.calculateHoodPos(distance) + 0.1;
 
-                    if (targetVelocity != 0) {
+                    if (targetVelocity != robot.shooter.calculateShooterRPM(22)) {
                         lastVelo = targetVelocity;
                     }
-                    robot.shooter.setShooterVelocity(-targetVelocity);
 
 //                    if (targetVelocity >= robot.shooter.outtake1.getVelocity() - 50 || targetVelocity <= robot.shooter.outtake1.getVelocity() + 50) {
 
@@ -96,9 +95,10 @@ public class IshaanFSM {
                     // This should prevent the shooter from changing hood pos if it can't see the AprilTag (so if it cuts out it's fine)
                     if (Robot.cam.getTargetArtifactTravelDistanceX() == 22) {
                         robot.shooter.setHoodAngle(shooter.variableHood.getPosition());
-                        robot.shooter.setShooterPower(robot.shooter.calculateShooterRPM(odoDistance));
+                        robot.shooter.setShooterPower(-lastVelo);
                     } else {
                         robot.shooter.setHoodAngle(targetHoodPos);
+                        robot.shooter.setShooterVelocity(-targetVelocity);
 
                     }
 
