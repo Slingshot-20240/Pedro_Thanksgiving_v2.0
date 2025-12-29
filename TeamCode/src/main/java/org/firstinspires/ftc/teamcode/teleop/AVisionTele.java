@@ -28,7 +28,7 @@ import java.util.function.Supplier;
 public class AVisionTele extends OpMode {
 
     private GamepadMapping controls;
-    private IshaanFSM fsm;
+    private FSM fsm;
     private Robot robot;
     //private logi cam;
 
@@ -50,7 +50,7 @@ public class AVisionTele extends OpMode {
     public void init() {
         controls = new GamepadMapping(gamepad1, gamepad2);
         robot = new Robot(hardwareMap, controls);
-        fsm = new IshaanFSM(hardwareMap, controls, robot);
+        fsm = new FSM(hardwareMap, controls, robot);
 
         follower = Constants.createFollower(hardwareMap);
         //follower.setStartingPose(new Pose(126.2, 119, Math.toRadians(36)));
@@ -170,6 +170,7 @@ public class AVisionTele extends OpMode {
         telemetry.addData("AT angle", Robot.cam.getATangle());
         telemetry.addData("AT dist",  Robot.cam.getATdist());
         telemetry.addData("Artifact Travel distance", Robot.cam.getTargetArtifactTravelDistanceX());
+        telemetry.addData("last velo",  fsm.lastVelo);
 
         telemetry.addLine("--------------------------------");
         telemetry.addData("Vision AutoTurn", autoTurnVision);
