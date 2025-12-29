@@ -249,7 +249,8 @@ public class Solo15 extends NextFTCOpMode {
     private Command init_bot() {
         return new ParallelGroup(
                 Hoodnf.INSTANCE.setHoodPos(0.35),
-                Transfernf.INSTANCE.idle()
+                Transfernf.INSTANCE.idle(),
+                Lednf.INSTANCE.green
         );
 
     }
