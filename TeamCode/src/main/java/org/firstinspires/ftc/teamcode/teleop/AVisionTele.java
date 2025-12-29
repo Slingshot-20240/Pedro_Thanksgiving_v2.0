@@ -169,6 +169,8 @@ public class AVisionTele extends OpMode {
         telemetry.addData("Heading", heading);
         telemetry.addData("AT angle", Robot.cam.getATangle());
         telemetry.addData("AT dist",  Robot.cam.getATdist());
+        telemetry.addData("Artifact Travel distance", Robot.cam.getTargetArtifactTravelDistanceX());
+
         telemetry.addLine("--------------------------------");
         telemetry.addData("Vision AutoTurn", autoTurnVision);
         telemetry.addData("AutoPark", automatedDrive);

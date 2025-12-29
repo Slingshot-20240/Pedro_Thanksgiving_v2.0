@@ -89,7 +89,7 @@ public class FSM {
 //                    }
 
                     // This should prevent the shooter from changing hood pos if it can't see the AprilTag (so if it cuts out it's fine)
-                    if (Robot.cam.getTargetArtifactTravelDistanceX() == 0) {
+                    if (Robot.cam.getTargetArtifactTravelDistanceX() == 22) {
                         robot.shooter.setHoodAngle(shooter.variableHood.getPosition());
                         robot.shooter.setShooterPower(-robot.shooter.calculateShooterRPM(lastVelo));
                     } else {

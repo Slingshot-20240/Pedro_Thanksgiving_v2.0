@@ -13,12 +13,14 @@ import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 
 import org.firstinspires.ftc.teamcode.NextFTC.autonomous.PoseStorage;
 import org.firstinspires.ftc.teamcode.NextFTC.subsystems_nf.Intakenf;
+import org.firstinspires.ftc.teamcode.NextFTC.subsystems_nf.Lednf;
 import org.firstinspires.ftc.teamcode.NextFTC.subsystems_nf.Shooternf;
 import org.firstinspires.ftc.teamcode.NextFTC.subsystems_nf.Transfernf;
 import org.firstinspires.ftc.teamcode.NextFTC.subsystems_nf.Hoodnf;
 import org.firstinspires.ftc.teamcode.pedroPathing.Constants;
 
 import dev.nextftc.core.commands.Command;
+import dev.nextftc.core.commands.conditionals.IfElseCommand;
 import dev.nextftc.core.commands.delays.Delay;
 import dev.nextftc.core.commands.delays.WaitUntil;
 import dev.nextftc.core.commands.groups.ParallelGroup;
@@ -37,7 +39,8 @@ public class Solo15 extends NextFTCOpMode {
         addComponents(
                 new SubsystemComponent(
                         Intakenf.INSTANCE, Hoodnf.INSTANCE,
-                        Shooternf.INSTANCE, Transfernf.INSTANCE
+                        Shooternf.INSTANCE, Transfernf.INSTANCE,
+                        Lednf.INSTANCE
                 ),
                 new PedroComponent(Constants::createFollower),
                 BulkReadComponent.INSTANCE
@@ -290,74 +293,83 @@ public class Solo15 extends NextFTCOpMode {
     }
 
     private Command autonomous() {
-        return new SequentialGroup(
+        return new ParallelGroup(
 
-
-                new ParallelGroup(
-                        new FollowPath(scorePreloads),
-                        baseState(-1240),
-                        Transfernf.INSTANCE.hotdog()
-                ),
-                transferUpFor(1.3),
-
-
-                //SET 2
-                new ParallelGroup(
-                        new SequentialGroup(
-                                new FollowPath(grabMiddleSet),
-//                                new Delay(0.14),
-                                new FollowPath(scoreMiddleSet)
-
-                        ),
-                        baseState(-1240),
-
-                        transferSequence(scoreMiddleSet,1.3)
+                //LED sequence
+                new IfElseCommand(
+                        () -> Transfernf.INSTANCE.isTransfering,
+                        Lednf.INSTANCE.yellow,
+                        Lednf.INSTANCE.green
                 ),
 
-
-                //SET 3
-                new ParallelGroup(
-                        new SequentialGroup(
-                                new FollowPath(grabGate),
-                                new Delay(2.3),
-                                new FollowPath(backAssureGate),
-                                new Delay(0.3),
-                                new FollowPath(assureGate),
-                                new FollowPath(scoreGate)
-
-                        ),
-                        baseState(-1240),
-
-                        transferSequence(scoreGate,1.3)
-                ),
+                //Main auton sequence
+                new SequentialGroup(
+                    new ParallelGroup(
+                            new FollowPath(scorePreloads),
+                            baseState(-1240),
+                            Transfernf.INSTANCE.hotdog()
+                    ),
+                    transferUpFor(1.3),
 
 
-                //SET 4
-                new ParallelGroup(
-                        new SequentialGroup(
-                                new FollowPath(grabSet4),
-//                                new Delay(0.7),
-                                new FollowPath(scoreSet4)
+                    //SET 2
+                    new ParallelGroup(
+                            new SequentialGroup(
+                                    new FollowPath(grabMiddleSet),
+    //                                new Delay(0.14),
+                                    new FollowPath(scoreMiddleSet)
 
-                        ),
-                        baseState(-1240),
+                            ),
+                            baseState(-1240),
 
-                        transferSequence(scoreSet4,1.3)
-                ),
+                            transferSequence(scoreMiddleSet,1.3)
+                    ),
+
+
+                    //SET 3
+                    new ParallelGroup(
+                            new SequentialGroup(
+                                    new FollowPath(grabGate),
+                                    new Delay(2.3),
+                                    new FollowPath(backAssureGate),
+                                    new Delay(0.3),
+                                    new FollowPath(assureGate),
+                                    new FollowPath(scoreGate)
+
+                            ),
+                            baseState(-1240),
+
+                            transferSequence(scoreGate,1.3)
+                    ),
+
+
+                    //SET 4
+                    new ParallelGroup(
+                            new SequentialGroup(
+                                    new FollowPath(grabSet4),
+    //                                new Delay(0.7),
+                                    new FollowPath(scoreSet4)
+
+                            ),
+                            baseState(-1240),
+
+                            transferSequence(scoreSet4,1.3)
+                    ),
 
 
 
-                new ParallelGroup(
-                        new SequentialGroup(
-                                new FollowPath(grabSet2),
-//                                new Delay(0.9),
-                                new FollowPath(scoreSet2)
-                        ),
-                        baseState(-1240),
+                    new ParallelGroup(
+                            new SequentialGroup(
+                                    new FollowPath(grabSet2),
+    //                                new Delay(0.9),
+                                    new FollowPath(scoreSet2)
+                            ),
+                            baseState(-1240),
 
-                        transferSequence(scoreSet2,1.3)
-                ),
-                new FollowPath(park)
+                            transferSequence(scoreSet2,1.3)
+                    ),
+                    new FollowPath(park)
+                )
 
 
         );

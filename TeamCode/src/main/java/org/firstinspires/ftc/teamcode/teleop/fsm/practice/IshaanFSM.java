@@ -1,5 +1,6 @@
 package org.firstinspires.ftc.teamcode.teleop.fsm.practice;
 
+
 import com.qualcomm.robotcore.hardware.HardwareMap;
 
 import org.firstinspires.ftc.teamcode.misc.gamepad.GamepadMapping;
@@ -7,9 +8,9 @@ import org.firstinspires.ftc.teamcode.subsystems.intake.Intake;
 import org.firstinspires.ftc.teamcode.subsystems.robot.Robot;
 import org.firstinspires.ftc.teamcode.subsystems.shooter.Shooter;
 import org.firstinspires.ftc.teamcode.subsystems.transfer.Transfer;
+import org.firstinspires.ftc.teamcode.teleop.AVisionTele;
 
 public class IshaanFSM {
-
     // GENERAL ROBOT STATES + CLASSES
     public Robot robot;
     public FSMStates state = FSMStates.BASE_STATE;
@@ -21,9 +22,11 @@ public class IshaanFSM {
     private final Transfer transfer;
     private final Shooter shooter;
 
-    // ===== Vision cache (last known good values) =====
-    private double lastShooterRPM = 0.0;
-    private double lastHoodPos = 0.0;
+    private double lastVelo = 0;
+
+
+    // Everyone ignore this horrendous OOP
+    private double odoDistance = AVisionTele.odoDistance;
 
     public IshaanFSM(HardwareMap hardwareMap, GamepadMapping gamepad, Robot robot) {
         this.robot = robot;
@@ -31,6 +34,7 @@ public class IshaanFSM {
 
         intake = robot.intake;
         transfer = robot.transfer;
+
         shooter = robot.shooter;
     }
 
@@ -38,7 +42,6 @@ public class IshaanFSM {
         gamepad.update();
 
         switch (state) {
-
             case BASE_STATE:
 
                 if (type == ControlType.HARDCODED_CONTROL) {
@@ -70,39 +73,50 @@ public class IshaanFSM {
                     state = FSMStates.PID_SHOOT;
                 }
 
-                // ===== PID / Vision-based control =====
                 if (type == ControlType.PID_CONTROL) {
-
                     double distance = Robot.cam.getTargetArtifactTravelDistanceX();
 
-                    if (distance != 0) {
-                        // Vision valid → compute + cache
-                        lastShooterRPM = robot.shooter.calculateShooterRPM(distance);
-                        lastHoodPos = robot.shooter.calculateHoodPos(distance) + 0.1; // offset
+                    double targetVelocity = robot.shooter.calculateShooterRPM(distance);
+                    //TODO - TUNE THIS OFFSET VALUE
+                    double targetHoodPos = robot.shooter.calculateHoodPos(distance) + 0.1;
 
-                        robot.shooter.setShooterVelocity(-lastShooterRPM);
-                        robot.shooter.setHoodAngle(lastHoodPos);
+                    if (targetVelocity != 0) {
+                        lastVelo = targetVelocity;
+                    }
+                    robot.shooter.setShooterVelocity(-targetVelocity);
+
+//                    if (targetVelocity >= robot.shooter.outtake1.getVelocity() - 50 || targetVelocity <= robot.shooter.outtake1.getVelocity() + 50) {
+
+
+//                    } else {
+//                        robot.ledBoard0.setState(false);
+//                        robot.ledBoard1.setState(false);
+//                    }
+
+                    // This should prevent the shooter from changing hood pos if it can't see the AprilTag (so if it cuts out it's fine)
+                    if (Robot.cam.getTargetArtifactTravelDistanceX() == 22) {
+                        robot.shooter.setHoodAngle(shooter.variableHood.getPosition());
+                        robot.shooter.setShooterPower(robot.shooter.calculateShooterRPM(odoDistance));
                     } else {
-                        // Vision lost → reuse last known good values
-                        if (lastShooterRPM != 0) {
-                            robot.shooter.setShooterVelocity(-lastShooterRPM);
-                        }
-                        robot.shooter.setHoodAngle(lastHoodPos);
+                        robot.shooter.setHoodAngle(targetHoodPos);
+
+                    }
+
+                    if (Robot.cam.getTargetArtifactTravelDistanceX() != 22) {
+                        robot.ledBoard0.setState(true);
+                        robot.ledBoard1.setState(true);
+                    } else {
+                        robot.ledBoard0.setState(false);
+                        robot.ledBoard1.setState(true);
                     }
                 }
 
                 break;
-
             case OUTTAKING:
                 intake.intakeReverse();
-
                 if (!gamepad.outtake.locked()) {
                     state = FSMStates.BASE_STATE;
-                    gamepad.resetMultipleControls(
-                            gamepad.transfer,
-                            gamepad.shootFront,
-                            gamepad.shootBack
-                    );
+                    gamepad.resetMultipleControls(gamepad.transfer, gamepad.shootFront, gamepad.shootBack);
                 }
                 break;
 
@@ -111,48 +125,36 @@ public class IshaanFSM {
                 shooter.hoodToBack();
                 intake.intakeOn();
 
-                if (shooter.outtake1.getVelocity()
-                        <= Shooter.outtakeVels.HARDCODED_SHOOT_BACK.getOuttakeVel() + 50) {
+                if (shooter.outtake1.getVelocity() <= Shooter.outtakeVels.HARDCODED_SHOOT_BACK.getOuttakeVel() + 50) {
                     transfer.transferOn();
                 }
 
                 if (!gamepad.shootBack.locked()) {
                     state = FSMStates.BASE_STATE;
-                    gamepad.resetMultipleControls(
-                            gamepad.shootBack,
-                            gamepad.shootFront,
-                            gamepad.transfer
-                    );
+                    gamepad.resetMultipleControls(gamepad.shootBack, gamepad.shootFront, gamepad.transfer);
                 }
                 break;
-
             case SHOOT_FRONT:
                 intake.intakeOn();
                 shooter.shootFromFront();
+
                 transfer.transferOn();
 
                 if (!gamepad.shootFront.locked()) {
                     state = FSMStates.BASE_STATE;
-                    gamepad.resetMultipleControls(
-                            gamepad.shootBack,
-                            gamepad.shootFront,
-                            gamepad.transfer
-                    );
+                    gamepad.resetMultipleControls(gamepad.shootBack, gamepad.shootFront, gamepad.transfer);
                 }
                 break;
 
             case PID_SHOOT:
                 intake.intakeOn();
+
                 transfer.transferOn();
 
                 if (!gamepad.transfer.locked()) {
                     state = FSMStates.BASE_STATE;
-                    gamepad.resetMultipleControls(
-                            gamepad.transfer,
-                            gamepad.outtake
-                    );
+                    gamepad.resetMultipleControls(gamepad.transfer, gamepad.outtake);
                 }
-                break;
         }
     }
 
@@ -168,4 +170,5 @@ public class IshaanFSM {
         HARDCODED_CONTROL,
         PID_CONTROL
     }
+
 }
