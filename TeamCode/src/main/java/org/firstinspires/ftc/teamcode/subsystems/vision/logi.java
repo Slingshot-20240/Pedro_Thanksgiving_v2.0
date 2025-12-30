@@ -18,7 +18,7 @@ import org.opencv.core.Mat;
 public class logi {
     AprilTagProcessor apriltagPipeline;
 
-    ballProcessor ballPipeline;
+    BallProcessor ballPipeline;
 
     VisionPortal portal;
 
@@ -37,7 +37,9 @@ public class logi {
                 .setOutputUnits(DistanceUnit.INCH, AngleUnit.DEGREES)
                 .build();
 
-        ballPipeline = new ballProcessor();
+        ballPipeline = new BallProcessor();
+
+        int[] myPortalsList = VisionPortal.makeMultiPortalView(2, VisionPortal.MultiPortalLayout.HORIZONTAL);
 
         portal = new VisionPortal.Builder()
                 .setCamera(hw.get(WebcamName.class, "Webcam 1"))
@@ -45,7 +47,7 @@ public class logi {
                 .setCameraResolution(new Size(1920, 1080))
                 .setStreamFormat(VisionPortal.StreamFormat.MJPEG)
                 .setAutoStopLiveView(true)
-                
+                .setLiveViewContainerId(myPortalsList[0])
                 .build();
 
         portal.setProcessorEnabled(apriltagPipeline, true);
@@ -95,24 +97,5 @@ public class logi {
             return detection.ftcPose.bearing;
         }
         return 0.0;
-    }
-}
-
-//Not done yet sdadge
-class ballProcessor implements VisionProcessor {
-
-    @Override
-    public void init(int width, int height, CameraCalibration calibration) {
-
-    }
-
-    @Override
-    public Object processFrame(Mat frame, long captureTimeNanos) {
-        return null;
-    }
-
-    @Override
-    public void onDrawFrame(Canvas canvas, int onscreenWidth, int onscreenHeight, float scaleBmpPxToCanvasPx, float scaleCanvasDensity, Object userContext) {
-
     }
 }
