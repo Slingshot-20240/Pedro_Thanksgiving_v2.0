@@ -1,7 +1,10 @@
 package org.firstinspires.ftc.teamcode.NextFTC.subsystems_nf;
 
 import dev.nextftc.core.commands.Command;
+import dev.nextftc.core.commands.delays.Delay;
 import dev.nextftc.core.commands.groups.ParallelGroup;
+import dev.nextftc.core.commands.groups.SequentialGroup;
+import dev.nextftc.core.commands.utility.InstantCommand;
 import dev.nextftc.core.subsystems.Subsystem;
 import dev.nextftc.hardware.impl.CRServoEx;
 import dev.nextftc.hardware.powerable.SetPower;
@@ -12,26 +15,66 @@ public class Transfernf implements Subsystem {
 
     public CRServoEx frontTransfer;
     public CRServoEx backTransfer;
+    public boolean isTransfering = false;
 
 
     public Command on() {
         return new ParallelGroup(
                 new SetPower(frontTransfer, -1.0),
-                new SetPower(backTransfer, -1.0)
+                new SetPower(backTransfer, -1.0),
+                new InstantCommand(() -> isTransfering = true)
+        );
+    }
+
+    public Command gateIntake() {
+        return new SequentialGroup(
+                new ParallelGroup(
+                        new SetPower(frontTransfer, -0.2),
+                        new SetPower(backTransfer, -1.0),
+                        new InstantCommand(() -> isTransfering = false)
+                ),
+                new Delay(0.2),
+                new ParallelGroup(
+                        new SetPower(frontTransfer, -0.15),
+                        new SetPower(backTransfer, -1.0)
+                )
+        );
+    }
+    public Command stepOn() {
+        return new SequentialGroup(
+                new ParallelGroup(
+                        new SetPower(frontTransfer, -0.6),
+                        new SetPower(backTransfer, -0.6),
+                        new InstantCommand(() -> isTransfering = false)
+                ),
+                new Delay(0.2),
+                new ParallelGroup(
+                        new SetPower(frontTransfer, -1.0),
+                        new SetPower(backTransfer, -1.0)
+                )
+
         );
     }
 
     public Command hotdog() {
         return new ParallelGroup(
-                new SetPower(frontTransfer, -0.2),
-                new SetPower(backTransfer, 1.0)
+                new SetPower(frontTransfer, -0.11),
+                new SetPower(backTransfer, 1.0),
+                new InstantCommand(() -> isTransfering = false)
         );
     }
 
 
     public Command idle() {
         return new ParallelGroup(
-                new SetPower(frontTransfer, -0.05),
+                new SetPower(frontTransfer, 0),
+                new SetPower(backTransfer, 0),
+                new InstantCommand(() -> isTransfering = false)
+        );
+    }
+
+    public Command forceBackOn() {
+        return new ParallelGroup(
                 new SetPower(backTransfer, -1.0)
         );
     }

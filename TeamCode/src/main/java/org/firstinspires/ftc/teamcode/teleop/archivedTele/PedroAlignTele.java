@@ -1,13 +1,9 @@
-package org.firstinspires.ftc.teamcode.teleop;
-
-import android.print.PageRange;
-
+package org.firstinspires.ftc.teamcode.teleop.archivedTele;
 import com.bylazar.configurables.annotations.Configurable;
 import com.bylazar.telemetry.PanelsTelemetry;
 import com.bylazar.telemetry.TelemetryManager;
 import com.pedropathing.follower.Follower;
 import com.pedropathing.geometry.BezierLine;
-import com.pedropathing.geometry.BezierPoint;
 import com.pedropathing.geometry.Pose;
 import com.pedropathing.paths.HeadingInterpolator;
 import com.pedropathing.paths.Path;
@@ -25,18 +21,17 @@ import java.util.function.Supplier;
 
 @Configurable
 @TeleOp
-public class LCsTele extends OpMode {
-
+public class PedroAlignTele extends OpMode {
     private GamepadMapping controls;
     private FSM fsm;
     private Robot robot;
     private logi cam;
 
     private Follower follower;
-    private boolean turning;
+    public static Pose startingPose; //See ExampleAuto to understand how to use this
+    private boolean automatedDrive;
+    private Supplier<PathChain> pathChain;
     private TelemetryManager telemetryM;
-    public static Pose pose;
-
 
     @Override
     public void init() {
@@ -46,11 +41,8 @@ public class LCsTele extends OpMode {
         cam = new logi(hardwareMap);
 
         follower = Constants.createFollower(hardwareMap);
-        //follower.setStartingPose(new Pose(18, 118, Math.toRadians(144)));
-        pose = follower.getPose();
-        follower.setStartingPose(pose);
+        follower.setStartingPose(startingPose == null ? new Pose() : startingPose);
         follower.update();
-
         telemetryM = PanelsTelemetry.INSTANCE.getTelemetry();
 
 
@@ -58,61 +50,63 @@ public class LCsTele extends OpMode {
 
     @Override
     public void start() {
-        robot.hardwareSoftReset();
-        follower.startTeleopDrive(true);
+        //The parameter controls whether the Follower should use break mode on the motors (using it is recommended).
+        //In order to use float mode, add .useBrakeModeInTeleOp(true); to your Drivetrain Constants in Constant.java (for Mecanum)
+        //If you don't pass anything in, it uses the default (false)
+        follower.startTeleopDrive();
     }
 
     @Override
     public void loop() {
-        fsm.update();
+        //Call this once per loop
         follower.update();
         telemetryM.update();
-        telemetry.update();
-
+        fsm.update();
         Pose pose = follower.getPose();
         double heading = pose.getHeading();
-
-        double atBearing = Math.toRadians(cam.getATangle());
-        double atHeadingError = angleWrap(atBearing);
-
-        if (gamepad1.a) {
-            //TODO - try true, and positive error degrees
-            //follower.turnDegrees(-atHeadingError,false);
-            follower.turnDegrees(20,true);
-            //follower.holdPoint(pose);
-        }
 
         boolean controllerBusy =
                 Math.abs( gamepad1.left_stick_x) > 0.05
                         || Math.abs(gamepad1.left_stick_y) > 0.05
                         || Math.abs(gamepad1.right_stick_x) > 0.05;
 
-        if (gamepad1.xWasPressed()) {
-            follower.setPose(new Pose(pose.getX(), pose.getY(), Math.toRadians(90)));
+        double atBearing = Math.toRadians(cam.getATangle());
+        double atHeadingError = angleWrap(atBearing);
+        pathChain = () -> follower.pathBuilder() //Lazy Curve Generation
+                .addPath(new Path(new BezierLine(follower::getPose, new Pose(pose.getX() + 0.1, pose.getY() + 0.1))))
+                .setHeadingInterpolation(HeadingInterpolator.linearFromPoint(follower::getHeading, pose.getHeading() + atHeadingError, 0.9))
+                .build();
+
+        if (!automatedDrive) {
+
+            follower.setTeleOpDrive(
+                    -gamepad1.left_stick_y,
+                    -gamepad1.left_stick_x,
+                    -gamepad1.right_stick_x * 0.6,
+                    true // Robot Centric
+            );
+
         }
 
+        //Automated PathFollowing
+        if (gamepad1.aWasPressed()) {
+            follower.followPath(pathChain.get());
+            automatedDrive = true;
+        }
 
-        double forward = -gamepad1.left_stick_y;
-        double strafe  = -gamepad1.left_stick_x;
-        double rotate = -gamepad1.right_stick_x * 0.65;
-
-        follower.setTeleOpDrive(forward, strafe, rotate, true);
-
-        if (!follower.isBusy()) {
-//            follower.resumePathFollowing();
-//            follower.breakFollowing();
+        //Stop automated following if the follower is done
+        if (automatedDrive && (controllerBusy || gamepad1.bWasPressed() || !follower.isBusy())) {
             follower.startTeleopDrive();
+            automatedDrive = false;
         }
 
-        telemetry.addData("pose", pose);
-        telemetry.addData("Heading", heading);
-        //TODO - change offset hard coded values of goal
-        telemetry.addData("Odo Distance", pose.distanceFrom(new Pose(137,137)));
-        telemetry.addLine("--------------------------------");
-        telemetry.addData("AT angle", cam.getATangle());
-        telemetry.addData("AT dist", cam.getATdist());
-    }
 
+        telemetryM.debug("position", follower.getPose());
+        telemetryM.debug("velocity", follower.getVelocity());
+        telemetryM.debug("automatedDrive", automatedDrive);
+        telemetry.addData("graph AT heading error", atHeadingError);
+
+    }
     private double angleWrap(double angle) {
         while (angle > Math.PI) angle -= 2 * Math.PI;
         while (angle < -Math.PI) angle += 2 * Math.PI;

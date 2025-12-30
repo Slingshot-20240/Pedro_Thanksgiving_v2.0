@@ -6,12 +6,16 @@ import com.pedropathing.geometry.Pose;
 
 import com.pedropathing.paths.PathChain;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
+import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 
+import org.firstinspires.ftc.teamcode.NextFTC.autonomous.PoseStorage;
 import org.firstinspires.ftc.teamcode.NextFTC.subsystems_nf.Intakenf;
 import org.firstinspires.ftc.teamcode.NextFTC.subsystems_nf.Shooternf;
 import org.firstinspires.ftc.teamcode.NextFTC.subsystems_nf.Transfernf;
 import org.firstinspires.ftc.teamcode.NextFTC.subsystems_nf.Hoodnf;
 import org.firstinspires.ftc.teamcode.pedroPathing.Constants;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import dev.nextftc.core.commands.Command;
 import dev.nextftc.core.commands.delays.Delay;
@@ -23,8 +27,10 @@ import dev.nextftc.extensions.pedro.PedroComponent;
 import dev.nextftc.ftc.NextFTCOpMode;
 import dev.nextftc.ftc.components.BulkReadComponent;
 
+@Disabled
 @Autonomous(name = "12 Red Close Gate")
 public class LM3RedCloseGate12 extends NextFTCOpMode {
+
     public LM3RedCloseGate12() {
         addComponents(
                 new SubsystemComponent(
@@ -47,7 +53,7 @@ public class LM3RedCloseGate12 extends NextFTCOpMode {
     public PathChain park;
 
     public Pose scorePose = new Pose(88,88);
-    public static Pose pose;
+    public static Pose startingPose = new Pose();
 
     public void buildPaths() {
         PedroComponent.follower().setStartingPose(new Pose(126.2, 119, Math.toRadians(36)));
@@ -156,7 +162,6 @@ public class LM3RedCloseGate12 extends NextFTCOpMode {
                 .setLinearHeadingInterpolation(Math.toRadians(45), Math.toRadians(90))
                 .build();
 
-        pose = new Pose(108, 70.000,Math.toRadians(90));
 
 
     }
@@ -264,6 +269,9 @@ public class LM3RedCloseGate12 extends NextFTCOpMode {
     public void onStartButtonPressed() {
         autonomous().schedule();
         Shooternf.INSTANCE.enable();
-
+    }
+    @Override
+    public void onStop() {
+        PoseStorage.startingPose = PedroComponent.follower().getPose();
     }
 }

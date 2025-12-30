@@ -1,7 +1,6 @@
 package org.firstinspires.ftc.teamcode.NextFTC.subsystems_nf;
 
 import com.bylazar.configurables.annotations.Configurable;
-import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 
 import dev.nextftc.control.ControlSystem;
 import dev.nextftc.core.commands.Command;
@@ -18,32 +17,32 @@ public class Shooternf implements Subsystem {
     public MotorEx outtake1, outtake2;
     public MotorGroup shooter;
 
-
     private final ControlSystem shooterController = ControlSystem.builder()
-            .velPid(0.32,0,0.001)
-          //   .velPid(1.52,0,0)
+            .velPid(0.342,0,0.001)
+            .basicFF(0.001)
+            //.velPid(1.52,0,0)
             .build();
 
     private boolean enabled = false;
 
     private enum shooterStates {
         IDLE (0),
-        CLOSE_SIDE (-1167),
+        CLOSE_SIDE (-1210),
         FAR_SIDE (-1420);
 
         private final double shooterState;
         shooterStates(double state) { this.shooterState = state; }
-        public double getState() { return shooterState; }
+        public double getVel() { return shooterState; }
     }
 
     public Command closeSide() {
-        return new RunToVelocity(shooterController, shooterStates.CLOSE_SIDE.getState());
+        return new RunToVelocity(shooterController, shooterStates.CLOSE_SIDE.getVel()).requires(shooter);
     }
     public Command farSide() {
-        return new RunToVelocity(shooterController, shooterStates.FAR_SIDE.getState());
+        return new RunToVelocity(shooterController, shooterStates.FAR_SIDE.getVel()).requires(shooter);
     }
     public Command idle() {
-        return new RunToVelocity(shooterController, shooterStates.IDLE.getState());
+        return new RunToVelocity(shooterController, shooterStates.IDLE.getVel()).requires(shooter);
     }
     public Command setShooterVel(double shooterVel) {
         return new RunToVelocity(shooterController, shooterVel).requires(shooter);
@@ -57,6 +56,9 @@ public class Shooternf implements Subsystem {
         enabled = false;
         shooter.setPower(0); //prevents shooter on in init
     }
+
+
+
 
     @Override
     public void initialize() {

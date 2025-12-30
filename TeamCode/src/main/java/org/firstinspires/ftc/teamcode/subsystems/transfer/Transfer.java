@@ -17,7 +17,7 @@ public class Transfer {
 
     public void transferOn() {
         backTransfer.setPower(-1.0);
-        frontTransfer.setPower(-1.0);
+        frontTransfer.setPower(-.6);
     }
 
     public void transferOff() {
@@ -27,7 +27,7 @@ public class Transfer {
 
     public void hotDog() {
         backTransfer.setPower(1);
-        frontTransfer.setPower(-0.2);
+        frontTransfer.setPower(-0.15);
     }
 
 }

@@ -5,30 +5,25 @@ import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 import com.qualcomm.robotcore.hardware.Servo;
 
+import org.firstinspires.ftc.teamcode.misc.gamepad.GamepadMapping;
 import org.firstinspires.ftc.teamcode.subsystems.robot.Robot;
-import org.firstinspires.ftc.teamcode.subsystems.vision.logi;
-import org.firstinspires.ftc.teamcode.teleop.ARedTele;
 
 public class Shooter {
     public final DcMotorEx outtake1;
     public final DcMotorEx outtake2;
     public final Servo variableHood;
-    //public logi cam;
 
-    public Shooter(HardwareMap hardwareMap) {
+    public Shooter(HardwareMap hardwareMap, GamepadMapping controls) {
         outtake1 = hardwareMap.get(DcMotorEx.class, "outtake1");
         outtake2 = hardwareMap.get(DcMotorEx.class, "outtake2");
-        outtake1.setVelocityPIDFCoefficients(578,0,0,70);
-        outtake2.setVelocityPIDFCoefficients(578,0,0,70);
+        outtake1.setVelocityPIDFCoefficients(578, 0, 0, 70);
+        outtake2.setVelocityPIDFCoefficients(578, 0, 0, 70);
         outtake2.setDirection(DcMotorSimple.Direction.REVERSE);
 
         variableHood = hardwareMap.get(Servo.class, "variableHood");
-
-        //cam = new logi(hardwareMap);
     }
 
     public enum outtakeVels {
-        PID_SHOOT(shootVel),
         // 5.059
         HARDCODED_SHOOT_FRONT(-1120),
         // 5.954
@@ -40,6 +35,7 @@ public class Shooter {
         outtakeVels(double pos) {
             this.outtake_vels = pos;
         }
+
         public double getOuttakeVel() {
             return outtake_vels;
         }
@@ -51,40 +47,58 @@ public class Shooter {
     private static final double H = 0.360837;
     private static double shootVel;
 
-    //TODO COMMENTED OUT!!!
-    // calculates target velocity depending on the distance the robot is from the goal
-//    public double calculateShooterVel() {
-//        double R = robot.cam.getATdist();
-//        shootVel = Math.sqrt(H * g + g * Math.sqrt(Math.pow(R, 2) + Math.pow(H, 2)));
-//        return convertMPSToRPM(shootVel);
-//    }
+    // calculates target velocity with GIVEN distance in INCHES from the goal
+    public static double calculateShooterMPS(double d) {
+        double R = d * 0.0254;
+        shootVel = Math.sqrt(H * g + g * Math.sqrt(Math.pow(R, 2) + Math.pow(H, 2)));
+        return shootVel;
+    }
+
+    // calculates target velocity with CURRENT distance away from the goal
+    public double calculateShooterMPS() {
+        return calculateShooterRPM(Robot.cam.getTargetArtifactTravelDistanceX());
+    }
+
+    // calculates target velocity in TICKS PER SECOND instead of meters per second
+    public double calculateShooterRPM(double d) {
+        return convertMPSToRPM(calculateShooterMPS(d));
+    }
 
     // converts the target velocity from meters per second to rpm for DcMotor
     public static double convertMPSToRPM(double mpsVel) {
         double c = -2.28611;
         double a = 12.79622;
         double b = 0.000790302;
-        double lnArgument = 1.0 - ((mpsVel - c)/a);
-        return -Math.log(lnArgument)/b; // Math.log is natural logarithm
+        double lnArgument = Math.abs(1.0 - ((mpsVel - c) / a));
+        return -Math.log(lnArgument) / b; // Math.log is natural logarithm
     }
 
     // HOOD ANGLE CALCULATIONS
     // ---------------------------------
     private static double hoodAngle;
 
-    //TODO COMMENTED OUT!!!!
-    // returns the target angle in degrees depending on our distance from the april tag
-//    public double calculateHoodAngle() {
-//        double R = robot.cam.getATdist();
-//        hoodAngle = Math.atan(Math.pow(calculateShooterVel(), 2)/(g * R));
-//        return Math.toRadians(hoodAngle);
-//    }
+    // returns the target angle in RADIANS depending on GIVEN distance in INCHES from the april tag
+    public static double calculateHoodAngle(double d) {
+        double R = d * 0.0254;
+        hoodAngle = Math.atan(Math.pow(calculateShooterMPS(d), 2) / (g * R));
+        return hoodAngle;
+    }
+
+    // returns the target angle in RADIANS depending on CURRENT distance from the april tag
+    public double calculateHoodAngle() {
+        return calculateHoodAngle(Robot.cam.getTargetArtifactTravelDistanceX());
+    }
+
+    // returns the target angle in HOOD POS (0-1) instead of radians
+    public double calculateHoodPos(double d) {
+        return convertTargetAngleToHoodPos(calculateHoodAngle(d));
+    }
 
     // converts the target angle from calculateHoodAngle() to a servo position from 0-1
-    public double convertTargetAngleToHoodPos(double targetAngle) {
+    public static double convertTargetAngleToHoodPos(double targetAngle) {
         double m = 42.8718;
         double b = 37.09643;
-        return (targetAngle - b)/m;
+        return (Math.toDegrees(targetAngle) - b) / m;
     }
 
     public static double getShootVel() {
@@ -107,6 +121,7 @@ public class Shooter {
     public void setHoodAngle(double angle) {
         variableHood.setPosition(angle);
     }
+
     // fully down is .6
     // fully up is .1
     public void hoodToBack() {

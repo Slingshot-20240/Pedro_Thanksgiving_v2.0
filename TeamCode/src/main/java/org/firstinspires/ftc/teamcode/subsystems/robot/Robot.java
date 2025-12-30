@@ -2,6 +2,7 @@ package org.firstinspires.ftc.teamcode.subsystems.robot;
 
 import com.qualcomm.hardware.gobilda.GoBildaPinpointDriver;
 import com.qualcomm.hardware.rev.RevHubOrientationOnRobot;
+import com.qualcomm.robotcore.hardware.DigitalChannel;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 import com.qualcomm.robotcore.hardware.IMU;
 
@@ -10,7 +11,6 @@ import org.firstinspires.ftc.teamcode.subsystems.drivetrain.Drivetrain;
 import org.firstinspires.ftc.teamcode.subsystems.intake.Intake;
 import org.firstinspires.ftc.teamcode.subsystems.shooter.Shooter;
 import org.firstinspires.ftc.teamcode.subsystems.transfer.Transfer;
-import org.firstinspires.ftc.teamcode.subsystems.vision.PythonLimelight;
 import org.firstinspires.ftc.teamcode.subsystems.vision.logi;
 
 public class Robot {
@@ -37,9 +37,10 @@ public class Robot {
 
     public GamepadMapping controls;
 
-    //public logi cam;
+    public static logi cam;
 
-    //public PythonLimelight limelight;
+    public DigitalChannel ledBoard0;
+    public DigitalChannel ledBoard1;
 
     public Robot(HardwareMap hardwareMap, GamepadMapping controls) {
         this.controls = controls;
@@ -52,16 +53,18 @@ public class Robot {
 
         driver = hardwareMap.get(GoBildaPinpointDriver.class, "pinpoint");
 
+        cam = new logi(hardwareMap);
 
         intake = new Intake(hardwareMap);
         transfer = new Transfer(hardwareMap);
-        shooter = new Shooter(hardwareMap);
-
-        //cam = new logi(hardwareMap);
+        shooter = new Shooter(hardwareMap, controls);
 
         drivetrain = new Drivetrain(hardwareMap, imu, controls);
 
-        //limelight = new PythonLimelight(hardwareMap);
+        ledBoard0 = hardwareMap.get(DigitalChannel.class, "ledBoard0");
+        ledBoard0.setMode(DigitalChannel.Mode.OUTPUT);
+        ledBoard1 = hardwareMap.get(DigitalChannel.class, "ledBoard1");
+        ledBoard1.setMode(DigitalChannel.Mode.OUTPUT);
     }
 
     public void hardwareSoftReset() {

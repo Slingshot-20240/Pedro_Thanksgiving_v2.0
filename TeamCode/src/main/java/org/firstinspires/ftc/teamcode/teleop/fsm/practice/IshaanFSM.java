@@ -1,4 +1,4 @@
-package org.firstinspires.ftc.teamcode.teleop.fsm;
+package org.firstinspires.ftc.teamcode.teleop.fsm.practice;
 
 
 import com.qualcomm.robotcore.hardware.HardwareMap;
@@ -10,7 +10,7 @@ import org.firstinspires.ftc.teamcode.subsystems.shooter.Shooter;
 import org.firstinspires.ftc.teamcode.subsystems.transfer.Transfer;
 import org.firstinspires.ftc.teamcode.teleop.AVisionTele;
 
-public class FSM {
+public class IshaanFSM {
     // GENERAL ROBOT STATES + CLASSES
     public Robot robot;
     public FSMStates state = FSMStates.BASE_STATE;
@@ -28,7 +28,7 @@ public class FSM {
     // Everyone ignore this horrendous OOP
     private double odoDistance = AVisionTele.odoDistance;
 
-    public FSM(HardwareMap hardwareMap, GamepadMapping gamepad, Robot robot) {
+    public IshaanFSM(HardwareMap hardwareMap, GamepadMapping gamepad, Robot robot) {
         this.robot = robot;
         this.gamepad = robot.controls;
 
