@@ -40,7 +40,7 @@ public class AVisionTele extends OpMode {
 
     //auto align
     public static double tolerance = 0.02;
-    public static double turn_kP = 0.9;
+    public static double turn_kP = 0.2;
     public static double minTurnPower = 0.08;
     public static double toMiniTolerance = 0.02;
     public int count = 0;

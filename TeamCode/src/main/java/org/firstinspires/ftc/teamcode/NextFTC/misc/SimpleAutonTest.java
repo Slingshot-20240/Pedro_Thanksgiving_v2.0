@@ -14,6 +14,8 @@ import com.qualcomm.robotcore.hardware.HardwareMap;
 
 import org.firstinspires.ftc.teamcode.NextFTC.autonomous.PoseStorage;
 import org.firstinspires.ftc.teamcode.NextFTC.subsystems_nf.Intakenf;
+import org.firstinspires.ftc.teamcode.NextFTC.subsystems_nf.Lednf;
+import org.firstinspires.ftc.teamcode.NextFTC.subsystems_nf.Loginf;
 import org.firstinspires.ftc.teamcode.NextFTC.subsystems_nf.Shooternf;
 import org.firstinspires.ftc.teamcode.NextFTC.subsystems_nf.Transfernf;
 import org.firstinspires.ftc.teamcode.NextFTC.subsystems_nf.Hoodnf;
@@ -41,14 +43,13 @@ public class SimpleAutonTest extends NextFTCOpMode {
         addComponents(
                 new SubsystemComponent(
                         Intakenf.INSTANCE, Hoodnf.INSTANCE,
-                        Shooternf.INSTANCE, Transfernf.INSTANCE
+                        Shooternf.INSTANCE, Transfernf.INSTANCE,
+                        Lednf.INSTANCE, Loginf.INSTANCE
                 ),
                 new PedroComponent(Constants::createFollower),
                 BulkReadComponent.INSTANCE
         );
     }
-    public logi cam;
-    double bearing;
 
     public PathChain scorePreloads;
 
@@ -277,26 +278,9 @@ public class SimpleAutonTest extends NextFTCOpMode {
 
         );
     }
-    private Command vision() {
-        return new SequentialGroup(
-
-                // Grab the angle at runtime
-                new WaitUntil(() -> {
-                    bearing = cam.getATangle();
-                    return true;
-                }),
-
-                // Now use it
-                new TurnBy(Angle.fromDeg(bearing)),
-
-                transferUpFor(2)
-        );
-    }
 
     @Override
     public void onInit() {
-        cam = new logi(hardwareMap);
-
         buildPaths();
         init_bot().schedule();
         Shooternf.INSTANCE.disable();
@@ -304,21 +288,15 @@ public class SimpleAutonTest extends NextFTCOpMode {
 
     @Override
     public void onStartButtonPressed() {
-        cam.enableAT();
         autonomous().schedule();
         Shooternf.INSTANCE.enable();
-        //vision().schedule();
 
     }
 
     @Override
     public void onUpdate() {
-        telemetry.addData("ATangle", cam.getATangle());
+        telemetry.addData("ATangle", Loginf.INSTANCE.getATangle());
         telemetry.update();
-        bearing = cam.getATangle();
-        new SequentialGroup(
-                new TurnBy(Angle.fromDeg(cam.getATangle()))
-        ).schedule();
     }
 
 
