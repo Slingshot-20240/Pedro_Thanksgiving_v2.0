@@ -9,19 +9,18 @@ import com.pedropathing.geometry.Pose;
 
 import com.pedropathing.paths.HeadingInterpolator;
 import com.pedropathing.paths.PathChain;
-import com.pedropathing.paths.PathConstraints;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 
 import org.firstinspires.ftc.teamcode.NextFTC.autonomous.PoseStorage;
+import org.firstinspires.ftc.teamcode.NextFTC.sequences_and_groups.asc;
 import org.firstinspires.ftc.teamcode.NextFTC.subsystems_nf.Intakenf;
+import org.firstinspires.ftc.teamcode.NextFTC.subsystems_nf.Lednf;
 import org.firstinspires.ftc.teamcode.NextFTC.subsystems_nf.Shooternf;
 import org.firstinspires.ftc.teamcode.NextFTC.subsystems_nf.Transfernf;
 import org.firstinspires.ftc.teamcode.NextFTC.subsystems_nf.Hoodnf;
 import org.firstinspires.ftc.teamcode.pedroPathing.Constants;
 
 import dev.nextftc.core.commands.Command;
-import dev.nextftc.core.commands.delays.Delay;
-import dev.nextftc.core.commands.delays.WaitUntil;
 import dev.nextftc.core.commands.groups.ParallelGroup;
 import dev.nextftc.core.commands.groups.SequentialGroup;
 import dev.nextftc.core.components.SubsystemComponent;
@@ -37,6 +36,7 @@ public class Solo18 extends NextFTCOpMode {
     public Solo18() {
         addComponents(
                 new SubsystemComponent(
+                        asc.i,
                         Intakenf.INSTANCE, Hoodnf.INSTANCE,
                         Shooternf.INSTANCE, Transfernf.INSTANCE
                 ),
@@ -298,85 +298,60 @@ public class Solo18 extends NextFTCOpMode {
 
     }
 
-    private Command transferUpFor(double time) {
-        return new ParallelGroup(
-                Transfernf.INSTANCE.stepOn(),
-                new Delay(time)
-        );
-    }
 
-    private Command transferSequence(PathChain pathChain, double transferTime) {
-        return new SequentialGroup(
-                Transfernf.INSTANCE.hotdog(),
-                new WaitUntil(() -> pathChain.lastPath().isAtParametricEnd()),
-                transferUpFor(transferTime)
-        );
-    }
 
-    private Command transferSequenceDistance(PathChain pathChain, double transferTime, double proximity) {
-        return new SequentialGroup(
-                Transfernf.INSTANCE.hotdog(),
-                new WaitUntil(() -> pathChain.lastPath().getDistanceRemaining() < proximity),
-                transferUpFor(transferTime)
-        );
-    }
-
-    private Command baseState(double shooterVel) {
-        return new ParallelGroup(
-                Intakenf.INSTANCE.in(),
-                Shooternf.INSTANCE.setShooterVel(shooterVel),
-                Hoodnf.INSTANCE.setHoodPos(0.34)
-        );
-    }
-    private Command baseState(double shooterVel, double hoodPos) {
-        return new ParallelGroup(
-                Intakenf.INSTANCE.in(),
-                Shooternf.INSTANCE.setShooterVel(shooterVel),
-                Hoodnf.INSTANCE.setHoodPos(hoodPos)
-        );
-    }
 
     private Command autonomous() {
         return new SequentialGroup(
 
 
                 new ParallelGroup(
-                        new FollowPath(scorePreloads),
-                        baseState(-1240),
+                        new ParallelGroup(
+                                new FollowPath(scorePreloads),
+                                Lednf.INSTANCE.green
+                        ),
+                        asc.i.baseState(-1240),
                         //Transfernf.INSTANCE.hotdog()
-                        transferSequence(scorePreloads,0.9)
+                        asc.i.transferSequence(scorePreloads,1)
                 ),
 
 
                 //SET 2
                 new ParallelGroup(
                         new SequentialGroup(
-                                new FollowPath(grabMiddleSet),
+                                new ParallelGroup(
+                                        new FollowPath(grabMiddleSet),
+                                        Lednf.INSTANCE.red
+                                ),
 //                                new Delay(0.14),
                                 new FollowPath(scoreMiddleSet)
 
                         ),
-                        baseState(-1240),
+                        asc.i.baseState(-1240),
 
-                        transferSequence(scoreMiddleSet,0.8)
+                        asc.i.transferSequence(scoreMiddleSet,1)
                 ),
 
 
                 //SET 3
                 new ParallelGroup(
                         new SequentialGroup(
-                                new FollowPath(grabGate),
-//                                Transfernf.INSTANCE.gateIntake(),
-//                                new Delay(0.1),
-                                new FollowPath(backAssureGate),
+                                new ParallelGroup(
+                                        Lednf.INSTANCE.red,
+                                        new SequentialGroup(
+                                                new FollowPath(grabGate),
+                                                new FollowPath(backAssureGate)
+                                        )
+                                ),
+
 //                                new Delay(0.2),
                                 new FollowPath(scoreGate)
 
                         ),
-                        baseState(-1240),
+                        asc.i.baseState(-1240),
 
 
-                        transferSequence(scoreGate,0.8)
+                        asc.i.transferSequence(scoreGate,1)
 
                 ),
 
@@ -390,9 +365,9 @@ public class Solo18 extends NextFTCOpMode {
                                 new FollowPath(scoreGate2)
 
                         ),
-                        baseState(-1240),
+                        asc.i.baseState(-1240),
 
-                        transferSequence(scoreGate2,0.8)
+                        asc.i.transferSequence(scoreGate2,1)
                 ),
 
                 //SET 4
@@ -403,9 +378,9 @@ public class Solo18 extends NextFTCOpMode {
                                 new FollowPath(scoreSet4)
 
                         ),
-                        baseState(-1240),
+                        asc.i.baseState(-1240),
 
-                        transferSequence(scoreSet4,0.8)
+                        asc.i.transferSequence(scoreSet4,1)
                 ),
 
 
@@ -416,9 +391,9 @@ public class Solo18 extends NextFTCOpMode {
 //                                new Delay(0.9),
                                 new FollowPath(scoreSet2)
                         ),
-                        baseState(-1200,0.38),
+                        asc.i.baseState(-1200,0.38),
 
-                        transferSequence(scoreSet2,5)
+                        asc.i.transferSequence(scoreSet2,5)
                 )
 
 

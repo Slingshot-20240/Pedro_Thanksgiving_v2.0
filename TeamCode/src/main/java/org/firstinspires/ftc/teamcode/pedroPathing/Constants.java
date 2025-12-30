@@ -33,7 +33,7 @@ public class Constants {
 
 //DRIVE
             //TODO - P USED TO BE 0.87
-            .drivePIDFCoefficients(new FilteredPIDFCoefficients(0.86,0.0,0.02,0.6,0.0))
+            .drivePIDFCoefficients(new FilteredPIDFCoefficients(0.846,0.0,0.02,0.6,0.0))
 //            .useSecondaryDrivePIDF(true)
 //            .secondaryDrivePIDFCoefficients(new FilteredPIDFCoefficients(0.1,0,0.01,0.6,0.01))
             ;
@@ -55,7 +55,7 @@ public class Constants {
             .xVelocity(73.5)
             .yVelocity(62)
             .useVoltageCompensation(true)
-            .nominalVoltage(13.5);
+            .nominalVoltage(13.99);
 
     public static Follower createFollower(HardwareMap hardwareMap) {
         return new FollowerBuilder(followerConstants, hardwareMap)
