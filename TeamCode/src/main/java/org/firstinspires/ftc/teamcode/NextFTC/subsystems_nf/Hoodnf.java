@@ -10,7 +10,7 @@ public class Hoodnf implements Subsystem {
     private Hoodnf() {}
 
     private final ServoEx variableHood = new ServoEx("variableHood",-0.1);
-    //------- The more the hood position, to more arc -------\\
+    //------- The more the hood position, the more the ball arc, aka ball goes higher -------\\
 
     public Command closeSide() {
         return new SetPosition(variableHood, 0.4).requires(this);

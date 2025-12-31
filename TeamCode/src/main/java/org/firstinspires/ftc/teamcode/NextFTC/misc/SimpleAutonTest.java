@@ -13,6 +13,7 @@ import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 
 import org.firstinspires.ftc.teamcode.NextFTC.autonomous.PoseStorage;
+import org.firstinspires.ftc.teamcode.NextFTC.sequences_and_groups.f;
 import org.firstinspires.ftc.teamcode.NextFTC.subsystems_nf.Intakenf;
 import org.firstinspires.ftc.teamcode.NextFTC.subsystems_nf.Lednf;
 import org.firstinspires.ftc.teamcode.NextFTC.subsystems_nf.Loginf;
@@ -42,6 +43,7 @@ public class SimpleAutonTest extends NextFTCOpMode {
     public SimpleAutonTest() {
         addComponents(
                 new SubsystemComponent(
+                        f.i,
                         Intakenf.INSTANCE, Hoodnf.INSTANCE,
                         Shooternf.INSTANCE, Transfernf.INSTANCE,
                         Lednf.INSTANCE, Loginf.INSTANCE
@@ -253,7 +255,7 @@ public class SimpleAutonTest extends NextFTCOpMode {
         return new ParallelGroup(
                 Intakenf.INSTANCE.in(),
                 Shooternf.INSTANCE.setShooterVel(shooterVel),
-                Hoodnf.INSTANCE.setHoodPos(0.33)
+                Hoodnf.INSTANCE.setHoodPos(0.32)
         );
     }
     private Command baseState(double shooterVel, double hoodPos) {
@@ -267,14 +269,13 @@ public class SimpleAutonTest extends NextFTCOpMode {
     private Command autonomous() {
         return new SequentialGroup(
 
-
                 new ParallelGroup(
                         new FollowPath(scorePreloads),
-                        baseState(-1240),
-                        Transfernf.INSTANCE.hotdog()
+                        baseState(-1280),
+                        Transfernf.INSTANCE.slowHotdog()
                 ),
-                new Delay(1)
-
+                new Delay(1),
+                f.i.autoAlign()
 
         );
     }

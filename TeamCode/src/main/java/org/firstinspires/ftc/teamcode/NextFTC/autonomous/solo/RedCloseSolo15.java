@@ -33,8 +33,8 @@ import dev.nextftc.ftc.components.BulkReadComponent;
 
 @Config
 @Autonomous(name = "-0 15 Solo")
-public class Solo15 extends NextFTCOpMode {
-    public Solo15() {
+public class RedCloseSolo15 extends NextFTCOpMode {
+    public RedCloseSolo15() {
         addComponents(
                 new SubsystemComponent(
                         f.i,
@@ -287,7 +287,7 @@ public class Solo15 extends NextFTCOpMode {
                     new ParallelGroup(
                             f.i.follow(scorePreloads,"green"),
                             asc.i.baseState(-1240),
-                            Transfernf.INSTANCE.hotdog()
+                            Transfernf.INSTANCE.slowHotdog()
                     ),
                     asc.i.transferUpFor(1.5),
 

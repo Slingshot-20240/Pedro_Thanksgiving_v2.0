@@ -69,7 +69,6 @@ public class Lednf implements Subsystem {
                 color(color2),
                 new Delay(intensityDelay)
             ).raceWith(new Delay(time));
-
     }
 
     @Override
