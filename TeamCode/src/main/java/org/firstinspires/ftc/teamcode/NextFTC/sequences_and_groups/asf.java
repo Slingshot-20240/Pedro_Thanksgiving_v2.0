@@ -16,6 +16,7 @@ import dev.nextftc.core.commands.delays.WaitUntil;
 import dev.nextftc.core.commands.groups.ParallelGroup;
 import dev.nextftc.core.commands.groups.SequentialGroup;
 import dev.nextftc.core.subsystems.SubsystemGroup;
+import kotlinx.coroutines.DebugKt;
 
 //AUTON SEQUENCES CLOSE
 public class asf extends SubsystemGroup {
@@ -58,6 +59,15 @@ public class asf extends SubsystemGroup {
 
         );
     }
+    public final Command transferSequence(PathChain lastPathChain, double transferTime, double spinUpTime) {
+        return new SequentialGroup(
+                new Delay(spinUpTime),
+                Transfernf.INSTANCE.hotdog(),
+                new WaitUntil(() -> lastPathChain.lastPath().isAtParametricEnd()),
+                transferUpFor(transferTime)
+
+        );
+    }
 
     public final Command transferSequenceDistance(PathChain pathChain, double transferTime, double proximity) {
         return new SequentialGroup(
@@ -70,14 +80,14 @@ public class asf extends SubsystemGroup {
     public final Command baseState(double shooterVel) {
         return new ParallelGroup(
                 Intakenf.INSTANCE.in(),
-                Shooternf.INSTANCE.setShooterVel(shooterVel),
+                Shooternf.INSTANCE.setShooterVel(shooterVel, true),
                 Hoodnf.INSTANCE.setHoodPos(0.32)
         );
     }
     public final Command baseState(double shooterVel, double hoodPos) {
         return new ParallelGroup(
                 Intakenf.INSTANCE.in(),
-                Shooternf.INSTANCE.setShooterVel(shooterVel),
+                Shooternf.INSTANCE.setShooterVel(shooterVel, true),
                 Hoodnf.INSTANCE.setHoodPos(hoodPos)
         );
     }

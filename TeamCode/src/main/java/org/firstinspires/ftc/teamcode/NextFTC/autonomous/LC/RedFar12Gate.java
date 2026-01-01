@@ -25,10 +25,10 @@ import dev.nextftc.extensions.pedro.FollowPath;
 import dev.nextftc.ftc.NextFTCOpMode;
 import dev.nextftc.ftc.components.BulkReadComponent;
 
-@Autonomous(name = "BlueFar12Gate LC")
-public class BlueFar12Gate extends NextFTCOpMode {
+@Autonomous(name = "RedFar12Gate LC")
+public class RedFar12Gate extends NextFTCOpMode {
 
-    public BlueFar12Gate() {
+    public RedFar12Gate() {
         addComponents(
                 new SubsystemComponent(
                         f.i,
@@ -44,82 +44,82 @@ public class BlueFar12Gate extends NextFTCOpMode {
 
     public PathChain scorePreloads, grabSet2, gate, scoreSet2, grabSet3, scoreSet3, prepareHp, grabHp, scoreHp, park;
 
-    Pose scorePose = new Pose(56, 17); // Blue Far scoring position
+    Pose scorePose = new Pose(88, 17); // Red Far scoring position (144 - 56)
 
     public void buildPaths() {
         // Starting pose
-        PedroComponent.follower().setStartingPose(new Pose(56, 8.2, Math.toRadians(90)));
+        PedroComponent.follower().setStartingPose(new Pose(88, 8.2, Math.toRadians(90)));
 
         // Score preloads
         scorePreloads = PedroComponent.follower()
                 .pathBuilder()
-                .addPath(new BezierLine(new Pose(56, 8.2), scorePose))
-                .setLinearHeadingInterpolation(Math.toRadians(90), Math.toRadians(112))
+                .addPath(new BezierLine(new Pose(88, 8.2), scorePose))
+                .setLinearHeadingInterpolation(Math.toRadians(90), Math.toRadians(68)) // 180-112
                 .build();
 
         // Grab Set 2
         grabSet2 = PedroComponent.follower()
                 .pathBuilder()
-                .addPath(new BezierCurve(scorePose, new Pose(58, 38), new Pose(12, 35)))
-                .setLinearHeadingInterpolation(Math.toRadians(112), Math.toRadians(180))
+                .addPath(new BezierCurve(scorePose, new Pose(86, 38), new Pose(132, 35))) // mirrored x
+                .setLinearHeadingInterpolation(Math.toRadians(68), Math.toRadians(0))
                 .build();
 
         // Gate (optional extra path)
         gate = PedroComponent.follower()
                 .pathBuilder()
                 .addPath(new BezierCurve(
-                        new Pose(12, 57),
-                        new Pose(55, 66),
-                        new Pose(14, 67)
+                        new Pose(132, 57),
+                        new Pose(89, 66),
+                        new Pose(130, 67)
                 ))
-                .setLinearHeadingInterpolation(Math.toRadians(180), Math.toRadians(90))
+                .setLinearHeadingInterpolation(Math.toRadians(0), Math.toRadians(90))
                 .build();
 
         // Score Set 2
         scoreSet2 = PedroComponent.follower()
                 .pathBuilder()
-                .addPath(new BezierCurve(new Pose(132, 67), new Pose(85, 60.5), scorePose))
-                .setLinearHeadingInterpolation(Math.toRadians(90), Math.toRadians(112))
+                .addPath(new BezierCurve(new Pose(12, 67), new Pose(59, 60.5), scorePose))
+                .setLinearHeadingInterpolation(Math.toRadians(90), Math.toRadians(68))
                 .build();
 
         // Grab Set 3
         grabSet3 = PedroComponent.follower()
                 .pathBuilder()
-                .addPath(new BezierCurve(scorePose, new Pose(87, 36), new Pose(134, 32.8)))
-                .setLinearHeadingInterpolation(Math.toRadians(112), Math.toRadians(0))
+                .addPath(new BezierCurve(scorePose, new Pose(57, 36), new Pose(10, 32.8)))
+                .setLinearHeadingInterpolation(Math.toRadians(68), Math.toRadians(180))
                 .build();
 
         // Score Set 3
         scoreSet3 = PedroComponent.follower()
                 .pathBuilder()
-                .addPath(new BezierLine(new Pose(134, 32.8), scorePose))
-                .setLinearHeadingInterpolation(Math.toRadians(0), Math.toRadians(112))
+                .addPath(new BezierLine(new Pose(10, 32.8), scorePose))
+                .setLinearHeadingInterpolation(Math.toRadians(180), Math.toRadians(68))
                 .build();
 
         // Human Player
         prepareHp = PedroComponent.follower()
                 .pathBuilder()
-                .addPath(new BezierLine(scorePose, new Pose(12, 50)))
-                .setLinearHeadingInterpolation(Math.toRadians(112), Math.toRadians(240))
+                .addPath(new BezierLine(scorePose, new Pose(132, 50)))
+                .setLinearHeadingInterpolation(Math.toRadians(68), Math.toRadians(-60))
                 .build();
 
         grabHp = PedroComponent.follower()
                 .pathBuilder()
-                .addPath(new BezierLine(new Pose(12, 50), new Pose(12, 11)))
-                .setLinearHeadingInterpolation(Math.toRadians(290), Math.toRadians(290))
+                .addPath(new BezierLine(new Pose(132, 50), new Pose(132, 11)))
+                .setLinearHeadingInterpolation(Math.toRadians(-70), Math.toRadians(-70))
                 .build();
 
         scoreHp = PedroComponent.follower()
                 .pathBuilder()
-                .addPath(new BezierLine(new Pose(10, 11), scorePose))
-                .setLinearHeadingInterpolation(Math.toRadians(290), Math.toRadians(112))
+                .addPath(new BezierLine(new Pose(134, 11), scorePose))
+                .setLinearHeadingInterpolation(Math.toRadians(-70), Math.toRadians(68))
                 .build();
 
         // Park
         park = PedroComponent.follower()
                 .pathBuilder()
-                .addPath(new BezierLine(scorePose, new Pose(12, 68)))
-                .setLinearHeadingInterpolation(Math.toRadians(112), Math.toRadians(90))
+                .addPath(new BezierLine(scorePose, new Pose(132, 68)))
+                .setLinearHeadingInterpolation(Math.toRadians(68), Math.toRadians(90))
                 .build();
     }
 
@@ -130,7 +130,6 @@ public class BlueFar12Gate extends NextFTCOpMode {
     private Command autonomous() {
         return new ParallelGroup(
                 Intakenf.INSTANCE.in(),
-
                 new SequentialGroup(
                         // Preloads
                         new ParallelGroup(

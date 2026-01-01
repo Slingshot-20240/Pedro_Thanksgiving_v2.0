@@ -16,6 +16,7 @@ import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import org.firstinspires.ftc.teamcode.NextFTC.autonomous.PoseStorage;
 import org.firstinspires.ftc.teamcode.misc.gamepad.GamepadMapping;
 import org.firstinspires.ftc.teamcode.pedroPathing.Constants;
+import org.firstinspires.ftc.teamcode.pedroPathing.DrawingNew;
 import org.firstinspires.ftc.teamcode.subsystems.robot.Robot;
 import org.firstinspires.ftc.teamcode.subsystems.vision.logi;
 import org.firstinspires.ftc.teamcode.teleop.fsm.FSM;
@@ -68,6 +69,7 @@ public class AVisionTele extends OpMode {
                         follower::getHeading, Math.toRadians(90), 0.96)
                 )
                 .build();
+        DrawingNew.init();
     }
 
     @Override
@@ -83,6 +85,7 @@ public class AVisionTele extends OpMode {
         follower.update();
         telemetryM.update();
         telemetry.update();
+        DrawingNew.drawDebug(follower);
 
         Pose pose = follower.getPose();
         double heading = pose.getHeading();

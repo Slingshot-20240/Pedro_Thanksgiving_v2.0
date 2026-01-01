@@ -12,41 +12,17 @@ import org.firstinspires.ftc.vision.apriltag.AprilTagDetection;
 import org.firstinspires.ftc.vision.apriltag.AprilTagProcessor;
 
 import dev.nextftc.core.subsystems.Subsystem;
+import dev.nextftc.ftc.ActiveOpMode;
 
 
 public class Loginf implements Subsystem {
     public static final Loginf INSTANCE = new Loginf();
-    private Loginf(HardwareMap hw) {
-        apriltagPipeline = new AprilTagProcessor.Builder()
-                .setTagFamily(AprilTagProcessor.TagFamily.TAG_36h11)
-                .setDrawTagID(true)
-                .setDrawTagOutline(true)
-                .setDrawAxes(true)
-                .setDrawCubeProjection(true)
-//                .setLensIntrinsics(0.187319959814, -0.575948480673, -0.00438930956954, 0.00126723944556)
-                .setOutputUnits(DistanceUnit.INCH, AngleUnit.DEGREES)
-                .build();
-
-
-        portal = new VisionPortal.Builder()
-                .setCamera(hw.get(WebcamName.class, "Webcam 1"))
-                .addProcessors(apriltagPipeline)
-                .setCameraResolution(new Size(1920, 1080))
-                .setStreamFormat(VisionPortal.StreamFormat.MJPEG)
-                .setAutoStopLiveView(true)
-
-                .build();
-
-        portal.setProcessorEnabled(apriltagPipeline, true);
-    }
+    private Loginf() {}
 
     AprilTagProcessor apriltagPipeline;
 
     VisionPortal portal;
 
-    public Loginf() {
-
-    }
     public double getATdist() {
         if(!portal.getProcessorEnabled(apriltagPipeline))
             return 0.0;
@@ -81,7 +57,28 @@ public class Loginf implements Subsystem {
 
     @Override
     public void initialize() {
-       enableAT();
+        apriltagPipeline = new AprilTagProcessor.Builder()
+                .setTagFamily(AprilTagProcessor.TagFamily.TAG_36h11)
+                .setDrawTagID(true)
+                .setDrawTagOutline(true)
+                .setDrawAxes(true)
+                .setDrawCubeProjection(true)
+//                .setLensIntrinsics(0.187319959814, -0.575948480673, -0.00438930956954, 0.00126723944556)
+                .setOutputUnits(DistanceUnit.INCH, AngleUnit.DEGREES)
+                .build();
+
+
+        portal = new VisionPortal.Builder()
+                .setCamera(ActiveOpMode.hardwareMap().get(WebcamName.class, "Webcam 1"))
+                .addProcessors(apriltagPipeline)
+                .setCameraResolution(new Size(1920, 1080))
+                .setStreamFormat(VisionPortal.StreamFormat.MJPEG)
+                .setAutoStopLiveView(true)
+
+                .build();
+
+        portal.setProcessorEnabled(apriltagPipeline, true);
+        enableAT();
     }
 
     @Override

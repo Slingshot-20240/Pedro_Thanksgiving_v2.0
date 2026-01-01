@@ -77,7 +77,7 @@ public class Transfernf implements Subsystem {
         return new ParallelGroup(
                 new SetPower(frontTransfer, -0.07),
                 new SetPower(backTransfer, 1.0)
-        );
+        ).addRequirements(frontTransfer,backTransfer);
     }
 
 
