@@ -1,0 +1,95 @@
+package org.firstinspires.ftc.teamcode.NextFTC.sequences_and_groups;
+
+
+
+import com.pedropathing.paths.PathChain;
+
+import org.firstinspires.ftc.teamcode.NextFTC.subsystems_nf.Intakenf;
+import org.firstinspires.ftc.teamcode.NextFTC.subsystems_nf.Lednf;
+import org.firstinspires.ftc.teamcode.NextFTC.subsystems_nf.Shooternf;
+import org.firstinspires.ftc.teamcode.NextFTC.subsystems_nf.Transfernf;
+import org.firstinspires.ftc.teamcode.NextFTC.subsystems_nf.Hoodnf;
+
+import dev.nextftc.core.commands.Command;
+import dev.nextftc.core.commands.delays.Delay;
+import dev.nextftc.core.commands.delays.WaitUntil;
+import dev.nextftc.core.commands.groups.ParallelGroup;
+import dev.nextftc.core.commands.groups.SequentialGroup;
+import dev.nextftc.core.subsystems.SubsystemGroup;
+import kotlinx.coroutines.DebugKt;
+
+//AUTON SEQUENCES CLOSE
+public class asf extends SubsystemGroup {
+    public static final asf i = new asf();
+    private asf() {
+        super(
+                Intakenf.INSTANCE, Transfernf.INSTANCE,
+                Shooternf.INSTANCE, Hoodnf.INSTANCE,
+                Lednf.INSTANCE
+        );
+
+    }
+
+
+
+    /**
+     * Transfer on
+     * Wait for time
+     * @param time
+     */
+    public final Command transferUpFor(double time) {
+        return new ParallelGroup(
+                Transfernf.INSTANCE.stepOn(0.8),
+                new Delay(time),
+                Lednf.INSTANCE.yellow
+        );
+    }
+
+    /**
+     * Hotdog until last path of pathchain is at parametric end
+     * Then LED green, and transfer up for transferTime
+     * @param lastPathChain
+     * @param transferTime
+     */
+    public final Command transferSequence(PathChain lastPathChain, double transferTime) {
+        return new SequentialGroup(
+                Transfernf.INSTANCE.hotdog(),
+                new WaitUntil(() -> lastPathChain.lastPath().isAtParametricEnd()),
+                transferUpFor(transferTime)
+
+        );
+    }
+    public final Command transferSequence(PathChain lastPathChain, double transferTime, double spinUpTime) {
+        return new SequentialGroup(
+                new Delay(spinUpTime),
+                Transfernf.INSTANCE.hotdog(),
+                new WaitUntil(() -> lastPathChain.lastPath().isAtParametricEnd()),
+                transferUpFor(transferTime)
+
+        );
+    }
+
+    public final Command transferSequenceDistance(PathChain pathChain, double transferTime, double proximity) {
+        return new SequentialGroup(
+                Transfernf.INSTANCE.hotdog(),
+                new WaitUntil(() -> pathChain.lastPath().getDistanceRemaining() < proximity),
+                transferUpFor(transferTime)
+        );
+    }
+
+    public final Command baseState(double shooterVel) {
+        return new ParallelGroup(
+                Intakenf.INSTANCE.in(),
+                Shooternf.INSTANCE.setShooterVel(shooterVel, true),
+                Hoodnf.INSTANCE.setHoodPos(0.32)
+        );
+    }
+    public final Command baseState(double shooterVel, double hoodPos) {
+        return new ParallelGroup(
+                Intakenf.INSTANCE.in(),
+                Shooternf.INSTANCE.setShooterVel(shooterVel, true),
+                Hoodnf.INSTANCE.setHoodPos(hoodPos)
+        );
+    }
+
+}

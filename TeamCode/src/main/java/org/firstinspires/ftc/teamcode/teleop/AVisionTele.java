@@ -16,6 +16,7 @@ import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import org.firstinspires.ftc.teamcode.NextFTC.autonomous.PoseStorage;
 import org.firstinspires.ftc.teamcode.misc.gamepad.GamepadMapping;
 import org.firstinspires.ftc.teamcode.pedroPathing.Constants;
+import org.firstinspires.ftc.teamcode.pedroPathing.DrawingNew;
 import org.firstinspires.ftc.teamcode.subsystems.robot.Robot;
 import org.firstinspires.ftc.teamcode.subsystems.vision.logi;
 import org.firstinspires.ftc.teamcode.teleop.fsm.FSM;
@@ -28,7 +29,7 @@ import java.util.function.Supplier;
 public class AVisionTele extends OpMode {
 
     private GamepadMapping controls;
-    private IshaanFSM fsm;
+    private FSM fsm;
     private Robot robot;
     //private logi cam;
 
@@ -40,7 +41,7 @@ public class AVisionTele extends OpMode {
 
     //auto align
     public static double tolerance = 0.02;
-    public static double turn_kP = 0.9;
+    public static double turn_kP = 0.2;
     public static double minTurnPower = 0.08;
     public static double toMiniTolerance = 0.02;
     public int count = 0;
@@ -50,7 +51,7 @@ public class AVisionTele extends OpMode {
     public void init() {
         controls = new GamepadMapping(gamepad1, gamepad2);
         robot = new Robot(hardwareMap, controls);
-        fsm = new IshaanFSM(hardwareMap, controls, robot);
+        fsm = new FSM(hardwareMap, controls, robot);
 
         follower = Constants.createFollower(hardwareMap);
         //follower.setStartingPose(new Pose(126.2, 119, Math.toRadians(36)));
@@ -68,6 +69,7 @@ public class AVisionTele extends OpMode {
                         follower::getHeading, Math.toRadians(90), 0.96)
                 )
                 .build();
+        DrawingNew.init();
     }
 
     @Override
@@ -83,6 +85,7 @@ public class AVisionTele extends OpMode {
         follower.update();
         telemetryM.update();
         telemetry.update();
+        DrawingNew.drawDebug(follower);
 
         Pose pose = follower.getPose();
         double heading = pose.getHeading();
@@ -170,6 +173,7 @@ public class AVisionTele extends OpMode {
         telemetry.addData("AT angle", Robot.cam.getATangle());
         telemetry.addData("AT dist",  Robot.cam.getATdist());
         telemetry.addData("Artifact Travel distance", Robot.cam.getTargetArtifactTravelDistanceX());
+        telemetry.addData("last velo",  fsm.lastVelo);
 
         telemetry.addLine("--------------------------------");
         telemetry.addData("Vision AutoTurn", autoTurnVision);

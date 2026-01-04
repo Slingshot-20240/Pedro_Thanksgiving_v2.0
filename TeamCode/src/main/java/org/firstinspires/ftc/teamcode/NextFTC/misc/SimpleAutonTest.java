@@ -2,6 +2,8 @@ package org.firstinspires.ftc.teamcode.NextFTC.misc;
 
 import static dev.nextftc.extensions.pedro.PedroComponent.follower;
 
+import android.util.Log;
+
 import com.acmerobotics.dashboard.config.Config;
 import com.pedropathing.geometry.BezierCurve;
 import com.pedropathing.geometry.BezierLine;
@@ -9,11 +11,19 @@ import com.pedropathing.geometry.Pose;
 
 import com.pedropathing.paths.HeadingInterpolator;
 import com.pedropathing.paths.PathChain;
+import com.pedropathing.paths.callbacks.PathCallback;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 
+import org.firstinspires.ftc.robotcore.external.Telemetry;
+import org.firstinspires.ftc.teamcode.pedroPathing.DrawingNew;
+
+
 import org.firstinspires.ftc.teamcode.NextFTC.autonomous.PoseStorage;
+import org.firstinspires.ftc.teamcode.NextFTC.sequences_and_groups.f;
 import org.firstinspires.ftc.teamcode.NextFTC.subsystems_nf.Intakenf;
+import org.firstinspires.ftc.teamcode.NextFTC.subsystems_nf.Lednf;
+import org.firstinspires.ftc.teamcode.NextFTC.subsystems_nf.Loginf;
 import org.firstinspires.ftc.teamcode.NextFTC.subsystems_nf.Shooternf;
 import org.firstinspires.ftc.teamcode.NextFTC.subsystems_nf.Transfernf;
 import org.firstinspires.ftc.teamcode.NextFTC.subsystems_nf.Hoodnf;
@@ -25,6 +35,8 @@ import dev.nextftc.core.commands.delays.Delay;
 import dev.nextftc.core.commands.delays.WaitUntil;
 import dev.nextftc.core.commands.groups.ParallelGroup;
 import dev.nextftc.core.commands.groups.SequentialGroup;
+import dev.nextftc.core.commands.utility.InstantCommand;
+import dev.nextftc.core.commands.utility.LambdaCommand;
 import dev.nextftc.core.components.SubsystemComponent;
 import dev.nextftc.core.units.Angle;
 import dev.nextftc.extensions.pedro.FollowPath;
@@ -35,20 +47,20 @@ import dev.nextftc.ftc.components.BulkReadComponent;
 
 
 @Config
-@Autonomous(name = "15 Logi Test")
+@Autonomous(name = "zSimple Auton Test")
 public class SimpleAutonTest extends NextFTCOpMode {
     public SimpleAutonTest() {
         addComponents(
                 new SubsystemComponent(
+                        f.i,
                         Intakenf.INSTANCE, Hoodnf.INSTANCE,
-                        Shooternf.INSTANCE, Transfernf.INSTANCE
+                        Shooternf.INSTANCE, Transfernf.INSTANCE,
+                        Lednf.INSTANCE, Loginf.INSTANCE
                 ),
                 new PedroComponent(Constants::createFollower),
                 BulkReadComponent.INSTANCE
         );
     }
-    public logi cam;
-    double bearing;
 
     public PathChain scorePreloads;
 
@@ -62,20 +74,21 @@ public class SimpleAutonTest extends NextFTCOpMode {
 
     public Pose scorePose = new Pose(87,87);
     //TODO - try different types, public private regular etc.
+    double atErrorDeg;
 
     public void buildPaths() {
-        double gateHeading = 18;
 
-        PedroComponent.follower().setStartingPose(new Pose(126.2, 119, Math.toRadians(36)));
+        follower().setStartingPose(new Pose(126.2, 119, Math.toRadians(36)));
 
-        scorePreloads = PedroComponent.follower().pathBuilder()
+        scorePreloads = follower().pathBuilder()
                 .addPath(
                         new BezierLine(new Pose(126.2, 119), scorePose)
                 )
                 .setLinearHeadingInterpolation(Math.toRadians(36), Math.toRadians(50))
                 .build();
 
-        grabMiddleSet = PedroComponent.follower().pathBuilder()
+
+        grabMiddleSet = follower().pathBuilder()
 
                 //Grab Middle Set
                 .addPath(
@@ -104,112 +117,6 @@ public class SimpleAutonTest extends NextFTCOpMode {
                 )
 
 
-                .build();
-
-        scoreMiddleSet = PedroComponent.follower().pathBuilder()
-                .addPath(
-                        new BezierCurve(
-                                new Pose(132.4, 54.000),
-                                new Pose(97.500, 60.000),
-                                scorePose
-                        )
-                )
-                .setLinearHeadingInterpolation(Math.toRadians(0), Math.toRadians(43.5))
-                .build();
-
-
-        //----------- GATES ------------\\
-        grabGate = PedroComponent.follower().pathBuilder()
-                .addPath(
-                        new BezierCurve(
-                                scorePose,
-                                new Pose(82.000, 58.000),
-                                new Pose(131.5, 60.2)
-                        )
-                )
-                .setLinearHeadingInterpolation(Math.toRadians(43.5), Math.toRadians(gateHeading))
-                .build();
-
-        scoreGate = PedroComponent.follower().pathBuilder()
-                .addPath(
-                        new BezierCurve(
-                                new Pose(131.5, 60.2),
-                                new Pose(94.000, 64.000),
-                                scorePose
-                        )
-                )
-                .setLinearHeadingInterpolation(Math.toRadians(gateHeading), Math.toRadians(43.5))
-                .build();
-
-
-
-        //----------- Done ------------\\
-
-
-        grabSet4 = follower()
-                .pathBuilder()
-
-                .addPath(
-                        new BezierCurve(
-                                scorePose,
-                                new Pose(88, 39),
-                                new Pose(82, 31),
-                                new Pose(131, 33.3)
-                        )
-                )
-//                .setLinearHeadingInterpolation(Math.toRadians(43.5), Math.toRadians(0))
-                .setTangentHeadingInterpolation()
-
-
-                .build();
-
-
-        scoreSet4 = follower()
-                .pathBuilder()
-
-                .addPath(
-                        new BezierLine(new Pose(131, 33.3), scorePose)
-                )
-                .setHeadingInterpolation(
-                        HeadingInterpolator.piecewise(
-
-                                new HeadingInterpolator.PiecewiseNode(
-                                        0,
-                                        0.6,
-                                        HeadingInterpolator.tangent.reverse()
-                                ),
-
-
-                                new HeadingInterpolator.PiecewiseNode(
-                                        0.6,
-                                        1.0,
-                                        HeadingInterpolator.constant(Math.toRadians(42))
-                                )
-                        )
-                )
-                .build();
-
-        grabSet2 = PedroComponent.follower()
-                .pathBuilder()
-                .addPath(
-                        new BezierCurve(
-                                scorePose,
-                                new Pose(92.292, 77),
-                                new Pose(126, 80)
-                        )
-                )
-                .setLinearHeadingInterpolation(Math.toRadians(43.5), Math.toRadians(0))
-
-
-                .build();
-
-
-        scoreSet2 = PedroComponent.follower().pathBuilder()
-                //Score Set 2
-                .addPath(
-                        new BezierLine(new Pose(126, 80), new Pose(90,110))
-                )
-                .setLinearHeadingInterpolation(Math.toRadians(0), Math.toRadians(28.4))
                 .build();
 
 
@@ -252,7 +159,7 @@ public class SimpleAutonTest extends NextFTCOpMode {
         return new ParallelGroup(
                 Intakenf.INSTANCE.in(),
                 Shooternf.INSTANCE.setShooterVel(shooterVel),
-                Hoodnf.INSTANCE.setHoodPos(0.33)
+                Hoodnf.INSTANCE.setHoodPos(0.32)
         );
     }
     private Command baseState(double shooterVel, double hoodPos) {
@@ -262,69 +169,64 @@ public class SimpleAutonTest extends NextFTCOpMode {
                 Hoodnf.INSTANCE.setHoodPos(hoodPos)
         );
     }
-
+    private Command atCorrection() {
+        return new LambdaCommand()
+                .setUpdate(() -> {
+                    new TurnBy(Angle.fromDeg(atErrorDeg)).schedule();
+                })
+                .setIsDone(() -> true);
+//        return new InstantCommand(() -> new TurnBy(Angle.fromDeg(atErrorDeg)));
+    }
     private Command autonomous() {
         return new SequentialGroup(
 
-
                 new ParallelGroup(
-                        new FollowPath(scorePreloads),
-                        baseState(-1240),
-                        Transfernf.INSTANCE.hotdog()
+                        f.i.follow(scorePreloads,"red"),
+                        new InstantCommand(() -> telemetry.addLine("Inside P-group"))
                 ),
-                new Delay(1)
+                new SequentialGroup(
+                        new InstantCommand(() -> telemetry.addLine("Outside P-group")),
 
-
+//                new Delay(1),
+                        Lednf.INSTANCE.green,
+                        new SequentialGroup(
+                                atCorrection()
+                        )
+                )
         );
     }
-    private Command vision() {
-        return new SequentialGroup(
 
-                // Grab the angle at runtime
-                new WaitUntil(() -> {
-                    bearing = cam.getATangle();
-                    return true;
-                }),
 
-                // Now use it
-                new TurnBy(Angle.fromDeg(bearing)),
 
-                transferUpFor(2)
-        );
-    }
 
     @Override
     public void onInit() {
-        cam = new logi(hardwareMap);
-
         buildPaths();
         init_bot().schedule();
         Shooternf.INSTANCE.disable();
+        DrawingNew.init();
     }
 
     @Override
     public void onStartButtonPressed() {
-        cam.enableAT();
         autonomous().schedule();
-        Shooternf.INSTANCE.enable();
-        //vision().schedule();
-
     }
 
     @Override
     public void onUpdate() {
-        telemetry.addData("ATangle", cam.getATangle());
+        DrawingNew.drawDebug(follower());
+
+        atErrorDeg = Loginf.INSTANCE.getATangle();
+        telemetry.addData("atErrorDeg", atErrorDeg);
+        telemetry.addData("ATangle", Loginf.INSTANCE.getATangle());
         telemetry.update();
-        bearing = cam.getATangle();
-        new SequentialGroup(
-                new TurnBy(Angle.fromDeg(cam.getATangle()))
-        ).schedule();
+
     }
 
 
     @Override
     public void onStop() {
-        PoseStorage.startingPose = PedroComponent.follower().getPose();
+        PoseStorage.startingPose = follower().getPose();
     }
 
 

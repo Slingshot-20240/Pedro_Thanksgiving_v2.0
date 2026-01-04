@@ -12,6 +12,8 @@ import com.pedropathing.paths.PathChain;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 
 import org.firstinspires.ftc.teamcode.NextFTC.autonomous.PoseStorage;
+import org.firstinspires.ftc.teamcode.NextFTC.sequences_and_groups.asc;
+import org.firstinspires.ftc.teamcode.NextFTC.sequences_and_groups.f;
 import org.firstinspires.ftc.teamcode.NextFTC.subsystems_nf.Intakenf;
 import org.firstinspires.ftc.teamcode.NextFTC.subsystems_nf.Lednf;
 import org.firstinspires.ftc.teamcode.NextFTC.subsystems_nf.Shooternf;
@@ -20,13 +22,10 @@ import org.firstinspires.ftc.teamcode.NextFTC.subsystems_nf.Hoodnf;
 import org.firstinspires.ftc.teamcode.pedroPathing.Constants;
 
 import dev.nextftc.core.commands.Command;
-import dev.nextftc.core.commands.conditionals.IfElseCommand;
 import dev.nextftc.core.commands.delays.Delay;
-import dev.nextftc.core.commands.delays.WaitUntil;
 import dev.nextftc.core.commands.groups.ParallelGroup;
 import dev.nextftc.core.commands.groups.SequentialGroup;
 import dev.nextftc.core.components.SubsystemComponent;
-import dev.nextftc.extensions.pedro.FollowPath;
 import dev.nextftc.extensions.pedro.PedroComponent;
 import dev.nextftc.ftc.NextFTCOpMode;
 import dev.nextftc.ftc.components.BulkReadComponent;
@@ -34,10 +33,12 @@ import dev.nextftc.ftc.components.BulkReadComponent;
 
 @Config
 @Autonomous(name = "-0 15 Solo")
-public class Solo15 extends NextFTCOpMode {
-    public Solo15() {
+public class RedCloseSolo15 extends NextFTCOpMode {
+    public RedCloseSolo15() {
         addComponents(
                 new SubsystemComponent(
+                        f.i,
+                        asc.i,
                         Intakenf.INSTANCE, Hoodnf.INSTANCE,
                         Shooternf.INSTANCE, Transfernf.INSTANCE,
                         Lednf.INSTANCE
@@ -57,8 +58,7 @@ public class Solo15 extends NextFTCOpMode {
     public PathChain grabSet2, scoreSet2;
     public PathChain park;
 
-    public Pose scorePose = new Pose(87,87);
-    //TODO - try different types, public private regular etc.
+    public Pose scorePose = new Pose(88,88);
 
     public void buildPaths() {
         double gateHeading = 18;
@@ -69,7 +69,7 @@ public class Solo15 extends NextFTCOpMode {
                 .addPath(
                         new BezierLine(new Pose(126.2, 119), scorePose)
                 )
-                .setLinearHeadingInterpolation(Math.toRadians(36), Math.toRadians(43.5))
+                .setLinearHeadingInterpolation(Math.toRadians(36), Math.toRadians(45))
                 .build();
 
         grabMiddleSet = PedroComponent.follower().pathBuilder()
@@ -89,7 +89,7 @@ public class Solo15 extends NextFTCOpMode {
                                 new HeadingInterpolator.PiecewiseNode(
                                         0,
                                         0.4,
-                                        HeadingInterpolator.linear(Math.toRadians(43.5), Math.toRadians(0))
+                                        HeadingInterpolator.linear(Math.toRadians(45), Math.toRadians(0))
                                 ),
 
                                 new HeadingInterpolator.PiecewiseNode(
@@ -111,7 +111,7 @@ public class Solo15 extends NextFTCOpMode {
                                 scorePose
                         )
                 )
-                .setLinearHeadingInterpolation(Math.toRadians(0), Math.toRadians(43.5))
+                .setLinearHeadingInterpolation(Math.toRadians(0), Math.toRadians(45))
                 .build();
 
 
@@ -124,41 +124,64 @@ public class Solo15 extends NextFTCOpMode {
                                 new Pose(131.5, 60.2)
                         )
                 )
-                .setLinearHeadingInterpolation(Math.toRadians(43.5), Math.toRadians(gateHeading))
-                .build();
+                .setLinearHeadingInterpolation(Math.toRadians(45), Math.toRadians(gateHeading))
 
-        backAssureGate = PedroComponent.follower().pathBuilder()
                 .addPath(
                         new BezierCurve(
-                                new Pose(131.5,60.2),
-                                new Pose(120, 58)
+                                new Pose(131.5, 60.2),
+                                new Pose(131.5,60)
                         )
                 )
-                .setLinearHeadingInterpolation(Math.toRadians(gateHeading), Math.toRadians(0))
+                .setLinearHeadingInterpolation(Math.toRadians(gateHeading), Math.toRadians(gateHeading - 4))
                 .build();
 
-        assureGate = PedroComponent.follower().pathBuilder()
-                .addPath(
-                        new BezierCurve(
-                                new Pose(120, 58),
-                                new Pose(132, 58)
-                        )
-                )
-                .setLinearHeadingInterpolation(Math.toRadians(0), Math.toRadians(0))
-//                .setTimeoutConstraint(1)
-                .build();
+//        backAssureGate = PedroComponent.follower().pathBuilder()
+//                .addPath(
+//                        new BezierCurve(
+//                                new Pose(131.5,60.2),
+//                                new Pose(120, 58)
+//                        )
+//                )
+//                .setLinearHeadingInterpolation(Math.toRadians(gateHeading), Math.toRadians(0))
+//                .build();
+//
+//        assureGate = PedroComponent.follower().pathBuilder()
+//                .addPath(
+//                        new BezierCurve(
+//                                new Pose(120, 58),
+//                                new Pose(132, 58)
+//                        )
+//                )
+//                .setLinearHeadingInterpolation(Math.toRadians(0), Math.toRadians(0))
+////                .setTimeoutConstraint(1)
+//                .build();
 
 
 
         scoreGate = PedroComponent.follower().pathBuilder()
                 .addPath(
                         new BezierCurve(
-                                new Pose(132, 58),
+                                new Pose(131.5, 60),
                                 new Pose(94.000, 64.000),
                                 scorePose
                         )
                 )
-                .setLinearHeadingInterpolation(Math.toRadians(0), Math.toRadians(43.5))
+                .setHeadingInterpolation(
+                        HeadingInterpolator.piecewise(
+
+                                new HeadingInterpolator.PiecewiseNode(
+                                        0,
+                                        0.4,
+                                        HeadingInterpolator.linear(gateHeading - 4, Math.toRadians(0))
+                                ),
+
+                                new HeadingInterpolator.PiecewiseNode(
+                                        0.4,
+                                        1.0,
+                                        HeadingInterpolator.linear(Math.toRadians(0), Math.toRadians(45))
+                                )
+                        )
+                )
                 .build();
 
 
@@ -177,18 +200,19 @@ public class Solo15 extends NextFTCOpMode {
                                 new Pose(131, 33.3)
                         )
                 )
-//                .setLinearHeadingInterpolation(Math.toRadians(43.5), Math.toRadians(0))
+//                .setLinearHeadingInterpolation(Math.toRadians(45), Math.toRadians(0))
                 .setTangentHeadingInterpolation()
 
 
                 .build();
 
 
-        scoreSet4 = follower()
-                .pathBuilder()
-
+        scoreSet4 = PedroComponent.follower().pathBuilder()
                 .addPath(
-                        new BezierLine(new Pose(131, 33.3), scorePose)
+                        new BezierLine(
+                                new Pose(131, 33.3),
+                                scorePose
+                        )
                 )
                 .setHeadingInterpolation(
                         HeadingInterpolator.piecewise(
@@ -203,7 +227,7 @@ public class Solo15 extends NextFTCOpMode {
                                 new HeadingInterpolator.PiecewiseNode(
                                         0.6,
                                         1.0,
-                                        HeadingInterpolator.constant(Math.toRadians(42))
+                                        HeadingInterpolator.constant(Math.toRadians(45))
                                 )
                         )
                 )
@@ -218,7 +242,7 @@ public class Solo15 extends NextFTCOpMode {
                                 new Pose(126, 80)
                         )
                 )
-                .setLinearHeadingInterpolation(Math.toRadians(43.5), Math.toRadians(0))
+                .setLinearHeadingInterpolation(Math.toRadians(45), Math.toRadians(0))
 
 
                 .build();
@@ -230,7 +254,7 @@ public class Solo15 extends NextFTCOpMode {
 //                        new BezierLine(new Pose(126, 80), new Pose(90,110))
                         new BezierLine(new Pose(126, 80), scorePose)
                 )
-                .setLinearHeadingInterpolation(Math.toRadians(0), Math.toRadians(43.5))
+                .setLinearHeadingInterpolation(Math.toRadians(0), Math.toRadians(45))
                 .build();
 
         park = PedroComponent.follower()
@@ -238,7 +262,7 @@ public class Solo15 extends NextFTCOpMode {
                 .addPath(
                         new BezierLine(scorePose, new Pose(108, 70.000))
                 )
-                .setLinearHeadingInterpolation(Math.toRadians(43.5), Math.toRadians(90))
+                .setLinearHeadingInterpolation(Math.toRadians(45), Math.toRadians(90))
                 .build();
 
 
@@ -248,131 +272,82 @@ public class Solo15 extends NextFTCOpMode {
     //TODO - figure out the max and min pos of servo! Does increasing bring hood up or down?
     private Command init_bot() {
         return new ParallelGroup(
-                Hoodnf.INSTANCE.setHoodPos(0.35),
-                Transfernf.INSTANCE.idle()
-        );
-
-    }
-
-    private Command transferUpFor(double time) {
-        return new ParallelGroup(
-                Transfernf.INSTANCE.stepOn(),
-                new Delay(time)
+                Hoodnf.INSTANCE.setHoodPos(0.37),
+                Transfernf.INSTANCE.idle(),
+                Lednf.INSTANCE.yellow
         );
     }
 
-    private Command transferSequence(PathChain pathChain, double transferTime) {
-        return new SequentialGroup(
-                Transfernf.INSTANCE.hotdog(),
-                new WaitUntil(() -> pathChain.lastPath().isAtParametricEnd()),
-                transferUpFor(transferTime)
-        );
-    }
 
-    private Command transferSequenceDistance(PathChain pathChain, double transferTime, double proximity) {
-        return new SequentialGroup(
-                Transfernf.INSTANCE.hotdog(),
-                new WaitUntil(() -> pathChain.lastPath().getDistanceRemaining() < proximity),
-                transferUpFor(transferTime)
-        );
-    }
-
-    private Command baseState(double shooterVel) {
-        return new ParallelGroup(
-                Intakenf.INSTANCE.in(),
-                Shooternf.INSTANCE.setShooterVel(shooterVel),
-                Hoodnf.INSTANCE.setHoodPos(0.35)
-        );
-    }
-    private Command baseState(double shooterVel, double hoodPos) {
-        return new ParallelGroup(
-                Intakenf.INSTANCE.in(),
-                Shooternf.INSTANCE.setShooterVel(shooterVel),
-                Hoodnf.INSTANCE.setHoodPos(hoodPos)
-        );
-    }
 
     private Command autonomous() {
-        return new ParallelGroup(
-
-                //LED sequence
-                new IfElseCommand(
-                        () -> Transfernf.INSTANCE.isTransfering,
-                        Lednf.INSTANCE.yellow,
-                        Lednf.INSTANCE.green
-                ),
+            return new SequentialGroup(
 
                 //Main auton sequence
-                new SequentialGroup(
                     new ParallelGroup(
-                            new FollowPath(scorePreloads),
-                            baseState(-1240),
-                            Transfernf.INSTANCE.hotdog()
+                            f.i.follow(scorePreloads,"green"),
+                            asc.i.baseState(-1240),
+                            Transfernf.INSTANCE.slowHotdog()
                     ),
-                    transferUpFor(1.3),
+                    asc.i.transferUpFor(1.5),
 
 
                     //SET 2
                     new ParallelGroup(
                             new SequentialGroup(
-                                    new FollowPath(grabMiddleSet),
-    //                                new Delay(0.14),
-                                    new FollowPath(scoreMiddleSet)
-
+                                    f.i.follow(grabMiddleSet, "red"),
+                                    new Delay(0.2),
+                                    f.i.follow(scoreMiddleSet,"green")
                             ),
-                            baseState(-1240),
+                            asc.i.baseState(-1240),
 
-                            transferSequence(scoreMiddleSet,1.3)
+                            asc.i.transferSequenceDistance(scoreMiddleSet,1.7,1.5)
                     ),
 
 
                     //SET 3
                     new ParallelGroup(
                             new SequentialGroup(
-                                    new FollowPath(grabGate),
+                                    f.i.follow(grabGate, "red"),
+                                    //Lednf.INSTANCE.flash("red","yellow",0.4,2.3),
                                     new Delay(2.3),
-                                    new FollowPath(backAssureGate),
-                                    new Delay(0.3),
-                                    new FollowPath(assureGate),
-                                    new FollowPath(scoreGate)
-
+                                    f.i.follow(scoreGate, "green")
                             ),
-                            baseState(-1240),
+                            asc.i.baseState(-1240),
 
-                            transferSequence(scoreGate,1.3)
+                            asc.i.transferSequenceDistance(scoreGate,1.7,1.5)
                     ),
 
 
                     //SET 4
                     new ParallelGroup(
                             new SequentialGroup(
-                                    new FollowPath(grabSet4),
-    //                                new Delay(0.7),
-                                    new FollowPath(scoreSet4)
-
+                                    f.i.follow(grabSet4, "red"),
+                                    f.i.follow(scoreSet4, "green")
                             ),
-                            baseState(-1240),
+                            asc.i.baseState(-1240),
 
-                            transferSequence(scoreSet4,1.3)
+                            asc.i.transferSequenceDistance(scoreSet4,1.7,1.5)
                     ),
 
 
 
                     new ParallelGroup(
                             new SequentialGroup(
-                                    new FollowPath(grabSet2),
-    //                                new Delay(0.9),
-                                    new FollowPath(scoreSet2)
+                                    f.i.follow(grabSet2, "red"),
+                                    //Lednf.INSTANCE.flash("red","yellow",0.05,0.2),
+                                    new Delay(0.2),
+                                    f.i.follow(scoreSet2, "green")
                             ),
-                            baseState(-1240),
+                            asc.i.baseState(-1240),
 
-                            transferSequence(scoreSet2,1.3)
+                            asc.i.transferSequenceDistance(scoreSet2,1.5,1.5)
                     ),
-                    new FollowPath(park)
-                )
+                    f.i.follow(park, "green")
+
+            );
 
 
-        );
     }
 
 
