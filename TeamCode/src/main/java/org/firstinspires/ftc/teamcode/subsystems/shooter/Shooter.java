@@ -113,11 +113,6 @@ public class Shooter {
         outtake2.setVelocity(velo);
     }
 
-    public void setShooterPower(double power) {
-        outtake1.setPower(power);
-        outtake2.setPower(power);
-    }
-
     public void setHoodAngle(double angle) {
         variableHood.setPosition(angle);
     }
