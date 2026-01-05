@@ -15,6 +15,11 @@ public class Intake {
 
     }
 
+    // constructor for JUnit
+    public Intake(DcMotorEx intake) {
+        this.intake = intake;
+    }
+
 //-------------------------------------------------------------------------------
 
     public void intakeOn() {

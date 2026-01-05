@@ -57,7 +57,7 @@ public class Robot {
 
         intake = new Intake(hardwareMap);
         transfer = new Transfer(hardwareMap);
-        shooter = new Shooter(hardwareMap, controls);
+        shooter = new Shooter(hardwareMap);
 
         drivetrain = new Drivetrain(hardwareMap, imu, controls);
 
@@ -65,6 +65,21 @@ public class Robot {
         ledBoard0.setMode(DigitalChannel.Mode.OUTPUT);
         ledBoard1 = hardwareMap.get(DigitalChannel.class, "ledBoard1");
         ledBoard1.setMode(DigitalChannel.Mode.OUTPUT);
+    }
+
+    public Robot(GamepadMapping controls, IMU imu, GoBildaPinpointDriver pinpoint,
+                 logi cam, Intake intake, Transfer transfer, Shooter shooter, Drivetrain dt,
+                 DigitalChannel led0, DigitalChannel led1) {
+        this.controls = controls;
+        this.imu = imu;
+        this.driver = pinpoint;
+        // this.cam = cam;
+        this.intake = intake;
+        this.transfer = transfer;
+        this.shooter = shooter;
+        this.drivetrain = dt;
+        this.ledBoard0 = led0;
+        this.ledBoard1 = led1;
     }
 
     public void hardwareSoftReset() {

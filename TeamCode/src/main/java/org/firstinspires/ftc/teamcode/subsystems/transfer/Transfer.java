@@ -13,6 +13,11 @@ public class Transfer {
         frontTransfer = hardwareMap.get(CRServo.class, "transferF");
 
     }
+
+    public Transfer(CRServo frontTransfer, CRServo backTransfer) {
+        this.frontTransfer = frontTransfer;
+        this.backTransfer = backTransfer;
+    }
 // ------------------------------------------------------------------
 
     public void transferOn() {

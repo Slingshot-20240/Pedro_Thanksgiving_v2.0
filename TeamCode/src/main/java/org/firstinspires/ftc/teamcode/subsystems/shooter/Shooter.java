@@ -13,7 +13,7 @@ public class Shooter {
     public final DcMotorEx outtake2;
     public final Servo variableHood;
 
-    public Shooter(HardwareMap hardwareMap, GamepadMapping controls) {
+    public Shooter(HardwareMap hardwareMap) {
         outtake1 = hardwareMap.get(DcMotorEx.class, "outtake1");
         outtake2 = hardwareMap.get(DcMotorEx.class, "outtake2");
         outtake1.setVelocityPIDFCoefficients(578, 0, 0, 70);
@@ -21,6 +21,12 @@ public class Shooter {
         outtake2.setDirection(DcMotorSimple.Direction.REVERSE);
 
         variableHood = hardwareMap.get(Servo.class, "variableHood");
+    }
+
+    public Shooter(DcMotorEx outtake1, DcMotorEx outtake2, Servo hood) {
+        this.outtake1 = outtake1;
+        this.outtake2 = outtake2;
+        this.variableHood = hood;
     }
 
     public enum outtakeVels {
