@@ -74,8 +74,8 @@ public class Turretnf implements Subsystem {
 
     @Override
     public void initialize() {
-        turretServo1 = new ServoEx("turret1");
-        turretServo2 = new ServoEx("turret2");
+        turretServo1 = new FeedbackServoEx("analog0", "turret1", 0.01);
+        turretServo2 = new FeedbackServoEx("analog0", "turret1", 0.01);
     }
 
     @Override
