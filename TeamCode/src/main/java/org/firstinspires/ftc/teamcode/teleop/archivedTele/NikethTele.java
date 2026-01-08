@@ -24,7 +24,7 @@ import dev.nextftc.extensions.pedro.PedroComponent;
 
 @Config
 @TeleOp
-public class ExampleTurnTele extends OpMode {
+public class NikethTele extends OpMode {
 
     private GamepadMapping controls;
     private FSM fsm;
@@ -53,7 +53,7 @@ public class ExampleTurnTele extends OpMode {
     public static double GOAL_Y = 140;
 
     // ODO tuning
-    public static double odoTurn_kP = 0.65;
+    public static double odoTurn_kP = 0.2;
     public static double odoMinTurnPower = 0.08;
 
     @Override
@@ -164,7 +164,7 @@ public class ExampleTurnTele extends OpMode {
             rotate = -gamepad1.right_stick_x * 0.55;
         }
 
-        follower.setTeleOpDrive(forward, strafe, rotate, true);
+        follower.setTeleOpDrive(forward, 0, rotate, true);
 
         // Path following
 
@@ -184,7 +184,7 @@ public class ExampleTurnTele extends OpMode {
             autoTurnVision = true;
         }
 
-        if (gamepad1.dpad_down && !autoTurnOdo) {
+        if (gamepad1.left_trigger > 0 && !autoTurnOdo) {
             autoTurnOdo = true;
         }
 

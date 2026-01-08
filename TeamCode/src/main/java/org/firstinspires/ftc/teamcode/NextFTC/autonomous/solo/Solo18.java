@@ -129,7 +129,7 @@ public class Solo18 extends NextFTCOpMode {
         backAssureGate = PedroComponent.follower().pathBuilder()
                 //back assure gate
                 .addPath(
-                        new BezierCurve(
+                        new BezierLine(
                                 new Pose(131.5,60.38),
                                 new Pose(125, 58)
                         )
@@ -138,7 +138,7 @@ public class Solo18 extends NextFTCOpMode {
 
                 //assure gate
                 .addPath(
-                        new BezierCurve(
+                        new BezierLine(
                                 new Pose(125, 58),
                                 new Pose(131, 56)
                         )
@@ -178,14 +178,14 @@ public class Solo18 extends NextFTCOpMode {
 
         backAssureGate2 = PedroComponent.follower().pathBuilder()
                 .addPath(
-                        new BezierCurve(
+                        new BezierLine(
                                 new Pose(131.5,60.38),
                                 new Pose(125, 58)
                         )
                 )
                 .setLinearHeadingInterpolation(Math.toRadians(gateHeading), Math.toRadians(10))
                 .addPath(
-                        new BezierCurve(
+                        new BezierLine(
                                 new Pose(125, 58),
                                 new Pose(131, 56)
                         )

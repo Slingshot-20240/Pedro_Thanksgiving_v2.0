@@ -1,7 +1,10 @@
 package org.firstinspires.ftc.teamcode.NextFTC.subsystems_nf;
 
+import com.pedropathing.paths.PathChain;
+
 import dev.nextftc.core.commands.Command;
 import dev.nextftc.core.commands.delays.Delay;
+import dev.nextftc.core.commands.delays.WaitUntil;
 import dev.nextftc.core.commands.groups.ParallelGroup;
 import dev.nextftc.core.commands.groups.SequentialGroup;
 import dev.nextftc.core.commands.utility.InstantCommand;
@@ -63,6 +66,17 @@ public class Transfernf implements Subsystem {
                         new SetPower(backTransfer, -1.0)
                 )
 
+        );
+    }
+
+    public Command pickup(PathChain pathChain, double distanceForHotdog) {
+        return new SequentialGroup(
+                new ParallelGroup(
+                        new SetPower(frontTransfer, -0.4),
+                        new SetPower(backTransfer, -1)
+                ),
+                new WaitUntil(() -> pathChain.lastPath().getDistanceRemaining() < distanceForHotdog),
+                hotdog()
         );
     }
 
