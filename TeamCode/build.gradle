@@ -37,7 +37,21 @@ android {
     packagingOptions {
         jniLibs.useLegacyPackaging true
     }
+
+    testOptions {
+        unitTests.all {
+            useJUnitPlatform()
+        }
+    }
 }
+
+tasks.withType(Test) {
+    testLogging {
+        events "passed", "skipped", "failed"
+        showStandardStreams = true
+    }
+}
+
 
 //Sloth addition 11/27/25
 repositories {
@@ -66,4 +80,11 @@ dependencies {
     implementation("com.pedropathing:ftc:2.0.5") {
         exclude group: "com.acmerobotics.dashboard"
     }
+
+    // junit & mockito dependencies for testing
+    testImplementation 'org.mockito:mockito-inline:5.0.0'
+    testImplementation 'org.mockito:mockito-junit-jupiter:5.0.0'
+
+    testImplementation 'org.junit.jupiter:junit-jupiter-api:5.10.2'
+    testRuntimeOnly 'org.junit.jupiter:junit-jupiter-engine:5.10.2'
 }

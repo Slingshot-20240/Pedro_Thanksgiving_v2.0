@@ -53,6 +53,32 @@ public class logi {
 
     }
 
+    public logi(WebcamName cam) {
+        apriltagPipeline = new AprilTagProcessor.Builder()
+                .setTagFamily(AprilTagProcessor.TagFamily.TAG_36h11)
+                .setDrawTagID(true)
+                .setDrawTagOutline(true)
+                .setDrawAxes(true)
+                .setDrawCubeProjection(true)
+//                .setLensIntrinsics(0.187319959814, -0.575948480673, -0.00438930956954, 0.00126723944556)
+                .setOutputUnits(DistanceUnit.INCH, AngleUnit.DEGREES)
+                .build();
+
+        ballPipeline = new ballProcessor();
+
+        portal = new VisionPortal.Builder()
+                .setCamera(cam)
+                .addProcessors(apriltagPipeline, ballPipeline)
+                .setCameraResolution(new Size(1920, 1080))
+                .setStreamFormat(VisionPortal.StreamFormat.MJPEG)
+                .setAutoStopLiveView(true)
+
+                .build();
+
+        portal.setProcessorEnabled(apriltagPipeline, true);
+        portal.setProcessorEnabled(ballPipeline, false);
+    }
+
     public void enableAT() {
         portal.setProcessorEnabled(apriltagPipeline, true);
     }

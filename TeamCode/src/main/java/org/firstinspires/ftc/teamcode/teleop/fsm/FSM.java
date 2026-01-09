@@ -26,7 +26,7 @@ public class FSM {
 
 
     // Everyone ignore this horrendous OOP
-    private double odoDistance = AVisionTele.odoDistance;
+    // private double odoDistance = AVisionTele.odoDistance;
 
     public FSM(HardwareMap hardwareMap, GamepadMapping gamepad, Robot robot) {
         this.robot = robot;
@@ -164,6 +164,22 @@ public class FSM {
                     gamepad.resetMultipleControls(gamepad.transfer, gamepad.outtake);
                 }
         }
+    }
+
+    public void setState(FSMStates newState) {
+        state = newState;
+    }
+
+    public FSMStates getState() {
+        return state;
+    }
+
+    public void setControlType(ControlType newCType) {
+        type = newCType;
+    }
+
+    public ControlType getControlType() {
+        return type;
     }
 
     public enum FSMStates {

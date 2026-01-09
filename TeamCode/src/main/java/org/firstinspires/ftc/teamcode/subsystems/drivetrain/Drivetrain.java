@@ -50,6 +50,14 @@ public class Drivetrain {
         driveMode = DriveMode.ROBO_CENTRIC;
     }
 
+    public Drivetrain(DcMotorEx leftFront, DcMotorEx rightFront, DcMotorEx leftBack, DcMotorEx rightBack, IMU imu) {
+        this.leftFront = leftFront;
+        this.rightFront = rightFront;
+        this.leftBack = leftBack;
+        this.rightBack = rightBack;
+        this.imu = imu;
+    }
+
     public void update() {
         double strafe = controls.strafe;
         double drive = controls.drive;
