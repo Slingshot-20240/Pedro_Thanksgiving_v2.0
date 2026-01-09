@@ -1,4 +1,4 @@
-package org.firstinspires.ftc.teamcode.teleop.archivedTele;
+package org.firstinspires.ftc.teamcode.teleop;
 
 import com.acmerobotics.dashboard.config.Config;
 import com.bylazar.telemetry.PanelsTelemetry;
@@ -24,7 +24,7 @@ import dev.nextftc.extensions.pedro.PedroComponent;
 
 @Config
 @TeleOp
-public class NikethTele extends OpMode {
+public class ViktorTele extends OpMode {
 
     private GamepadMapping controls;
     private FSM fsm;
@@ -116,13 +116,13 @@ public class NikethTele extends OpMode {
 
 
         //------------- error calculation -------------\\
-    // Vision error
+        // Vision error
         double visionBearing = Math.toRadians(Robot.cam.getATangle());
         double visionHeadingError = angleWrap(visionBearing);
         boolean visionTurnFinished =
                 Math.abs(visionHeadingError) < tolerance;
 
-    // ODO error
+        // ODO error
         double dx = GOAL_X - pose.getX();
         double dy = GOAL_Y - pose.getY();
         double targetHeading = Math.atan2(dy, dx);
@@ -164,10 +164,11 @@ public class NikethTele extends OpMode {
             rotate = -gamepad1.right_stick_x * 0.55;
         }
 
-        if (gamepad1.right_bumper) {
-            follower.setTeleOpDrive(forward, strafe, rotate, true);
-        } else {
-            follower.setTeleOpDrive(forward, 0, rotate, true);
+
+        follower.setTeleOpDrive(forward, strafe, rotate, true);
+
+        if (gamepad1.x) {
+            follower.setPose(new Pose(72,8,Math.toRadians(90)));
         }
 
         // Path following
