@@ -1,4 +1,4 @@
-package org.firstinspires.ftc.teamcode.teleop.archivedTele;
+package org.firstinspires.ftc.teamcode.teleop;
 
 import com.acmerobotics.dashboard.config.Config;
 import com.bylazar.telemetry.PanelsTelemetry;
@@ -24,7 +24,7 @@ import dev.nextftc.extensions.pedro.PedroComponent;
 
 @Config
 @TeleOp
-public class ExampleTurnTele extends OpMode {
+public class ViktorTele extends OpMode {
 
     private GamepadMapping controls;
     private FSM fsm;
@@ -44,7 +44,7 @@ public class ExampleTurnTele extends OpMode {
     public static double tolerance = 0.02;
 
     // Vision tuning
-    public static double visionTurn_kP = 0.9;
+    public static double visionTurn_kP = 0.1;
     public static double visionMinTurnPower = 0.08;
     public static double visionMiniTolerance = 0.02;
 
@@ -53,7 +53,7 @@ public class ExampleTurnTele extends OpMode {
     public static double GOAL_Y = 140;
 
     // ODO tuning
-    public static double odoTurn_kP = 0.65;
+    public static double odoTurn_kP = 0.3;
     public static double odoMinTurnPower = 0.08;
 
     @Override
@@ -116,13 +116,13 @@ public class ExampleTurnTele extends OpMode {
 
 
         //------------- error calculation -------------\\
-    // Vision error
+        // Vision error
         double visionBearing = Math.toRadians(Robot.cam.getATangle());
         double visionHeadingError = angleWrap(visionBearing);
         boolean visionTurnFinished =
                 Math.abs(visionHeadingError) < tolerance;
 
-    // ODO error
+        // ODO error
         double dx = GOAL_X - pose.getX();
         double dy = GOAL_Y - pose.getY();
         double targetHeading = Math.atan2(dy, dx);
@@ -164,7 +164,12 @@ public class ExampleTurnTele extends OpMode {
             rotate = -gamepad1.right_stick_x * 0.55;
         }
 
+
         follower.setTeleOpDrive(forward, strafe, rotate, true);
+
+        if (gamepad1.x) {
+            follower.setPose(new Pose(72,8,Math.toRadians(90)));
+        }
 
         // Path following
 
@@ -184,7 +189,7 @@ public class ExampleTurnTele extends OpMode {
             autoTurnVision = true;
         }
 
-        if (gamepad1.dpad_down && !autoTurnOdo) {
+        if (gamepad1.left_trigger > 0 && !autoTurnOdo) {
             autoTurnOdo = true;
         }
 

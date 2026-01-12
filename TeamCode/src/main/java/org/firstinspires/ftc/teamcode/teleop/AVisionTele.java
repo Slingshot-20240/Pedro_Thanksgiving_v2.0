@@ -34,6 +34,7 @@ public class AVisionTele extends OpMode {
     //private logi cam;
 
     private Follower follower;
+    double oldTime = 0;
     private boolean autoTurnVision = false;
     private boolean automatedDrive;
     private Supplier<PathChain> pathChain;
@@ -90,8 +91,11 @@ public class AVisionTele extends OpMode {
         Pose pose = follower.getPose();
         double heading = pose.getHeading();
 
-        // TODO BEE DO THE THING
-        odoDistance = pose.distanceFrom(new Pose(140,140));
+        double newTime = getRuntime();
+        double loopTime = newTime - oldTime;
+        oldTime = newTime;
+        telemetry.addData("Looptime", loopTime);
+
         double atBearing = Math.toRadians(Robot.cam.getATangle());
         double atHeadingError = angleWrap(atBearing);
         boolean visionTurnFinished = Math.abs(atHeadingError) < tolerance;

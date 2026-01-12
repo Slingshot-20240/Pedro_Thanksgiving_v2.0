@@ -32,7 +32,7 @@ public class Transfer {
 
     public void hotDog() {
         backTransfer.setPower(1);
-        frontTransfer.setPower(-0.15);
+        frontTransfer.setPower(-0.12);
     }
 
 }

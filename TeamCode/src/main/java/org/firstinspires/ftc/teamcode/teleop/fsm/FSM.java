@@ -107,7 +107,6 @@ public class FSM {
                     } else {
                         robot.shooter.setHoodAngle(targetHoodPos);
                         robot.shooter.setShooterVelocity(-targetVelocity);
-
                     }
 
                     if (Robot.cam.getATdist() != 0) {

@@ -1,5 +1,8 @@
 package org.firstinspires.ftc.teamcode.NextFTC.subsystems_nf;
 
+import com.qualcomm.robotcore.hardware.AnalogInput;
+import com.qualcomm.robotcore.hardware.CRServo;
+
 import dev.nextftc.core.commands.Command;
 import dev.nextftc.core.commands.delays.Delay;
 import dev.nextftc.core.commands.groups.ParallelGroup;
@@ -17,12 +20,10 @@ import dev.nextftc.hardware.powerable.SetPower;
 
 public class Turretnf implements Subsystem {
     public static final Turretnf INSTANCE = new Turretnf();
+    private Turretnf() { }
 
-    private Turretnf() {
-    }
-
-    public FeedbackServoEx turretServo1 = new FeedbackServoEx("analog0", "turret1", 0.01);
-    public FeedbackServoEx turretServo2 = new FeedbackServoEx("analog1", "turret2", 0.01);
+    public FeedbackCRServoEx turretServo1;
+    public FeedbackCRServoEx turretServo2;
 
     // TODO got from docs idk we'll see :sk
 
@@ -45,7 +46,7 @@ public class Turretnf implements Subsystem {
     public Command farBlue() {
         return new ParallelGroup(
                 new SetPosition(turretServo1, 0),
-                new SetPosition(turretServo1, 0)
+                new SetPosition(turretServo2, 0)
         );
     }
 
@@ -74,8 +75,16 @@ public class Turretnf implements Subsystem {
 
     @Override
     public void initialize() {
-        turretServo1 = new FeedbackServoEx("analog0", "turret1", 0.01);
-        turretServo2 = new FeedbackServoEx("analog0", "turret1", 0.01);
+        turretServo1 = new FeedbackCRServoEx(
+                0.01,
+                () ->  ActiveOpMode.hardwareMap().analogInput.get("analog0") ,
+                () ->  ActiveOpMode.hardwareMap().crservo.get("t1")
+        );
+        turretServo2 = new FeedbackCRServoEx(
+                0.01,
+                () ->  ActiveOpMode.hardwareMap().analogInput.get("analog1") ,
+                () ->  ActiveOpMode.hardwareMap().crservo.get("t2")
+        );
     }
 
     @Override    public void periodic() {

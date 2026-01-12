@@ -38,7 +38,8 @@ public class asc extends SubsystemGroup {
      */
     public final Command transferUpFor(double time) {
         return new ParallelGroup(
-                Transfernf.INSTANCE.stepOn(),
+                //Transfernf.INSTANCE.stepOn(),
+                Transfernf.INSTANCE.on(),
                 new Delay(time),
                 Lednf.INSTANCE.yellow
         );
@@ -71,7 +72,7 @@ public class asc extends SubsystemGroup {
         return new ParallelGroup(
                 Intakenf.INSTANCE.in(),
                 Shooternf.INSTANCE.setShooterVel(shooterVel),
-                Hoodnf.INSTANCE.setHoodPos(0.37)
+                Hoodnf.INSTANCE.setHoodPos(0.35)
         );
     }
     public final Command baseState(double shooterVel, double hoodPos) {
