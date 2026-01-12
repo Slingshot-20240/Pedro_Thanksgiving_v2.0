@@ -355,7 +355,8 @@ public class RedClose15AllianceFinal extends NextFTCOpMode {
                             ),
                             asc.i.baseState(-1200,0.37),
 
-                            asc.i.transferSequenceDistance(scoreHp,5, 2.6)
+                            //asc.i.transferSequenceDistance(scoreHp,5, 2.6),
+                            asc.i.transferSequence(scoreHp,5)
                     )
 
 
