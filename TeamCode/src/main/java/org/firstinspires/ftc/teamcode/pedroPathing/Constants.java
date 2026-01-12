@@ -52,10 +52,10 @@ public class Constants {
             .leftRearMotorDirection(DcMotorSimple.Direction.REVERSE)
             .rightFrontMotorDirection(DcMotorSimple.Direction.FORWARD)
             .rightRearMotorDirection(DcMotorSimple.Direction.FORWARD)
-            .xVelocity(80)
-            .yVelocity(65)
-            .useVoltageCompensation(true)
-            .nominalVoltage(13.99);
+            .xVelocity(84) // real tuned val was 80
+            .yVelocity(69); //real tuned cal was 65
+            //.useVoltageCompensation(true)
+            //.nominalVoltage(13.99);
 
     public static Follower createFollower(HardwareMap hardwareMap) {
         return new FollowerBuilder(followerConstants, hardwareMap)
