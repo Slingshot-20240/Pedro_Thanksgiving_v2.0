@@ -78,8 +78,7 @@ public class Turretnf implements Subsystem {
         turretServo2 = new FeedbackServoEx("analog0", "turret1", 0.01);
     }
 
-    @Override
-    public void periodic() {
+    @Override    public void periodic() {
 
     }
 }

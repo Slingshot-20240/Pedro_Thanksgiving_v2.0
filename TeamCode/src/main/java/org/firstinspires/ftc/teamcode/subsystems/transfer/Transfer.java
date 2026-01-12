@@ -22,7 +22,7 @@ public class Transfer {
 
     public void transferOn() {
         backTransfer.setPower(-1.0);
-        frontTransfer.setPower(-.6);
+        frontTransfer.setPower(-0.8);
     }
 
     public void transferOff() {
