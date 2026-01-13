@@ -5,6 +5,9 @@ import com.qualcomm.hardware.limelightvision.LLResultTypes.FiducialResult;
 import com.qualcomm.hardware.limelightvision.Limelight3A;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 
+import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
+import org.firstinspires.ftc.robotcore.external.navigation.DistanceUnit;
+import org.firstinspires.ftc.robotcore.external.navigation.Pose2D;
 import org.firstinspires.ftc.robotcore.external.navigation.Pose3D;
 
 import java.util.Objects;
@@ -32,20 +35,28 @@ public class AprilTagLimelight {
 
     default value is null
     */
-    public Pose3D ATrelocal(){
+    public Pose2D ATrelocal(){
         LLResult result = limelight.getLatestResult();
         if (result != null && result.isValid()) {
-            return result.getBotpose();
+            return new Pose2D(DistanceUnit.CM,
+                              result.getBotpose().getPosition().toUnit(DistanceUnit.CM).x,
+                              result.getBotpose().getPosition().toUnit(DistanceUnit.CM).y,
+                              AngleUnit.RADIANS,
+                              result.getBotpose().getOrientation().getYaw(AngleUnit.RADIANS));
         }
         return null;
     }
-    public Pose3D ATrelocal(double yaw) {
+    public Pose2D ATrelocal(double yaw) {
 
         LLResult result = limelight.getLatestResult();
 
         limelight.updateRobotOrientation(yaw);
         if (result != null && result.isValid()) {
-            return result.getBotpose_MT2();
+            return new Pose2D(DistanceUnit.CM,
+                    result.getBotpose().getPosition().toUnit(DistanceUnit.CM).x,
+                    result.getBotpose().getPosition().toUnit(DistanceUnit.CM).y,
+                    AngleUnit.RADIANS,
+                    result.getBotpose().getOrientation().getYaw(AngleUnit.RADIANS));
         }
         return null;
     }
