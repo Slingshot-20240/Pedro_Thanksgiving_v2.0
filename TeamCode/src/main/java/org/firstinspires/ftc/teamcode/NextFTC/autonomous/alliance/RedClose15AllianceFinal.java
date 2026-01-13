@@ -81,7 +81,7 @@ public class RedClose15AllianceFinal extends NextFTCOpMode {
                         new BezierCurve(
                                 scorePose,
                                 new Pose(92.292,77),
-                                new Pose(127, 78)
+                                new Pose(127, 79)
                         )
                 )
                 .setLinearHeadingInterpolation(Math.toRadians(45), Math.toRadians(0))
@@ -90,7 +90,7 @@ public class RedClose15AllianceFinal extends NextFTCOpMode {
             //Gate 1
                 .addPath(
                         new BezierCurve(
-                                new Pose(127, 78),
+                                new Pose(127, 79),
                                 new Pose(109, 76),
                                 new Pose(128, 73)
                         )
@@ -139,7 +139,7 @@ public class RedClose15AllianceFinal extends NextFTCOpMode {
                                 new Pose(129, 63)
                         )
                 )
-                .setLinearHeadingInterpolation(Math.toRadians(0), Math.toRadians(0))
+                .setLinearHeadingInterpolation(Math.toRadians(0), Math.toRadians(90))
 
 
 
@@ -152,13 +152,13 @@ public class RedClose15AllianceFinal extends NextFTCOpMode {
                 )
                 .setHeadingInterpolation(
                         HeadingInterpolator.piecewise(
+//                                new HeadingInterpolator.PiecewiseNode(
+//                                        0,
+//                                        0.5,
+//                                        //HeadingInterpolator.tangent.reverse()
+//                                ),
                                 new HeadingInterpolator.PiecewiseNode(
                                         0,
-                                        0.5 ,
-                                        HeadingInterpolator.tangent.reverse()
-                                ),
-                                new HeadingInterpolator.PiecewiseNode(
-                                        0.5,
                                         1.0,
                                         //TODO - tune the y value to make ball go in center due to newtons first law
                                         HeadingInterpolator.facingPoint(new Pose(144,144))
@@ -232,7 +232,7 @@ public class RedClose15AllianceFinal extends NextFTCOpMode {
 
                 //assure pickup
                 .addPath(
-                        new BezierLine(new Pose(122,15), new Pose(129.5,13))
+                        new BezierLine(new Pose(122,15), new Pose(129,13))
                 )
                 .setTangentHeadingInterpolation()
 
@@ -244,7 +244,7 @@ public class RedClose15AllianceFinal extends NextFTCOpMode {
                 .pathBuilder()
                 .addPath(
                         new BezierLine(
-                                new Pose(129.5, 13),
+                                new Pose(129, 13),
                                 new Pose(90.000, 110.000)
                         )
                 )
