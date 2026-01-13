@@ -32,7 +32,7 @@ import static dev.nextftc.extensions.pedro.PedroComponent.follower;
 
 
 @Config
-@Autonomous(name = "Red Pushbot 12")
+@Autonomous(name = "Red Push Robot 12")
 public class RedPushBot12 extends NextFTCOpMode {
     public RedPushBot12() {
         addComponents(
