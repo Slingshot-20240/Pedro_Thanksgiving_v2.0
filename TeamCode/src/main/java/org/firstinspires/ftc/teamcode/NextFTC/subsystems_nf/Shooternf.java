@@ -17,35 +17,58 @@ public class Shooternf implements Subsystem {
     public MotorEx outtake1, outtake2;
     public MotorGroup shooter;
 
-    private final ControlSystem shooterController = ControlSystem.builder()
-            .velPid(0.342,0,0.001)
-            .basicFF(0.001)
-            //.velPid(1.52,0,0)
+    private final ControlSystem closeShooterController = ControlSystem.builder()
+            .velPid(0.345, 0, 0.001)
+            .basicFF(0.002)
+            .build();
+
+    private final ControlSystem farShooterController = ControlSystem.builder()
+            //increased this value
+            .velPid(0.41, 0, 0.004)
+            .basicFF(0.008)
             .build();
 
     private boolean enabled = false;
 
-    private enum shooterStates {
-        IDLE (0),
-        CLOSE_SIDE (-1210),
-        FAR_SIDE (-1420);
-
-        private final double shooterState;
-        shooterStates(double state) { this.shooterState = state; }
-        public double getVel() { return shooterState; }
+    private enum ShooterControllerMode {
+        CLOSE,
+        FAR
     }
+
+    private ShooterControllerMode currentControllerMode = ShooterControllerMode.CLOSE;
+
 
     public Command closeSide() {
-        return new RunToVelocity(shooterController, shooterStates.CLOSE_SIDE.getVel()).requires(shooter);
+        currentControllerMode = ShooterControllerMode.CLOSE;
+        return new RunToVelocity(closeShooterController, -1210).requires(shooter);
     }
+
     public Command farSide() {
-        return new RunToVelocity(shooterController, shooterStates.FAR_SIDE.getVel()).requires(shooter);
+        currentControllerMode = ShooterControllerMode.FAR;
+        return new RunToVelocity(farShooterController, -1450).requires(shooter);
     }
+
     public Command idle() {
-        return new RunToVelocity(shooterController, shooterStates.IDLE.getVel()).requires(shooter);
+        currentControllerMode = ShooterControllerMode.CLOSE;
+        return new RunToVelocity(closeShooterController, 0).requires(shooter);
     }
+
     public Command setShooterVel(double shooterVel) {
-        return new RunToVelocity(shooterController, shooterVel).requires(shooter);
+        currentControllerMode = ShooterControllerMode.CLOSE;
+        return new RunToVelocity(closeShooterController, shooterVel).requires(shooter);
+    }
+
+    public Command setShooterVel(double shooterVel, boolean farSide) {
+        if (farSide) {
+            currentControllerMode = ShooterControllerMode.FAR;
+        } else {
+            currentControllerMode = ShooterControllerMode.CLOSE;
+        }
+
+        return new RunToVelocity(
+                farSide ? farShooterController : closeShooterController,
+                shooterVel
+        ).requires(shooter);
     }
 
     public void enable() {
@@ -54,11 +77,8 @@ public class Shooternf implements Subsystem {
 
     public void disable() {
         enabled = false;
-        shooter.setPower(0); //prevents shooter on in init
+        shooter.setPower(0);
     }
-
-
-
 
     @Override
     public void initialize() {
@@ -67,17 +87,24 @@ public class Shooternf implements Subsystem {
         outtake2.reverse();
         shooter = new MotorGroup(outtake1, outtake2);
 
-        disable(); //makes sure motor is off during init
+        disable();
     }
 
     @Override
     public void periodic() {
-
         if (!enabled) {
             shooter.setPower(0);
             return;
         }
 
-        shooter.setPower(shooterController.calculate(shooter.getState()));
+        ControlSystem controller;
+
+        if (currentControllerMode == ShooterControllerMode.FAR) {
+            controller = farShooterController;
+        } else {
+            controller = closeShooterController;
+        }
+
+        shooter.setPower(controller.calculate(shooter.getState()));
     }
 }

@@ -1,7 +1,6 @@
-package org.firstinspires.ftc.teamcode.teleop;
+package org.firstinspires.ftc.teamcode.teleop.archivedTele;
 
 import com.acmerobotics.dashboard.config.Config;
-import com.bylazar.configurables.annotations.Configurable;
 import com.bylazar.telemetry.PanelsTelemetry;
 import com.bylazar.telemetry.TelemetryManager;
 import com.pedropathing.follower.Follower;
@@ -16,10 +15,9 @@ import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import org.firstinspires.ftc.teamcode.NextFTC.autonomous.PoseStorage;
 import org.firstinspires.ftc.teamcode.misc.gamepad.GamepadMapping;
 import org.firstinspires.ftc.teamcode.pedroPathing.Constants;
+import org.firstinspires.ftc.teamcode.pedroPathing.DrawingNew;
 import org.firstinspires.ftc.teamcode.subsystems.robot.Robot;
-import org.firstinspires.ftc.teamcode.subsystems.vision.logi;
 import org.firstinspires.ftc.teamcode.teleop.fsm.FSM;
-import org.firstinspires.ftc.teamcode.teleop.fsm.practice.IshaanFSM;
 
 import java.util.function.Supplier;
 
@@ -33,6 +31,7 @@ public class AVisionTele extends OpMode {
     //private logi cam;
 
     private Follower follower;
+    double oldTime = 0;
     private boolean autoTurnVision = false;
     private boolean automatedDrive;
     private Supplier<PathChain> pathChain;
@@ -40,7 +39,7 @@ public class AVisionTele extends OpMode {
 
     //auto align
     public static double tolerance = 0.02;
-    public static double turn_kP = 0.9;
+    public static double turn_kP = 0.2;
     public static double minTurnPower = 0.08;
     public static double toMiniTolerance = 0.02;
     public int count = 0;
@@ -68,6 +67,7 @@ public class AVisionTele extends OpMode {
                         follower::getHeading, Math.toRadians(90), 0.96)
                 )
                 .build();
+        DrawingNew.init();
     }
 
     @Override
@@ -83,12 +83,16 @@ public class AVisionTele extends OpMode {
         follower.update();
         telemetryM.update();
         telemetry.update();
+        DrawingNew.drawDebug(follower);
 
         Pose pose = follower.getPose();
         double heading = pose.getHeading();
 
-        // TODO BEE DO THE THING
-        odoDistance = pose.distanceFrom(new Pose(140,140));
+        double newTime = getRuntime();
+        double loopTime = newTime - oldTime;
+        oldTime = newTime;
+        telemetry.addData("Looptime", loopTime);
+
         double atBearing = Math.toRadians(Robot.cam.getATangle());
         double atHeadingError = angleWrap(atBearing);
         boolean visionTurnFinished = Math.abs(atHeadingError) < tolerance;

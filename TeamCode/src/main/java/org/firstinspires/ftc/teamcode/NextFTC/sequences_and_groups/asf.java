@@ -16,11 +16,12 @@ import dev.nextftc.core.commands.delays.WaitUntil;
 import dev.nextftc.core.commands.groups.ParallelGroup;
 import dev.nextftc.core.commands.groups.SequentialGroup;
 import dev.nextftc.core.subsystems.SubsystemGroup;
+import kotlinx.coroutines.DebugKt;
 
 //AUTON SEQUENCES CLOSE
-public class asc extends SubsystemGroup {
-    public static final asc i = new asc();
-    private asc() {
+public class asf extends SubsystemGroup {
+    public static final asf i = new asf();
+    private asf() {
         super(
                 Intakenf.INSTANCE, Transfernf.INSTANCE,
                 Shooternf.INSTANCE, Hoodnf.INSTANCE,
@@ -38,8 +39,7 @@ public class asc extends SubsystemGroup {
      */
     public final Command transferUpFor(double time) {
         return new ParallelGroup(
-                //Transfernf.INSTANCE.stepOn(),
-                Transfernf.INSTANCE.on(),
+                Transfernf.INSTANCE.stepOn(0.8),
                 new Delay(time),
                 Lednf.INSTANCE.yellow
         );
@@ -59,6 +59,15 @@ public class asc extends SubsystemGroup {
 
         );
     }
+    public final Command transferSequence(PathChain lastPathChain, double transferTime, double spinUpTime) {
+        return new SequentialGroup(
+                new Delay(spinUpTime),
+                Transfernf.INSTANCE.hotdog(),
+                new WaitUntil(() -> lastPathChain.lastPath().isAtParametricEnd()),
+                transferUpFor(transferTime)
+
+        );
+    }
 
     public final Command transferSequenceDistance(PathChain pathChain, double transferTime, double proximity) {
         return new SequentialGroup(
@@ -71,14 +80,14 @@ public class asc extends SubsystemGroup {
     public final Command baseState(double shooterVel) {
         return new ParallelGroup(
                 Intakenf.INSTANCE.in(),
-                Shooternf.INSTANCE.setShooterVel(shooterVel),
-                Hoodnf.INSTANCE.setHoodPos(0.35)
+                Shooternf.INSTANCE.setShooterVel(shooterVel, true),
+                Hoodnf.INSTANCE.setHoodPos(0.32)
         );
     }
     public final Command baseState(double shooterVel, double hoodPos) {
         return new ParallelGroup(
                 Intakenf.INSTANCE.in(),
-                Shooternf.INSTANCE.setShooterVel(shooterVel),
+                Shooternf.INSTANCE.setShooterVel(shooterVel, true),
                 Hoodnf.INSTANCE.setHoodPos(hoodPos)
         );
     }

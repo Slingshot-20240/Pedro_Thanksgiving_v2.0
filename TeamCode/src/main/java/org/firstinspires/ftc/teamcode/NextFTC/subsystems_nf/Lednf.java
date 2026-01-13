@@ -5,6 +5,7 @@ import com.qualcomm.robotcore.hardware.DigitalChannel;
 import dev.nextftc.core.commands.Command;
 import dev.nextftc.core.commands.delays.Delay;
 import dev.nextftc.core.commands.groups.ParallelGroup;
+import dev.nextftc.core.commands.groups.ParallelRaceGroup;
 import dev.nextftc.core.commands.groups.SequentialGroup;
 import dev.nextftc.core.commands.utility.InstantCommand;
 import dev.nextftc.core.subsystems.Subsystem;
@@ -63,13 +64,15 @@ public class Lednf implements Subsystem {
         }
     }
     public Command flash(String color1, String color2, double intensityDelay, double time) {
-            return new SequentialGroup(
-                color(color1),
-                new Delay(intensityDelay),
-                color(color2),
-                new Delay(intensityDelay)
-            ).raceWith(new Delay(time));
-
+            return new ParallelRaceGroup(
+                    new SequentialGroup(
+                        color(color1),
+                        new Delay(intensityDelay),
+                        color(color2),
+                        new Delay(intensityDelay)
+                    ),
+                    new Delay(time)
+            );
     }
 
     @Override

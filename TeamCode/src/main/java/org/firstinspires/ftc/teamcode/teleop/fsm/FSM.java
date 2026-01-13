@@ -8,7 +8,6 @@ import org.firstinspires.ftc.teamcode.subsystems.intake.Intake;
 import org.firstinspires.ftc.teamcode.subsystems.robot.Robot;
 import org.firstinspires.ftc.teamcode.subsystems.shooter.Shooter;
 import org.firstinspires.ftc.teamcode.subsystems.transfer.Transfer;
-import org.firstinspires.ftc.teamcode.teleop.AVisionTele;
 
 public class FSM {
     // GENERAL ROBOT STATES + CLASSES
@@ -26,7 +25,7 @@ public class FSM {
 
 
     // Everyone ignore this horrendous OOP
-    private double odoDistance = AVisionTele.odoDistance;
+    // private double odoDistance = AVisionTele.odoDistance;
 
     public FSM(HardwareMap hardwareMap, GamepadMapping gamepad, Robot robot) {
         this.robot = robot;
@@ -107,7 +106,6 @@ public class FSM {
                     } else {
                         robot.shooter.setHoodAngle(targetHoodPos);
                         robot.shooter.setShooterVelocity(-targetVelocity);
-
                     }
 
                     if (Robot.cam.getATdist() != 0) {
@@ -164,6 +162,22 @@ public class FSM {
                     gamepad.resetMultipleControls(gamepad.transfer, gamepad.outtake);
                 }
         }
+    }
+
+    public void setState(FSMStates newState) {
+        state = newState;
+    }
+
+    public FSMStates getState() {
+        return state;
+    }
+
+    public void setControlType(ControlType newCType) {
+        type = newCType;
+    }
+
+    public ControlType getControlType() {
+        return type;
     }
 
     public enum FSMStates {

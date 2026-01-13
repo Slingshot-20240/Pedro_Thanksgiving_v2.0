@@ -1,4 +1,4 @@
-package org.firstinspires.ftc.teamcode.teleop.archivedTele;
+package org.firstinspires.ftc.teamcode.teleop;
 
 import com.acmerobotics.dashboard.config.Config;
 import com.bylazar.telemetry.PanelsTelemetry;
@@ -20,11 +20,9 @@ import org.firstinspires.ftc.teamcode.teleop.fsm.FSM;
 
 import java.util.function.Supplier;
 
-import dev.nextftc.extensions.pedro.PedroComponent;
-
 @Config
 @TeleOp
-public class ExampleTurnTele extends OpMode {
+public class LCsTeleRed extends OpMode {
 
     private GamepadMapping controls;
     private FSM fsm;
@@ -36,7 +34,15 @@ public class ExampleTurnTele extends OpMode {
     private boolean autoTurnOdo = false;
 
     private boolean automatedDrive;
-    private Supplier<PathChain> pathChain;
+    private Supplier<PathChain> gateRightClose;
+    private Supplier<PathChain> gateBackClose;
+    private Supplier<PathChain> gateLeftClose;
+    //no gate front, so make it default to right
+
+    private Supplier<PathChain> gateBackFar;
+
+
+
     private TelemetryManager telemetryM;
     public static double odoDistance;
 
@@ -44,7 +50,7 @@ public class ExampleTurnTele extends OpMode {
     public static double tolerance = 0.02;
 
     // Vision tuning
-    public static double visionTurn_kP = 0.9;
+    public static double visionTurn_kP = 0.1;
     public static double visionMinTurnPower = 0.08;
     public static double visionMiniTolerance = 0.02;
 
@@ -53,8 +59,10 @@ public class ExampleTurnTele extends OpMode {
     public static double GOAL_Y = 140;
 
     // ODO tuning
-    public static double odoTurn_kP = 0.65;
+    public static double odoTurn_kP = 0.3;
     public static double odoMinTurnPower = 0.08;
+
+    public static Pose gatePose = new Pose(129,70);
 
     @Override
     public void init() {
@@ -70,16 +78,66 @@ public class ExampleTurnTele extends OpMode {
 
         telemetryM = PanelsTelemetry.INSTANCE.getTelemetry();
 
-        pathChain = () -> follower.pathBuilder()
+
+
+        //Gate code
+        gateBackFar = () -> follower.pathBuilder()
                 .addPath(new Path(new BezierLine(
                         follower::getPose,
-                        new Pose(104, 32)
+                        //TODO - tune control point
+                        new Pose(112,70)
+                )))
+                .setHeadingInterpolation(
+                        HeadingInterpolator.tangent.reverse()
+                )
+
+                .addPath(new Path(new BezierLine(
+                        follower::getPose,
+                        gatePose
+                )))
+                .setHeadingInterpolation(
+                        HeadingInterpolator.constant(Math.toRadians(180))
+                )
+                .build();
+
+        gateRightClose = () -> follower.pathBuilder()
+                .addPath(new Path(new BezierLine(
+                        follower::getPose,
+                        gatePose
                 )))
                 .setHeadingInterpolation(
                         HeadingInterpolator.linearFromPoint(
                                 follower::getHeading,
                                 Math.toRadians(90),
-                                0.99
+                                0.8 //TODO - change and/or tune end t value
+                        )
+                )
+                .build();
+
+        gateBackClose = () -> follower.pathBuilder()
+                .addPath(new Path(new BezierLine(
+                        follower::getPose,
+                        gatePose
+                )))
+                .setHeadingInterpolation(
+                        HeadingInterpolator.linearFromPoint(
+                                follower::getHeading,
+                                Math.toRadians(180),
+                                0.8 //TODO - change and/or tune end t value
+                        )
+                )
+                .build();
+
+        gateLeftClose = () -> follower.pathBuilder()
+                .addPath(new Path(new BezierLine(
+                        follower::getPose,
+                        gatePose
+                )))
+                .setHeadingInterpolation(
+                        HeadingInterpolator.linearFromPoint(
+                                follower::getHeading,
+                                Math.toRadians(270),
+                                0.8 //TODO - change and/or tune end t value
                         )
                 )
                 .build();
@@ -101,6 +159,7 @@ public class ExampleTurnTele extends OpMode {
 
         Pose pose = follower.getPose();
         double heading = pose.getHeading();
+        double headingDeg = Math.toDegrees(heading);
         odoDistance = pose.distanceFrom(new Pose(140,140));
 
 
@@ -116,13 +175,13 @@ public class ExampleTurnTele extends OpMode {
 
 
         //------------- error calculation -------------\\
-    // Vision error
+        // Vision error
         double visionBearing = Math.toRadians(Robot.cam.getATangle());
         double visionHeadingError = angleWrap(visionBearing);
         boolean visionTurnFinished =
                 Math.abs(visionHeadingError) < tolerance;
 
-    // ODO error
+        // ODO error
         double dx = GOAL_X - pose.getX();
         double dy = GOAL_Y - pose.getY();
         double targetHeading = Math.atan2(dy, dx);
@@ -164,13 +223,43 @@ public class ExampleTurnTele extends OpMode {
             rotate = -gamepad1.right_stick_x * 0.55;
         }
 
+
         follower.setTeleOpDrive(forward, strafe, rotate, true);
 
-        // Path following
+        if (gamepad1.x) {
+            follower.setPose(new Pose(72,8,Math.toRadians(90)));
+        }
+
+        // Auto Gate
+
+        //TODO - try just start boolean instead of startWasPressed
 
         if (gamepad1.startWasPressed()) {
-            follower.followPath(pathChain.get());
-            automatedDrive = true;
+
+            // FAR CASE
+            //TODO - threshold for going far method
+            if (pose.getX() < 100) {
+                follower.followPath(gateBackFar.get());
+                automatedDrive = true;
+            }
+
+            // CLOSE CASE
+            else {
+                if (headingDeg > 45 && headingDeg < 135) {
+                    follower.followPath(gateRightClose.get());
+                }
+                else if (headingDeg > 135 && headingDeg < 225) {
+                    follower.followPath(gateBackClose.get());
+                }
+                else if (headingDeg > 225 && headingDeg < 315) {
+                    follower.followPath(gateLeftClose.get());
+                }
+                else { // 315–360 OR 0–45
+                    follower.followPath(gateRightClose.get());
+                }
+
+                automatedDrive = true;
+            }
         }
 
         if (automatedDrive && (controllerBusy || !follower.isBusy())) {
@@ -178,13 +267,14 @@ public class ExampleTurnTele extends OpMode {
             automatedDrive = false;
         }
 
+
         /* ---------------- AUTO TURN TOGGLES ---------------- */
 
         if (gamepad1.a && !autoTurnVision) {
             autoTurnVision = true;
         }
 
-        if (gamepad1.dpad_down && !autoTurnOdo) {
+        if (gamepad1.left_trigger > 0 && !autoTurnOdo) {
             autoTurnOdo = true;
         }
 

@@ -1,7 +1,10 @@
 package org.firstinspires.ftc.teamcode.NextFTC.subsystems_nf;
 
+import com.pedropathing.paths.PathChain;
+
 import dev.nextftc.core.commands.Command;
 import dev.nextftc.core.commands.delays.Delay;
+import dev.nextftc.core.commands.delays.WaitUntil;
 import dev.nextftc.core.commands.groups.ParallelGroup;
 import dev.nextftc.core.commands.groups.SequentialGroup;
 import dev.nextftc.core.commands.utility.InstantCommand;
@@ -15,14 +18,11 @@ public class Transfernf implements Subsystem {
 
     public CRServoEx frontTransfer;
     public CRServoEx backTransfer;
-    public boolean isTransfering = false;
-
 
     public Command on() {
         return new ParallelGroup(
                 new SetPower(frontTransfer, -1.0),
-                new SetPower(backTransfer, -1.0),
-                new InstantCommand(() -> isTransfering = true)
+                new SetPower(backTransfer, -1.0)
         );
     }
 
@@ -30,8 +30,7 @@ public class Transfernf implements Subsystem {
         return new SequentialGroup(
                 new ParallelGroup(
                         new SetPower(frontTransfer, -0.2),
-                        new SetPower(backTransfer, -1.0),
-                        new InstantCommand(() -> isTransfering = false)
+                        new SetPower(backTransfer, -1.0)
                 ),
                 new Delay(0.2),
                 new ParallelGroup(
@@ -43,9 +42,8 @@ public class Transfernf implements Subsystem {
     public Command stepOn() {
         return new SequentialGroup(
                 new ParallelGroup(
-                        new SetPower(frontTransfer, -0.6),
-                        new SetPower(backTransfer, -0.6),
-                        new InstantCommand(() -> isTransfering = false)
+                        new SetPower(frontTransfer, -0.5),
+                        new SetPower(backTransfer, -1.0)
                 ),
                 new Delay(0.2),
                 new ParallelGroup(
@@ -56,20 +54,51 @@ public class Transfernf implements Subsystem {
         );
     }
 
+    public Command stepOn(double maxPower) {
+        return new SequentialGroup(
+                new ParallelGroup(
+                        new SetPower(frontTransfer, -0.5),
+                        new SetPower(backTransfer, -0.5)
+                ),
+                new Delay(0.2),
+                new ParallelGroup(
+                        new SetPower(frontTransfer, -maxPower),
+                        new SetPower(backTransfer, -1.0)
+                )
+
+        );
+    }
+
+    public Command pickup(PathChain pathChain, double distanceForHotdog) {
+        return new SequentialGroup(
+                new ParallelGroup(
+                        new SetPower(frontTransfer, -0.4),
+                        new SetPower(backTransfer, -1)
+                ),
+                new WaitUntil(() -> pathChain.lastPath().getDistanceRemaining() < distanceForHotdog),
+                hotdog()
+        );
+    }
+
     public Command hotdog() {
         return new ParallelGroup(
                 new SetPower(frontTransfer, -0.11),
-                new SetPower(backTransfer, 1.0),
-                new InstantCommand(() -> isTransfering = false)
+                new SetPower(backTransfer, 1.0)
         );
+    }
+
+    public Command slowHotdog() {
+        return new ParallelGroup(
+                new SetPower(frontTransfer, -0.07),
+                new SetPower(backTransfer, 1.0)
+        ).addRequirements(frontTransfer,backTransfer);
     }
 
 
     public Command idle() {
         return new ParallelGroup(
                 new SetPower(frontTransfer, 0),
-                new SetPower(backTransfer, 0),
-                new InstantCommand(() -> isTransfering = false)
+                new SetPower(backTransfer, 0)
         );
     }
 
@@ -88,7 +117,7 @@ public class Transfernf implements Subsystem {
     }
 
     @Override
-    public void periodic(){
+    public void periodic() {
 
     }
 }

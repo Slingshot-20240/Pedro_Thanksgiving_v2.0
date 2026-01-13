@@ -6,6 +6,7 @@ import com.pedropathing.paths.PathChain;
 
 import org.firstinspires.ftc.teamcode.NextFTC.subsystems_nf.Intakenf;
 import org.firstinspires.ftc.teamcode.NextFTC.subsystems_nf.Lednf;
+import org.firstinspires.ftc.teamcode.NextFTC.subsystems_nf.Loginf;
 import org.firstinspires.ftc.teamcode.NextFTC.subsystems_nf.Shooternf;
 import org.firstinspires.ftc.teamcode.NextFTC.subsystems_nf.Transfernf;
 import org.firstinspires.ftc.teamcode.NextFTC.subsystems_nf.Hoodnf;
@@ -14,7 +15,9 @@ import dev.nextftc.core.commands.Command;
 import dev.nextftc.core.commands.groups.ParallelGroup;
 import dev.nextftc.core.commands.groups.SequentialGroup;
 import dev.nextftc.core.subsystems.SubsystemGroup;
+import dev.nextftc.core.units.Angle;
 import dev.nextftc.extensions.pedro.FollowPath;
+import dev.nextftc.extensions.pedro.TurnBy;
 
 public class f extends SubsystemGroup {
     public static final f i = new f();
@@ -23,7 +26,7 @@ public class f extends SubsystemGroup {
         super(
                 Intakenf.INSTANCE, Transfernf.INSTANCE,
                 Shooternf.INSTANCE, Hoodnf.INSTANCE,
-                Lednf.INSTANCE
+                Lednf.INSTANCE, Loginf.INSTANCE
         );
     }
 
@@ -61,6 +64,11 @@ public class f extends SubsystemGroup {
         );
     }
 
+    public final Command autoAlign() {
+        return new SequentialGroup(
+                new TurnBy(Angle.fromDeg(Loginf.INSTANCE.getATangle()))
+        );
+    }
 
 
 

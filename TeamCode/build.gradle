@@ -37,7 +37,21 @@ android {
     packagingOptions {
         jniLibs.useLegacyPackaging true
     }
+
+    testOptions {
+        unitTests.all {
+            useJUnitPlatform()
+        }
+    }
 }
+
+tasks.withType(Test) {
+    testLogging {
+        events "passed", "skipped", "failed"
+        showStandardStreams = true
+    }
+}
+
 
 //Sloth addition 11/27/25
 repositories {
@@ -52,6 +66,7 @@ dependencies {
     implementation 'dev.nextftc:ftc:1.0.1'
     implementation 'dev.nextftc:hardware:1.0.1'
     implementation 'dev.nextftc:control:1.0.0'
+    implementation 'dev.nextftc:bindings:1.0.1'
     implementation 'dev.nextftc.extensions:pedro:1.0.0'
 
     //Sloth addition 11/27/25
@@ -62,7 +77,14 @@ dependencies {
     implementation 'org.ftclib.ftclib:core:2.1.1' // core
 
 
-    implementation("com.pedropathing:ftc:2.0.4") {
+    implementation("com.pedropathing:ftc:2.0.5") {
         exclude group: "com.acmerobotics.dashboard"
     }
+
+    // junit & mockito dependencies for testing
+    testImplementation 'org.mockito:mockito-inline:5.0.0'
+    testImplementation 'org.mockito:mockito-junit-jupiter:5.0.0'
+
+    testImplementation 'org.junit.jupiter:junit-jupiter-api:5.10.2'
+    testRuntimeOnly 'org.junit.jupiter:junit-jupiter-engine:5.10.2'
 }
