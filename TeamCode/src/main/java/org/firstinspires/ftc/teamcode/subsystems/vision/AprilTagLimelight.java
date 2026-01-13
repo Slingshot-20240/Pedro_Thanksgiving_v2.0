@@ -35,7 +35,7 @@ public class AprilTagLimelight {
 
     default value is null
     */
-    public Pose2D ATrelocal(){
+    public Pose2D getBotPose(){
         LLResult result = limelight.getLatestResult();
         if (result != null && result.isValid()) {
             return new Pose2D(DistanceUnit.CM,
@@ -46,11 +46,11 @@ public class AprilTagLimelight {
         }
         return null;
     }
-    public Pose2D ATrelocal(double yaw) {
+    public Pose2D getBotPose(double yaw) {
 
         LLResult result = limelight.getLatestResult();
 
-        limelight.updateRobotOrientation(yaw);
+        limelight.updateRobotOrientation(yaw-270);
         if (result != null && result.isValid()) {
             return new Pose2D(DistanceUnit.CM,
                     result.getBotpose().getPosition().toUnit(DistanceUnit.CM).x,
@@ -61,7 +61,7 @@ public class AprilTagLimelight {
         return null;
     }
 
-    public double getDist(){
+    public double getDistance(){
         for(FiducialResult result : limelight.getLatestResult().getFiducialResults())
         {
             if(correctAT(result.getFiducialId())){ //distance formula i think this works
