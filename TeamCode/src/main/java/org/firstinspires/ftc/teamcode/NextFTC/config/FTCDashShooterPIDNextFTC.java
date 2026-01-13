@@ -1,18 +1,15 @@
 package org.firstinspires.ftc.teamcode.NextFTC.config;
 
 import com.acmerobotics.dashboard.config.Config;
-import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 
 import dev.nextftc.control.ControlSystem;
-import dev.nextftc.control.KineticState;
 import dev.nextftc.control.feedback.PIDCoefficients;
 import dev.nextftc.control.feedforward.BasicFeedforwardParameters;
 import dev.nextftc.hardware.controllable.MotorGroup;
 import dev.nextftc.hardware.impl.MotorEx;
 
-@Disabled
 @Config
 @TeleOp(name = "FTC Dash Shooter Config")
 public class FTCDashShooterPIDNextFTC extends OpMode {
@@ -26,11 +23,11 @@ public class FTCDashShooterPIDNextFTC extends OpMode {
     public static int shooterVel = 1100;
 
     public static PIDCoefficients coefficients = new PIDCoefficients(p, i, d);
-    //public static BasicFeedforwardParameters feedforwardParameters = new BasicFeedforwardParameters(kV, kA, kS);
+    public static BasicFeedforwardParameters feedforwardParameters = new BasicFeedforwardParameters(kV, kA, kS);
 
     ControlSystem shooterController = ControlSystem.builder()
             .velPid(coefficients)
-            //.basicFF(feedforwardParameters)
+            .basicFF(feedforwardParameters)
             .build();
 
     @Override
@@ -44,11 +41,13 @@ public class FTCDashShooterPIDNextFTC extends OpMode {
 
     @Override
     public void loop() {
-        shooter.setPower(
-                shooterController.calculate(
-                        new KineticState(0.0, shooter.getVelocity())
-                )
-        );
+//        shooter.setPower(
+//                shooterController.calculate(
+//                        new KineticState(0.0, shooter.getVelocity())
+//                )
+//        );
+        shooter.setPower(shooterController.calculate(shooter.getState()));
+
 
 
         telemetry.addData("Target Velocity", shooterVel);
