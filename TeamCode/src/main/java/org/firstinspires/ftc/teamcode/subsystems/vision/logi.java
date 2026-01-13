@@ -66,7 +66,7 @@ public class logi {
                 .setOutputUnits(DistanceUnit.INCH, AngleUnit.DEGREES)
                 .build();
 
-        ballPipeline = new ballProcessor();
+        ballPipeline = new BallProcessor();
 
         portal = new VisionPortal.Builder()
                 .setCamera(cam)

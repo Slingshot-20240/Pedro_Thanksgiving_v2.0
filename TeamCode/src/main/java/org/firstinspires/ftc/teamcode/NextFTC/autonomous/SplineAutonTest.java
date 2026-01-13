@@ -29,6 +29,7 @@ import dev.nextftc.ftc.components.BulkReadComponent;
 @Autonomous(name = "SplineAutonTest")
 public class SplineAutonTest extends NextFTCOpMode {
     public SplineAutonTest() {
+
         addComponents(
                 new SubsystemComponent(
                         Intakenf.INSTANCE, Hoodnf.INSTANCE,
