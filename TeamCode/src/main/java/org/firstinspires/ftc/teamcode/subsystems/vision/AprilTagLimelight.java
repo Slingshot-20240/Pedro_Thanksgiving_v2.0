@@ -55,8 +55,8 @@ public class AprilTagLimelight {
             return new Pose2D(DistanceUnit.CM,
                     result.getBotpose().getPosition().toUnit(DistanceUnit.CM).x,
                     result.getBotpose().getPosition().toUnit(DistanceUnit.CM).y,
-                    AngleUnit.RADIANS,
-                    result.getBotpose().getOrientation().getYaw(AngleUnit.RADIANS));
+                    AngleUnit.DEGREES,
+                    result.getBotpose().getOrientation().getYaw(AngleUnit.DEGREES));
         }
         return null;
     }
