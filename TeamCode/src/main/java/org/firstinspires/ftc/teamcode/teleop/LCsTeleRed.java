@@ -20,11 +20,9 @@ import org.firstinspires.ftc.teamcode.teleop.fsm.FSM;
 
 import java.util.function.Supplier;
 
-import dev.nextftc.extensions.pedro.PedroComponent;
-
 @Config
 @TeleOp
-public class ViktorTele extends OpMode {
+public class LCsTeleRed extends OpMode {
 
     private GamepadMapping controls;
     private FSM fsm;
@@ -36,7 +34,13 @@ public class ViktorTele extends OpMode {
     private boolean autoTurnOdo = false;
 
     private boolean automatedDrive;
-    private Supplier<PathChain> pathChain;
+    private Supplier<PathChain> gateRightClose;
+    private Supplier<PathChain> gateBackClose;
+    private Supplier<PathChain> gateLeftClose;
+    //no gate front, so make it default to right
+
+    private Supplier<PathChain> gateBackFar;
+
 
 
     private TelemetryManager telemetryM;
@@ -58,6 +62,8 @@ public class ViktorTele extends OpMode {
     public static double odoTurn_kP = 0.3;
     public static double odoMinTurnPower = 0.08;
 
+    public static Pose gatePose = new Pose(129,70);
+
     @Override
     public void init() {
 
@@ -72,16 +78,66 @@ public class ViktorTele extends OpMode {
 
         telemetryM = PanelsTelemetry.INSTANCE.getTelemetry();
 
-        pathChain = () -> follower.pathBuilder()
+
+
+        //Gate code
+        gateBackFar = () -> follower.pathBuilder()
                 .addPath(new Path(new BezierLine(
                         follower::getPose,
-                        new Pose(104, 32)
+                        //TODO - tune control point
+                        new Pose(112,70)
+                )))
+                .setHeadingInterpolation(
+                        HeadingInterpolator.tangent.reverse()
+                )
+
+                .addPath(new Path(new BezierLine(
+                        follower::getPose,
+                        gatePose
+                )))
+                .setHeadingInterpolation(
+                        HeadingInterpolator.constant(Math.toRadians(180))
+                )
+                .build();
+
+        gateRightClose = () -> follower.pathBuilder()
+                .addPath(new Path(new BezierLine(
+                        follower::getPose,
+                        gatePose
                 )))
                 .setHeadingInterpolation(
                         HeadingInterpolator.linearFromPoint(
                                 follower::getHeading,
                                 Math.toRadians(90),
-                                0.8 //TODO - try diff t values
+                                0.8 //TODO - change and/or tune end t value
+                        )
+                )
+                .build();
+
+        gateBackClose = () -> follower.pathBuilder()
+                .addPath(new Path(new BezierLine(
+                        follower::getPose,
+                        gatePose
+                )))
+                .setHeadingInterpolation(
+                        HeadingInterpolator.linearFromPoint(
+                                follower::getHeading,
+                                Math.toRadians(180),
+                                0.8 //TODO - change and/or tune end t value
+                        )
+                )
+                .build();
+
+        gateLeftClose = () -> follower.pathBuilder()
+                .addPath(new Path(new BezierLine(
+                        follower::getPose,
+                        gatePose
+                )))
+                .setHeadingInterpolation(
+                        HeadingInterpolator.linearFromPoint(
+                                follower::getHeading,
+                                Math.toRadians(270),
+                                0.8 //TODO - change and/or tune end t value
                         )
                 )
                 .build();
@@ -103,6 +159,7 @@ public class ViktorTele extends OpMode {
 
         Pose pose = follower.getPose();
         double heading = pose.getHeading();
+        double headingDeg = Math.toDegrees(heading);
         odoDistance = pose.distanceFrom(new Pose(140,140));
 
 
@@ -173,17 +230,43 @@ public class ViktorTele extends OpMode {
             follower.setPose(new Pose(72,8,Math.toRadians(90)));
         }
 
-        // Path following
+        // Auto Gate
+
+        //TODO - try just start boolean instead of startWasPressed
 
         if (gamepad1.startWasPressed()) {
-            follower.followPath(pathChain.get());
-            automatedDrive = true;
+
+            // FAR CASE
+            //TODO - threshold for going far method
+            if (pose.getX() < 100) {
+                follower.followPath(gateBackFar.get());
+                automatedDrive = true;
+            }
+
+            // CLOSE CASE
+            else {
+                if (headingDeg > 45 && headingDeg < 135) {
+                    follower.followPath(gateRightClose.get());
+                }
+                else if (headingDeg > 135 && headingDeg < 225) {
+                    follower.followPath(gateBackClose.get());
+                }
+                else if (headingDeg > 225 && headingDeg < 315) {
+                    follower.followPath(gateLeftClose.get());
+                }
+                else { // 315–360 OR 0–45
+                    follower.followPath(gateRightClose.get());
+                }
+
+                automatedDrive = true;
+            }
         }
 
         if (automatedDrive && (controllerBusy || !follower.isBusy())) {
             follower.startTeleopDrive();
             automatedDrive = false;
         }
+
 
         /* ---------------- AUTO TURN TOGGLES ---------------- */
 

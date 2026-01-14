@@ -1,22 +1,14 @@
 package org.firstinspires.ftc.teamcode.NextFTC.subsystems_nf;
 
-import com.qualcomm.robotcore.hardware.AnalogInput;
-import com.qualcomm.robotcore.hardware.CRServo;
-
+import dev.nextftc.control.ControlSystem;
 import dev.nextftc.core.commands.Command;
-import dev.nextftc.core.commands.delays.Delay;
-import dev.nextftc.core.commands.groups.ParallelGroup;
-import dev.nextftc.core.commands.groups.SequentialGroup;
+import dev.nextftc.core.commands.utility.InstantCommand;
 import dev.nextftc.core.subsystems.Subsystem;
 import dev.nextftc.ftc.ActiveOpMode;
 import dev.nextftc.hardware.controllable.RunToPosition;
-import dev.nextftc.hardware.controllable.RunToState;
-import dev.nextftc.hardware.impl.CRServoEx;
+;
 import dev.nextftc.hardware.impl.FeedbackCRServoEx;
-import dev.nextftc.hardware.impl.FeedbackServoEx;
-import dev.nextftc.hardware.impl.ServoEx;
-import dev.nextftc.hardware.positionable.SetPosition;
-import dev.nextftc.hardware.powerable.SetPower;
+
 
 public class Turretnf implements Subsystem {
     public static final Turretnf INSTANCE = new Turretnf();
@@ -24,6 +16,11 @@ public class Turretnf implements Subsystem {
 
     public FeedbackCRServoEx turretServo1;
     public FeedbackCRServoEx turretServo2;
+
+    private final ControlSystem turretController = ControlSystem.builder()
+            .posPid(0.345, 0, 0.001)
+            .basicFF(0.002)
+            .build();
 
     // TODO got from docs idk we'll see :sk
 
@@ -43,33 +40,39 @@ public class Turretnf implements Subsystem {
 
     // TODO lowkey dont know what method to use bc it's an angle so
 
+
+    public Command setTurretAngle(double angleDeg) {
+        return new InstantCommand( () ->
+                new RunToPosition(turretController, Math.toRadians(angleDeg))
+        ).addRequirements(turretServo1, turretServo2);
+    }
     public Command farBlue() {
-        return new ParallelGroup(
-                new SetPosition(turretServo1, 0),
-                new SetPosition(turretServo2, 0)
-        );
+        return new InstantCommand( () ->
+                new RunToPosition(turretController, Math.toRadians(180))
+        ).addRequirements(turretServo1, turretServo2);
     }
 
-    public Command closeBlue() {
-        return new ParallelGroup(
-                new SetPosition(turretServo1, 0),
-                new SetPosition(turretServo2, 0)
-        );
-    }
 
-    public Command farRed() {
-        return new ParallelGroup(
-                new SetPosition(turretServo1, 0),
-                new SetPosition(turretServo2, 0)
-        );
-    }
-
-    public Command closeRed() {
-        return new ParallelGroup(
-                new SetPosition(turretServo1, 0),
-                new SetPosition(turretServo2, 0)
-        );
-    }
+//    public Command closeBlue() {
+//        return new ParallelGroup(
+//                new RunToPosition(turretServo1, 0),
+//                new RunToPosition(turretServo2, 0)
+//        );
+//    }
+//
+//    public Command farRed() {
+//        return new ParallelGroup(
+//                new RunToPosition(turretServo1, 0),
+//                new RunToPosition(turretServo2, 0)
+//        );
+//    }
+//
+//    public Command closeRed() {
+//        return new ParallelGroup(
+//                new RunToPosition(turretServo1, 0),
+//                new RunToPosition(turretServo2, 0)
+//        );
+//    }
 
 
 
@@ -87,7 +90,10 @@ public class Turretnf implements Subsystem {
         );
     }
 
-    @Override    public void periodic() {
+    @Override
+    public void periodic() {
+        turretServo1.setPower(turretController.calculate(turretServo1.getState()));
+        turretServo2.setPower(turretController.calculate(turretServo2.getState()));
 
     }
 }

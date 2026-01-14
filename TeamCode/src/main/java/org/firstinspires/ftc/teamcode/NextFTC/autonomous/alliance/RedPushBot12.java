@@ -20,6 +20,7 @@ import org.firstinspires.ftc.teamcode.NextFTC.subsystems_nf.Hoodnf;
 import org.firstinspires.ftc.teamcode.pedroPathing.Constants;
 
 import dev.nextftc.core.commands.Command;
+import dev.nextftc.core.commands.delays.Delay;
 import dev.nextftc.core.commands.groups.ParallelGroup;
 import dev.nextftc.core.commands.groups.SequentialGroup;
 import dev.nextftc.core.components.SubsystemComponent;
@@ -31,9 +32,9 @@ import static dev.nextftc.extensions.pedro.PedroComponent.follower;
 
 
 @Config
-@Autonomous(name = "15 Final Red Close")
-public class RedClose15AllianceFinal extends NextFTCOpMode {
-    public RedClose15AllianceFinal() {
+@Autonomous(name = "Red Push Robot 12")
+public class RedPushBot12 extends NextFTCOpMode {
+    public RedPushBot12() {
         addComponents(
                 new SubsystemComponent(
                         f.i, asc.i,
@@ -50,14 +51,16 @@ public class RedClose15AllianceFinal extends NextFTCOpMode {
 
     public PathChain grabSet2;
     public PathChain scoreSet2;
+    public PathChain gate;
 
     public PathChain grabSet3;
     public PathChain scoreSet3;
 
     public PathChain grabSet4;
     public PathChain scoreSet4;
-    public PathChain grabHp;
-    public PathChain scoreHp;
+
+    public PathChain pushBot;
+    public PathChain park;
 
     public Pose scorePose = new Pose(89,89);
 
@@ -86,85 +89,56 @@ public class RedClose15AllianceFinal extends NextFTCOpMode {
                 )
                 .setLinearHeadingInterpolation(Math.toRadians(45), Math.toRadians(0))
 
+                .build();
 
-            //Gate 1
+        gate = PedroComponent.follower()
+                .pathBuilder()
+                //Gate 1
                 .addPath(
                         new BezierCurve(
                                 new Pose(127, 79),
                                 new Pose(109, 76),
-                                new Pose(128, 73)
+                                new Pose(128, 72)
                         )
                 )
-                .setLinearHeadingInterpolation(Math.toRadians(0), Math.toRadians(0))
+                .setLinearHeadingInterpolation(Math.toRadians(0), Math.toRadians(90))
 
                 .build();
+
 
 
         scoreSet2 = follower().pathBuilder()
                 //Score Set 2
                 .addPath(
-                        new BezierLine(new Pose(128, 73), scorePose)
+                        new BezierLine(new Pose(128, 72), scorePose)
                 )
-                .setLinearHeadingInterpolation(Math.toRadians(0), Math.toRadians(45))
-                //was 0
+                .setLinearHeadingInterpolation(Math.toRadians(90), Math.toRadians(45))
                 .build();
-
-
 
 
 
         grabSet3 = follower()
                 .pathBuilder()
 
-            //Grab set 3
+                //Grab set 3
                 .addPath(
                         new BezierCurve(
                                 scorePose,
                                 new Pose(87.760, 55.000),
                                 new Pose(79.313, 57.000),
-                                new Pose(132.4, 54.000)
+                                new Pose(132.4, 54)
                         )
                 )
                 .setLinearHeadingInterpolation(Math.toRadians(45), Math.toRadians(0))
-//                .setTangentHeadingInterpolation()
-
-
-
-                //Gate 2
-                .addPath(
-                        new BezierCurve(
-                                new Pose(132.4, 54.000),
-                                new Pose(120.000, 54.000),
-                                new Pose(113.000, 69.000),
-                                new Pose(129, 63)
-                        )
-                )
-                .setLinearHeadingInterpolation(Math.toRadians(0), Math.toRadians(90))
-
-
 
                 .build();
 
         scoreSet3 = follower().pathBuilder()
                 //Score set 3
                 .addPath(
-                        new BezierLine(new Pose(129, 63), scorePose)
+                        new BezierLine(new Pose(132.4, 54), scorePose)
                 )
-                .setHeadingInterpolation(
-                        HeadingInterpolator.piecewise(
-//                                new HeadingInterpolator.PiecewiseNode(
-//                                        0,
-//                                        0.5,
-//                                        //HeadingInterpolator.tangent.reverse()
-//                                ),
-                                new HeadingInterpolator.PiecewiseNode(
-                                        0,
-                                        1.0,
-                                        //TODO - tune the y value to make ball go in center due to newtons first law
-                                        HeadingInterpolator.facingPoint(new Pose(144,144))
-                                )
-                        )
-                )
+                .setLinearHeadingInterpolation(Math.toRadians(0), Math.toRadians(45))
                 .build();
 
 
@@ -181,7 +155,6 @@ public class RedClose15AllianceFinal extends NextFTCOpMode {
                 )
 //                .setLinearHeadingInterpolation(Math.toRadians(45), Math.toRadians(0))
                 .setTangentHeadingInterpolation()
-
 
                 .build();
 
@@ -205,70 +178,55 @@ public class RedClose15AllianceFinal extends NextFTCOpMode {
                                 new HeadingInterpolator.PiecewiseNode(
                                         0.6,
                                         1.0,
-                                        HeadingInterpolator.constant(Math.toRadians(45))
+                                        //HeadingInterpolator.constant(Math.toRadians(45))
+                                        //TODO - tune this value!
+                                        HeadingInterpolator.facingPoint(new Pose(144,144))
                                 )
                         )
                 )
                 .build();
 
-
-
-
-        grabHp = follower()
-                .pathBuilder()
-
-                //grab
+        pushBot = follower().
+                pathBuilder()
                 .addPath(
-                        new BezierCurve(scorePose, new Pose(126,25), new Pose(130,13))
-                )
-                .setTangentHeadingInterpolation()
-
-
-                //assure backup
-                .addPath(
-                        new BezierLine(new Pose(130,13), new Pose(122,15))
-                )
-                .setTangentHeadingInterpolation().setReversed()
-
-                //assure pickup
-                .addPath(
-                        new BezierLine(new Pose(122,15), new Pose(129,13))
-                )
-                .setTangentHeadingInterpolation()
-
-                .build();
-
-
-
-        scoreHp = follower()
-                .pathBuilder()
-                .addPath(
-                        new BezierLine(
-                                new Pose(129, 13),
-                                new Pose(90.000, 110.000)
-                        )
+                    new BezierLine(
+                            scorePose,
+                            new Pose(83, 10)
+                    )
                 )
                 .setHeadingInterpolation(
                         HeadingInterpolator.piecewise(
-
                                 new HeadingInterpolator.PiecewiseNode(
                                         0,
                                         0.7,
                                         HeadingInterpolator.tangent.reverse()
                                 ),
-
                                 new HeadingInterpolator.PiecewiseNode(
                                         0.7,
                                         1.0,
-                                        HeadingInterpolator.linear(
-                                                follower().getHeading(),
-                                                Math.toRadians(28.4)
-                                        )
+                                        HeadingInterpolator.constant(Math.toRadians(0))
                                 )
                         )
                 )
+
+                .addPath(
+                        new BezierLine(
+                                new Pose(83, 10),
+                                new Pose(126, 10)
+                        )
+                ).setLinearHeadingInterpolation(Math.toRadians(0), Math.toRadians(0))
+
                 .build();
 
+
+        park = follower().
+                pathBuilder().addPath(
+                        new BezierLine(
+                                new Pose(126, 10),
+                                new Pose(112, 70)
+                        )
+                ).setLinearHeadingInterpolation(Math.toRadians(0), Math.toRadians(180))
+                .build();
 
 
     }
@@ -288,77 +246,60 @@ public class RedClose15AllianceFinal extends NextFTCOpMode {
         return new SequentialGroup(
 
 
-                    new ParallelGroup(
-                            f.i.follow(scorePreloads, "green"),
-                            asc.i.baseState(-1240),
-                            Transfernf.INSTANCE.hotdog()
-                    ),
-                    asc.i.transferUpFor(1.5),
+                new ParallelGroup(
+                        f.i.follow(scorePreloads, "green"),
+                        asc.i.baseState(-1240),
+                        Transfernf.INSTANCE.hotdog()
+                ),
+                asc.i.transferUpFor(2),
 
 
-                    //SET 2
-                    new ParallelGroup(
-                            new SequentialGroup(
-                                    new ParallelGroup(
-                                            f.i.follow(grabSet2, "red"),
-                                            Transfernf.INSTANCE.pickup(grabSet2,2)
-                                    ),
-                                    f.i.follow(scoreSet2,"green")
-
-                            ),
-                            asc.i.baseState(-1240),
-
-                            asc.i.transferSequence(scoreSet2,1.3)
-                    ),
-
-
-                    //SET 3
-                    new ParallelGroup(
-                            new SequentialGroup(
-                                    new ParallelGroup(
-                                            f.i.follow(grabSet3, "red"),
-                                            Transfernf.INSTANCE.pickup(grabSet3,2)
-                                    ),
-                                    f.i.follow(scoreSet3,"green")
-
-                            ),
-                            asc.i.baseState(-1240),
-
-                            asc.i.transferSequence(scoreSet3,1.3)
-                    ),
-
-                    //SET 4
-                    new ParallelGroup(
-                            new SequentialGroup(
-                                    new ParallelGroup(
-                                            f.i.follow(grabSet4, "red"),
-                                            Transfernf.INSTANCE.pickup(grabSet4,2)
-                                    ),
-                                    f.i.follow(scoreSet4,"green")
-
-                            ),
-                            asc.i.baseState(-1240),
-
-                            asc.i.transferSequence(scoreSet4,1.3)
-                    ),
+                //SET 2
+                new ParallelGroup(
+                        new SequentialGroup(
+                                new ParallelGroup(
+                                        f.i.follow(grabSet2, "red"),
+                                        Transfernf.INSTANCE.pickup(grabSet2,2)
+                                ),
+                                f.i.follow(gate,"yellow"),
+                                new Delay(0.4),
+                                f.i.follow(scoreSet2,"green")
+                        ),
+                        asc.i.baseState(-1240)
+                ),
+                asc.i.transferUpFor(2),
 
 
+                //SET 3
+                new ParallelGroup(
+                        new SequentialGroup(
+                                new ParallelGroup(
+                                        f.i.follow(grabSet3, "red"),
+                                        Transfernf.INSTANCE.pickup(grabSet3,2)
+                                ),
+                                f.i.follow(scoreSet3,"green")
+                        ),
+                        asc.i.baseState(-1240)
+                ),
+                asc.i.transferUpFor(2),
 
-                    //SET 5 - Human Player
-                    new ParallelGroup(
-                            new SequentialGroup(
-                                    new ParallelGroup(
-                                            f.i.follow(grabHp, "red"),
-                                            Transfernf.INSTANCE.pickup(grabHp,2)
-                                    ),
-                                    f.i.follow(scoreHp,"green")
-                            ),
-                            asc.i.baseState(-1200,0.37),
+                //SET 4
+                new ParallelGroup(
+                        new SequentialGroup(
+                                new ParallelGroup(
+                                        f.i.follow(grabSet4, "red"),
+                                        Transfernf.INSTANCE.pickup(grabSet4,2)
+                                ),
+                                f.i.follow(scoreSet4,"green")
 
-                            //asc.i.transferSequenceDistance(scoreHp,5, 2.6),
-                            asc.i.transferSequence(scoreHp,5)
-                    )
+                        ),
+                        asc.i.baseState(-1240)
+                ),
+                asc.i.transferUpFor(2),
 
+                //PUSH BOT AND PARK
+                f.i.follow(pushBot,"yellow"),
+                f.i.follow(park,"green")
 
         );
     }
