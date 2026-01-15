@@ -55,7 +55,7 @@ public class AutoAlignAT extends OpMode {
         telemetry.update();
 
         //AUTO HOOD
-        double distance = Robot.cam.getTargetArtifactTravelDistanceX();
+        double distance = Robot.cam.getATdist();
         double targetHoodPos;
         //TODO - TUNE THIS OFFSET VALUE
         if (Robot.cam.getATdist() < 54) {
@@ -63,7 +63,7 @@ public class AutoAlignAT extends OpMode {
         } else {
             targetHoodPos = robot.shooter.calculateHoodPos(distance) + 0.1;
         }
-        if (Robot.cam.getTargetArtifactTravelDistanceX() == 22) {
+        if (Robot.cam.getATdist() == 22) {
             robot.shooter.setHoodAngle(shooter.variableHood.getPosition());
         } else {
             robot.shooter.setHoodAngle(targetHoodPos);

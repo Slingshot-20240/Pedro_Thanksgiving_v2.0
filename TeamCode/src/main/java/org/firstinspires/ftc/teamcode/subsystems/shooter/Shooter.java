@@ -16,8 +16,8 @@ public class Shooter {
     public Shooter(HardwareMap hardwareMap) {
         outtake1 = hardwareMap.get(DcMotorEx.class, "outtake1");
         outtake2 = hardwareMap.get(DcMotorEx.class, "outtake2");
-        outtake1.setVelocityPIDFCoefficients(578, 0, 0, 70);
-        outtake2.setVelocityPIDFCoefficients(578, 0, 0, 70);
+        outtake1.setVelocityPIDFCoefficients(700, 0, 0, 20);
+        outtake2.setVelocityPIDFCoefficients(700, 0, 0, 20);
         outtake2.setDirection(DcMotorSimple.Direction.REVERSE);
 
         variableHood = hardwareMap.get(Servo.class, "variableHood");
@@ -62,7 +62,7 @@ public class Shooter {
 
     // calculates target velocity with CURRENT distance away from the goal
     public double calculateShooterMPS() {
-        return calculateShooterRPM(Robot.cam.getTargetArtifactTravelDistanceX());
+        return calculateShooterRPM(Robot.cam.getATdist());
     }
 
     // calculates target velocity in TICKS PER SECOND instead of meters per second
@@ -92,7 +92,7 @@ public class Shooter {
 
     // returns the target angle in RADIANS depending on CURRENT distance from the april tag
     public double calculateHoodAngle() {
-        return calculateHoodAngle(Robot.cam.getTargetArtifactTravelDistanceX());
+        return calculateHoodAngle(Robot.cam.getATdist());
     }
 
     // returns the target angle in HOOD POS (0-1) instead of radians
