@@ -21,7 +21,7 @@ public class ATLimelightTest extends OpMode {
     GoBildaPinpointDriver pinpoint;
     @Override
     public void init() {
-        limelight = new AprilTagLimelight(hardwareMap, true);
+        limelight = new AprilTagLimelight(hardwareMap, true, telemetry);
 
         pinpoint = hardwareMap.get(GoBildaPinpointDriver.class, "pinpoint");
 
@@ -30,6 +30,8 @@ public class ATLimelightTest extends OpMode {
 
         // Set the location of the robot - this should be the place you are starting the robot from
         pinpoint.setPosition(new Pose2D(DistanceUnit.INCH, 0, 0, AngleUnit.DEGREES, 0));
+
+
     }
 
     @Override

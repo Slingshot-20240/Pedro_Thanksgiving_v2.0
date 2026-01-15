@@ -64,6 +64,7 @@ public class logi {
                 .setDrawCubeProjection(true)
 //                .setLensIntrinsics(0.187319959814, -0.575948480673, -0.00438930956954, 0.00126723944556)
                 .setOutputUnits(DistanceUnit.INCH, AngleUnit.DEGREES)
+
                 .build();
 
         ballPipeline = new BallProcessor();
@@ -123,5 +124,10 @@ public class logi {
             return detection.ftcPose.bearing;
         }
         return 0.0;
+    }
+
+    // extra 4" for cam-to-flywheel, 18" for AT-to-back-of-goal
+    public double getTargetArtifactTravelDistanceX() {
+        return getATdist() + 22;
     }
 }
