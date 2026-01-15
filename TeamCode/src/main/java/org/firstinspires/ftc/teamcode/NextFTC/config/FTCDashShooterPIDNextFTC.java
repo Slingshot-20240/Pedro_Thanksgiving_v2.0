@@ -12,12 +12,13 @@ import dev.nextftc.control.ControlSystem;
 import dev.nextftc.control.KineticState;
 import dev.nextftc.control.feedback.PIDCoefficients;
 import dev.nextftc.control.feedforward.BasicFeedforwardParameters;
+import dev.nextftc.ftc.NextFTCOpMode;
 import dev.nextftc.hardware.controllable.MotorGroup;
 import dev.nextftc.hardware.impl.MotorEx;
 
 @Config
 @TeleOp(name = "FTC Dash Shooter Config")
-public class FTCDashShooterPIDNextFTC extends OpMode {
+public class FTCDashShooterPIDNextFTC extends NextFTCOpMode {
 
     private Telemetry dashboardTelemetry;
 
@@ -38,7 +39,7 @@ public class FTCDashShooterPIDNextFTC extends OpMode {
             .build();
 
     @Override
-    public void init() {
+    public void onInit() {
         outtake1 = new MotorEx("outtake1");
         outtake2 = new MotorEx("outtake2");
         outtake2.reverse();
@@ -50,7 +51,7 @@ public class FTCDashShooterPIDNextFTC extends OpMode {
     }
 
     @Override
-    public void loop() {
+    public void onUpdate() {
 //        shooter.setPower(
 //                shooterController.calculate(
 //                        new KineticState(0.0, shooter.getVelocity())
