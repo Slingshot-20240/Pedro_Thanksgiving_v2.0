@@ -136,7 +136,12 @@ public class RedPushBot12 extends NextFTCOpMode {
         scoreSet3 = follower().pathBuilder()
                 //Score set 3
                 .addPath(
-                        new BezierLine(new Pose(132.4, 54), scorePose)
+                        new BezierCurve(
+                                new Pose(133, 54),
+                                new Pose(91.262, 56.240),
+                                new Pose(95.176, 82.815),
+                                scorePose
+                        )
                 )
                 .setLinearHeadingInterpolation(Math.toRadians(0), Math.toRadians(45))
                 .build();
@@ -191,7 +196,7 @@ public class RedPushBot12 extends NextFTCOpMode {
                 .addPath(
                     new BezierLine(
                             scorePose,
-                            new Pose(83, 10)
+                            new Pose(75, 8)
                     )
                 )
                 .setHeadingInterpolation(
@@ -211,8 +216,8 @@ public class RedPushBot12 extends NextFTCOpMode {
 
                 .addPath(
                         new BezierLine(
-                                new Pose(83, 10),
-                                new Pose(126, 10)
+                                new Pose(75, 8),
+                                new Pose(126, 8)
                         )
                 ).setLinearHeadingInterpolation(Math.toRadians(0), Math.toRadians(0))
 
@@ -222,7 +227,7 @@ public class RedPushBot12 extends NextFTCOpMode {
         park = follower().
                 pathBuilder().addPath(
                         new BezierLine(
-                                new Pose(126, 10),
+                                new Pose(126, 8),
                                 new Pose(112, 70)
                         )
                 ).setLinearHeadingInterpolation(Math.toRadians(0), Math.toRadians(180))
@@ -235,7 +240,7 @@ public class RedPushBot12 extends NextFTCOpMode {
     //TODO - figure out the max and min pos of servo! Does increasing bring hood up or down?
     private Command init_bot() {
         return new ParallelGroup(
-                Hoodnf.INSTANCE.setHoodPos(0.35),
+                Hoodnf.INSTANCE.setHoodPos(0.32),
                 Transfernf.INSTANCE.idle()
         );
 
@@ -248,7 +253,7 @@ public class RedPushBot12 extends NextFTCOpMode {
 
                 new ParallelGroup(
                         f.i.follow(scorePreloads, "green"),
-                        asc.i.baseState(-1240),
+                        asc.i.baseState(-1220,0.32),
                         Transfernf.INSTANCE.hotdog()
                 ),
                 asc.i.transferUpFor(2),
@@ -257,15 +262,17 @@ public class RedPushBot12 extends NextFTCOpMode {
                 //SET 2
                 new ParallelGroup(
                         new SequentialGroup(
-                                new ParallelGroup(
+                                asc.i.baseState(-1220,0.32),
+
+//                                new ParallelGroup(
                                         f.i.follow(grabSet2, "red"),
-                                        Transfernf.INSTANCE.pickup(grabSet2,2)
-                                ),
+//                                        Transfernf.INSTANCE.pickup(grabSet2,2)
+//                                ),
                                 f.i.follow(gate,"yellow"),
                                 new Delay(0.4),
                                 f.i.follow(scoreSet2,"green")
                         ),
-                        asc.i.baseState(-1240)
+                        Transfernf.INSTANCE.hotdog()
                 ),
                 asc.i.transferUpFor(2),
 
@@ -273,27 +280,31 @@ public class RedPushBot12 extends NextFTCOpMode {
                 //SET 3
                 new ParallelGroup(
                         new SequentialGroup(
-                                new ParallelGroup(
+//                                new ParallelGroup(
                                         f.i.follow(grabSet3, "red"),
-                                        Transfernf.INSTANCE.pickup(grabSet3,2)
-                                ),
+//                                        Transfernf.INSTANCE.pickup(grabSet3,2)
+//                                        Transfernf.INSTANCE.
+//                                ),
                                 f.i.follow(scoreSet3,"green")
                         ),
-                        asc.i.baseState(-1240)
+                        asc.i.baseState(-1220,0.32),
+                        Transfernf.INSTANCE.hotdog()
                 ),
                 asc.i.transferUpFor(2),
 
                 //SET 4
                 new ParallelGroup(
                         new SequentialGroup(
-                                new ParallelGroup(
+//                                new ParallelGroup(
                                         f.i.follow(grabSet4, "red"),
-                                        Transfernf.INSTANCE.pickup(grabSet4,2)
-                                ),
+//                                        Transfernf.INSTANCE.pickup(grabSet4,2)
+//                                        Transfernf.INSTANCE.on()
+//                                ),
                                 f.i.follow(scoreSet4,"green")
 
                         ),
-                        asc.i.baseState(-1240)
+                        asc.i.baseState(-1220,0.32),
+                        Transfernf.INSTANCE.hotdog()
                 ),
                 asc.i.transferUpFor(2),
 

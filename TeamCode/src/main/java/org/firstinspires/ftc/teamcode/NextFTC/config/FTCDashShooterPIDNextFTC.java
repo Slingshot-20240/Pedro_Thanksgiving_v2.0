@@ -57,7 +57,9 @@ public class FTCDashShooterPIDNextFTC extends OpMode {
 //                )
 //        );
 
-        //TODO - figure out how to actually use the target shooter vel into this controller
+
+        shooterController.setGoal(new KineticState(0, targetShooterVel));
+        //TODO - figure out how to actually use the target shooter vel\ into this controller
         shooter.setPower(shooterController.calculate(shooter.getState()));
 
 
