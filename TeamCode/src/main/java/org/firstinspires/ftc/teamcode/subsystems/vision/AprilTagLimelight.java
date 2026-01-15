@@ -5,6 +5,7 @@ import com.qualcomm.hardware.limelightvision.LLResultTypes.FiducialResult;
 import com.qualcomm.hardware.limelightvision.Limelight3A;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 
+import org.firstinspires.ftc.robotcore.external.Telemetry;
 import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
 import org.firstinspires.ftc.robotcore.external.navigation.DistanceUnit;
 import org.firstinspires.ftc.robotcore.external.navigation.Pose2D;
@@ -18,12 +19,19 @@ public class AprilTagLimelight {
     Limelight3A limelight;
     boolean isBlue;
 
-    public AprilTagLimelight(HardwareMap hw, boolean isBlue) {
-        //limelight = hw.get(Limelight3A.class, "limelight");
+    public AprilTagLimelight(HardwareMap hw, boolean isBlue, Telemetry t) {
+        limelight = hw.get(Limelight3A.class, "limelight");
         limelight.pipelineSwitch(0);
         limelight.start();
         this.isBlue = isBlue;
 
+
+        t.addLine(String.format("connected: %s, running: %s, status: %s, index: %s",
+                limelight.isConnected(),
+                limelight.isRunning(),
+                limelight.getStatus(),
+                limelight.getStatus().getPipelineIndex())
+        );
     }
     public ObeliskLocation getObelisk(){
         return Stream.of(limelight.getLatestResult().getFiducialResults()).map((a)->(FiducialResult)a).filter(Objects::nonNull).map(FiducialResult::getFiducialId).map(ObeliskLocation::fromInt).filter(Objects::nonNull).findFirst().orElse(null);
