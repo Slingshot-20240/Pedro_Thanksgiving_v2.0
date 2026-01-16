@@ -88,37 +88,6 @@ public class SimpleAutonTest extends NextFTCOpMode {
                 .build();
 
 
-        grabMiddleSet = follower().pathBuilder()
-
-                //Grab Middle Set
-                .addPath(
-                        new BezierCurve(
-                                scorePose,
-                                new Pose(87.760, 55.000),
-                                new Pose(79.313, 57.000),
-                                new Pose(132.4, 54.000)
-                        )
-                )
-                .setHeadingInterpolation(
-                        HeadingInterpolator.piecewise(
-
-                                new HeadingInterpolator.PiecewiseNode(
-                                        0,
-                                        0.4,
-                                        HeadingInterpolator.linear(Math.toRadians(43.5), Math.toRadians(0))
-                                ),
-
-                                new HeadingInterpolator.PiecewiseNode(
-                                        0.4,
-                                        1.0,
-                                        HeadingInterpolator.constant(0)
-                                )
-                        )
-                )
-
-
-                .build();
-
 
     }
 
@@ -132,66 +101,15 @@ public class SimpleAutonTest extends NextFTCOpMode {
 
     }
 
-    private Command transferUpFor(double time) {
-        return new ParallelGroup(
-                Transfernf.INSTANCE.stepOn(),
-                new Delay(time)
-        );
-    }
 
-    private Command transferSequence(PathChain pathChain, double transferTime) {
-        return new SequentialGroup(
-                Transfernf.INSTANCE.hotdog(),
-                new WaitUntil(() -> pathChain.lastPath().isAtParametricEnd()),
-                transferUpFor(transferTime)
-        );
-    }
-
-    private Command transferSequenceDistance(PathChain pathChain, double transferTime, double proximity) {
-        return new SequentialGroup(
-                Transfernf.INSTANCE.hotdog(),
-                new WaitUntil(() -> pathChain.lastPath().getDistanceRemaining() < proximity),
-                transferUpFor(transferTime)
-        );
-    }
-
-    private Command baseState(double shooterVel) {
-        return new ParallelGroup(
-                Intakenf.INSTANCE.in(),
-                Shooternf.INSTANCE.setShooterVel(shooterVel),
-                Hoodnf.INSTANCE.setHoodPos(0.32)
-        );
-    }
-    private Command baseState(double shooterVel, double hoodPos) {
-        return new ParallelGroup(
-                Intakenf.INSTANCE.in(),
-                Shooternf.INSTANCE.setShooterVel(shooterVel),
-                Hoodnf.INSTANCE.setHoodPos(hoodPos)
-        );
-    }
-    private Command atCorrection() {
-        return new LambdaCommand()
-                .setUpdate(() -> {
-                    new TurnBy(Angle.fromDeg(atErrorDeg)).schedule();
-                })
-                .setIsDone(() -> true);
-//        return new InstantCommand(() -> new TurnBy(Angle.fromDeg(atErrorDeg)));
-    }
     private Command autonomous() {
         return new SequentialGroup(
+                //new FollowPath(scorePreloads),
 
                 new ParallelGroup(
-                        f.i.follow(scorePreloads,"red"),
-                        new InstantCommand(() -> telemetry.addLine("Inside P-group"))
-                ),
-                new SequentialGroup(
-                        new InstantCommand(() -> telemetry.addLine("Outside P-group")),
-
-//                new Delay(1),
-                        Lednf.INSTANCE.green,
-                        new SequentialGroup(
-                                atCorrection()
-                        )
+                    Shooternf.INSTANCE.setShooterVel(-1240),
+                    Transfernf.INSTANCE.on(),
+                        Intakenf.INSTANCE.in()
                 )
         );
     }
@@ -204,17 +122,18 @@ public class SimpleAutonTest extends NextFTCOpMode {
         buildPaths();
         init_bot().schedule();
         Shooternf.INSTANCE.disable();
-        DrawingNew.init();
     }
 
     @Override
     public void onStartButtonPressed() {
+        Shooternf.INSTANCE.enable();
         autonomous().schedule();
+
+
     }
 
     @Override
     public void onUpdate() {
-        DrawingNew.drawDebug(follower());
 
         atErrorDeg = Loginf.INSTANCE.getATangle();
         telemetry.addData("atErrorDeg", atErrorDeg);

@@ -247,15 +247,22 @@ public class LCsTeleRed extends OpMode {
             else {
                 if (headingDeg > 45 && headingDeg < 135) {
                     follower.followPath(gateRightClose.get());
+                    telemetry.addLine("Forward");
                 }
                 else if (headingDeg > 135 && headingDeg < 225) {
                     follower.followPath(gateBackClose.get());
+                    telemetry.addLine("Left");
+
                 }
                 else if (headingDeg > 225 && headingDeg < 315) {
                     follower.followPath(gateLeftClose.get());
+                    telemetry.addLine("Back");
+
                 }
                 else { // 315–360 OR 0–45
                     follower.followPath(gateRightClose.get());
+                    telemetry.addLine("Right");
+
                 }
 
                 automatedDrive = true;

@@ -6,6 +6,9 @@ import android.util.Size;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 
 import org.firstinspires.ftc.robotcore.external.hardware.camera.WebcamName;
+import org.firstinspires.ftc.robotcore.external.hardware.camera.controls.ExposureControl;
+import org.firstinspires.ftc.robotcore.external.hardware.camera.controls.GainControl;
+import org.firstinspires.ftc.robotcore.external.hardware.camera.controls.WhiteBalanceControl;
 import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
 import org.firstinspires.ftc.robotcore.external.navigation.DistanceUnit;
 import org.firstinspires.ftc.robotcore.internal.camera.calibration.CameraCalibration;
@@ -14,6 +17,8 @@ import org.firstinspires.ftc.vision.VisionProcessor;
 import org.firstinspires.ftc.vision.apriltag.AprilTagDetection;
 import org.firstinspires.ftc.vision.apriltag.AprilTagProcessor;
 import org.opencv.core.Mat;
+
+import java.util.concurrent.TimeUnit;
 
 public class logi {
     AprilTagProcessor apriltagPipeline;
@@ -80,6 +85,20 @@ public class logi {
 
         portal.setProcessorEnabled(apriltagPipeline, true);
         portal.setProcessorEnabled(ballPipeline, false);
+
+        //Exposure Control
+        ExposureControl exposureControl = portal.getCameraControl(ExposureControl.class);
+        GainControl gainControl = portal.getCameraControl(GainControl.class);
+        WhiteBalanceControl whiteControl = portal.getCameraControl(WhiteBalanceControl.class);
+
+        // auto exposure is stupid
+        exposureControl.setMode(ExposureControl.Mode.Manual);
+
+        // Set a short exposure (e.g., 5 milliseconds) to "freeze" motion
+        exposureControl.setExposure(5, TimeUnit.MILLISECONDS);
+
+        // Increase gain to compensate for the dark image
+        gainControl.setGain(200); // Adjust based on your lighting
     }
 
     public void enableAT() {
