@@ -113,7 +113,7 @@ public class RedClose15Final extends NextFTCOpMode {
                                 scorePose,
                                 new Pose(87.760, 55.000),
                                 new Pose(79.313, 57.000),
-                                new Pose(132, 54.000)
+                                new Pose(131, 54.000)
                         )
                 )
                 .setLinearHeadingInterpolation(Math.toRadians(43), Math.toRadians(0))
@@ -124,8 +124,8 @@ public class RedClose15Final extends NextFTCOpMode {
                 //Gate 1
                 .addPath(
                         new BezierCurve(
-                                new Pose(132, 54.000),
-                                new Pose(120.000, 54.000),
+                                new Pose(131, 54.000),
+                                new Pose(120, 54.000),
                                 new Pose(113.000, 69.000),
                                 new Pose(127.4, 70)
                         )
@@ -152,7 +152,7 @@ public class RedClose15Final extends NextFTCOpMode {
                                         0,
                                         1.0,
                                         //TODO - tune the y value to make ball go in center due to newtons first law
-                                        HeadingInterpolator.facingPoint(new Pose(144,144))
+                                        HeadingInterpolator.facingPoint(new Pose(144,142))
                                 )
                         )
                 )
@@ -189,15 +189,15 @@ public class RedClose15Final extends NextFTCOpMode {
 
                                 new HeadingInterpolator.PiecewiseNode(
                                         0,
-                                        0.6,
+                                        0.4,
                                         HeadingInterpolator.tangent.reverse()
                                 ),
 
 
                                 new HeadingInterpolator.PiecewiseNode(
-                                        0.6,
+                                        0.4,
                                         1.0,
-                                        HeadingInterpolator.facingPoint(new Pose(144,144))
+                                        HeadingInterpolator.facingPoint(new Pose(144,140))
                                 )
                         )
                 )
@@ -237,7 +237,7 @@ public class RedClose15Final extends NextFTCOpMode {
                 .addPath(
                         new BezierLine(
                                 new Pose(127.5, 13),
-                                new Pose(90.000, 110.000)
+                                new Pose(90.000, 115)
                         )
                 )
                 .setHeadingInterpolation(
@@ -245,18 +245,18 @@ public class RedClose15Final extends NextFTCOpMode {
 
                                 new HeadingInterpolator.PiecewiseNode(
                                         0,
-                                        0.6,
+                                        0.47,
                                         HeadingInterpolator.tangent.reverse()
                                 ),
 
                                 new HeadingInterpolator.PiecewiseNode(
-                                        0.6,
+                                        0.47,
                                         1.0,
 //                                        HeadingInterpolator.linear(
 //                                                follower().getHeading(),
 //                                                Math.toRadians(28.4)
 //                                        )
-                                        HeadingInterpolator.facingPoint(new Pose(144,144))
+                                        HeadingInterpolator.facingPoint(new Pose(144,130))
                                 )
                         )
                 )
@@ -270,7 +270,7 @@ public class RedClose15Final extends NextFTCOpMode {
     //TODO - figure out the max and min pos of servo! Does increasing bring hood up or down?
     private Command init_bot() {
         return new ParallelGroup(
-                Hoodnf.INSTANCE.setHoodPos(0.325),
+                Hoodnf.INSTANCE.setHoodPos(0.32),
                 Transfernf.INSTANCE.idle(),
                 Lednf.INSTANCE.yellow
         );
@@ -284,7 +284,7 @@ public class RedClose15Final extends NextFTCOpMode {
 
                 new ParallelGroup(
                         f.i.follow(scorePreloads,"green"),
-                        asc.i.baseState(-1240),
+                        asc.i.baseState(-1240,0.32),
                         Transfernf.INSTANCE.hotdog()
                 ),
                 asc.i.transferUpFor(1.5),
@@ -302,7 +302,7 @@ public class RedClose15Final extends NextFTCOpMode {
                         ),
                         asc.i.baseState(-1240),
 
-                        asc.i.transferSequenceDistance(scoreSet2,1.5,2)
+                        asc.i.transferSequenceDistance(scoreSet2,1.3,2)
                 ),
 
 
@@ -314,12 +314,12 @@ public class RedClose15Final extends NextFTCOpMode {
 //                                        Transfernf.INSTANCE.pickup(grabSet3,2)
 //                                        Transfernf.INSTANCE.hotdog()
 //                                ),
-                                f.i.follow(scoreSet3,"green")
+                                f.i.follow(scoreSet3,"green", true)
 
                         ),
                         asc.i.baseState(-1240),
 
-                        asc.i.transferSequenceDistance(scoreSet3,1.4,2)
+                        asc.i.transferSequenceDistance(scoreSet3,1.5,6)
                 ),
 
                 //SET 4
@@ -335,7 +335,7 @@ public class RedClose15Final extends NextFTCOpMode {
                         ),
                         asc.i.baseState(-1240),
 
-                        asc.i.transferSequenceDistance(scoreSet4,1.4,2)
+                        asc.i.transferSequenceDistance(scoreSet4,1.4,3)
                 ),
 
 
@@ -350,10 +350,10 @@ public class RedClose15Final extends NextFTCOpMode {
 //                                ),
                                 f.i.follow(scoreHp,"green")
                         ),
-                        asc.i.baseState(-1230,0.38),
+                        asc.i.baseState(-1200,0.38),
 
                         //asc.i.transferSequenceDistance(scoreHp,5, 2.6),
-                        asc.i.transferSequenceDistance(scoreHp,5,6)
+                        asc.i.transferSequenceDistance(scoreHp,5,17)
                 )
 
 

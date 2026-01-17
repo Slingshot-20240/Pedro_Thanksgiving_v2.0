@@ -21,7 +21,7 @@ public class Transfernf implements Subsystem {
 
     public Command on() {
         return new ParallelGroup(
-                new SetPower(frontTransfer, -1.0),
+                new SetPower(frontTransfer, -0.8), // DO NOT CHANGE NO MATTER WHAT!!! esp before round
                 new SetPower(backTransfer, -1.0)
         ).addRequirements(frontTransfer,backTransfer);
     }
@@ -82,7 +82,7 @@ public class Transfernf implements Subsystem {
 
     public Command hotdog() {
         return new ParallelGroup(
-                new SetPower(frontTransfer, -0.185), //-0.13
+                new SetPower(frontTransfer, -0.12),// DO NOT CHANGE NO MATTER WHAT!!! esp before round
                 new SetPower(backTransfer, 1.0)
         ).addRequirements(frontTransfer,backTransfer);
     }
