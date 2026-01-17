@@ -73,19 +73,19 @@ public class FSM {
                 }
 
                 if (type == ControlType.PID_CONTROL) {
-                    double distance = Robot.cam.getATdist();
+                    double distance = Robot.cam.getTargetArtifactTravelDistanceX();
 
                     double targetVelocity = robot.shooter.calculateShooterRPM(distance);
 
                     double targetHoodPos;
                     //TODO - TUNE THIS OFFSET VALUE
-                    if (Robot.cam.getATdist() < 54) {
+                    if (Robot.cam.getTargetArtifactTravelDistanceX() < 54) {
                         targetHoodPos = robot.shooter.calculateHoodPos(distance) + 0.2;
                     } else {
                         targetHoodPos = robot.shooter.calculateHoodPos(distance) + 0.1;
                     }
 
-                    if (Robot.cam.getATdist() != 0) {
+                    if (Robot.cam.getTargetArtifactTravelDistanceX()!= 0) {
                         lastVelo = targetVelocity;
                     } else {
 
@@ -100,7 +100,7 @@ public class FSM {
 //                    }
 
                     // This should prevent the shooter from changing hood pos if it can't see the AprilTag (so if it cuts out it's fine)
-                    if (Robot.cam.getATdist() == 22) {
+                    if (Robot.cam.getTargetArtifactTravelDistanceX() == 22) {
                         robot.shooter.setHoodAngle(shooter.variableHood.getPosition());
                         robot.shooter.setShooterVelocity(-lastVelo);
                     } else {
@@ -108,7 +108,7 @@ public class FSM {
                         robot.shooter.setShooterVelocity(-targetVelocity);
                     }
 
-                    if (Robot.cam.getATdist() != 0) {
+                    if (Robot.cam.getTargetArtifactTravelDistanceX() != 0) {
                         robot.ledBoard0.setState(true);
                         robot.ledBoard1.setState(true);
                     } else {
