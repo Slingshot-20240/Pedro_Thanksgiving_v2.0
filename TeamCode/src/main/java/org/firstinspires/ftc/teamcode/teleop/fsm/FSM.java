@@ -23,6 +23,8 @@ public class FSM {
 
     public double lastVelo = 800;
 
+    private ControlType savedType;
+
 
     // Everyone ignore this horrendous OOP
     // private double odoDistance = AVisionTele.odoDistance;
@@ -46,6 +48,19 @@ public class FSM {
                 if (type == ControlType.HARDCODED_CONTROL) {
                     shooter.shootFromFront();
                     shooter.hoodToFront();
+                }
+
+                // TODO: test, should work
+                if (gamepad.switchMode.value()) {
+                    if(type == ControlType.HARDCODED_CONTROL) {
+                        savedType = ControlType.HARDCODED_CONTROL;
+                        type = ControlType.PID_CONTROL;
+                    } else {
+                        savedType = ControlType.PID_CONTROL;
+                        type = ControlType.HARDCODED_CONTROL;
+                    }
+                } else {
+                    type = savedType;
                 }
 
                 transfer.hotDog();
