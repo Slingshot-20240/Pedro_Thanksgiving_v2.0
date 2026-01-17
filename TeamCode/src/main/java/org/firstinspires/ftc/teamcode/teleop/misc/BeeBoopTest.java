@@ -39,7 +39,7 @@ public class BeeBoopTest extends OpMode {
 
         // TODO: if the hood position is greater than .6 or less than .05, there's something wrong with the math
 
-        double d = Robot.cam.getATdist();
+        double d = Robot.cam.getTargetArtifactTravelDistanceX();
 
         double targetVelocity = robot.shooter.calculateShooterRPM(d);
         double targetHoodPos = robot.shooter.calculateHoodPos(d);
