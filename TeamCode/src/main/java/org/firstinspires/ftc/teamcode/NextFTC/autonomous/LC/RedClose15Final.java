@@ -245,18 +245,18 @@ public class RedClose15Final extends NextFTCOpMode {
 
                                 new HeadingInterpolator.PiecewiseNode(
                                         0,
-                                        0.47,
+                                        0.7,
                                         HeadingInterpolator.tangent.reverse()
                                 ),
 
                                 new HeadingInterpolator.PiecewiseNode(
-                                        0.47,
+                                        0.7,
                                         1.0,
-//                                        HeadingInterpolator.linear(
-//                                                follower().getHeading(),
-//                                                Math.toRadians(28.4)
-//                                        )
-                                        HeadingInterpolator.facingPoint(new Pose(144,130))
+                                        HeadingInterpolator.linear(
+                                                follower().getHeading(),
+                                                Math.toRadians(28.4)
+                                        )
+//                                        HeadingInterpolator.facingPoint(new Pose(144,130))
                                 )
                         )
                 )
@@ -285,9 +285,10 @@ public class RedClose15Final extends NextFTCOpMode {
                 new ParallelGroup(
                         f.i.follow(scorePreloads,"green"),
                         asc.i.baseState(-1240,0.32),
-                        Transfernf.INSTANCE.hotdog()
+
+                        asc.i.transferSequence(scorePreloads,1.5)
                 ),
-                asc.i.transferUpFor(1.5),
+
 
 
                 //SET 2
@@ -302,7 +303,7 @@ public class RedClose15Final extends NextFTCOpMode {
                         ),
                         asc.i.baseState(-1240),
 
-                        asc.i.transferSequenceDistance(scoreSet2,1.3,2)
+                        asc.i.transferSequenceDistance(scoreSet2,1.6,2)
                 ),
 
 
@@ -319,7 +320,7 @@ public class RedClose15Final extends NextFTCOpMode {
                         ),
                         asc.i.baseState(-1240),
 
-                        asc.i.transferSequenceDistance(scoreSet3,1.5,6)
+                        asc.i.transferSequenceDistance(scoreSet3,1.6,6)
                 ),
 
                 //SET 4
@@ -350,10 +351,10 @@ public class RedClose15Final extends NextFTCOpMode {
 //                                ),
                                 f.i.follow(scoreHp,"green")
                         ),
-                        asc.i.baseState(-1200,0.38),
+                        asc.i.baseState(-1200,0.38, true),
 
                         //asc.i.transferSequenceDistance(scoreHp,5, 2.6),
-                        asc.i.transferSequenceDistance(scoreHp,5,17)
+                        asc.i.transferSequenceDistance(scoreHp,5,1)
                 )
 
 

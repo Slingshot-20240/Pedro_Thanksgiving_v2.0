@@ -83,4 +83,20 @@ public class asc extends SubsystemGroup {
         );
     }
 
+    //far
+    public final Command baseState(double shooterVel, boolean far) {
+        return new ParallelGroup(
+                Intakenf.INSTANCE.in(),
+                Shooternf.INSTANCE.setShooterVel(shooterVel, far),
+                Hoodnf.INSTANCE.setHoodPos(0.33)
+        );
+    }
+    public final Command baseState(double shooterVel, double hoodPos, boolean far) {
+        return new ParallelGroup(
+                Intakenf.INSTANCE.in(),
+                Shooternf.INSTANCE.setShooterVel(shooterVel,far),
+                Hoodnf.INSTANCE.setHoodPos(hoodPos)
+        );
+    }
+
 }
