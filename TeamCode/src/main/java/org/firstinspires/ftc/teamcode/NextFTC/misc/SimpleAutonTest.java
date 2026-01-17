@@ -87,6 +87,30 @@ public class SimpleAutonTest extends NextFTCOpMode {
                 .setLinearHeadingInterpolation(Math.toRadians(36), Math.toRadians(50))
                 .build();
 
+        grabSet2 = PedroComponent.follower()
+                .pathBuilder()
+                .addPath(
+                        new BezierCurve(
+                                scorePose,
+                                new Pose(92.292,77),
+                                new Pose(126.5, 79)
+                        )
+                )
+                .setLinearHeadingInterpolation(Math.toRadians(43), Math.toRadians(0))
+
+
+                .build();
+
+
+        scoreSet2 = follower().pathBuilder()
+                //Score Set 2
+                .addPath(
+                        new BezierLine(new Pose(126.5, 79), scorePose)
+                )
+                .setLinearHeadingInterpolation(Math.toRadians(0), Math.toRadians(43))
+                //was 0
+                .build();
+
 
 
     }
@@ -104,13 +128,33 @@ public class SimpleAutonTest extends NextFTCOpMode {
 
     private Command autonomous() {
         return new SequentialGroup(
-                //new FollowPath(scorePreloads),
-
                 new ParallelGroup(
-                    Shooternf.INSTANCE.setShooterVel(-1240),
-                    Transfernf.INSTANCE.on(),
-                        Intakenf.INSTANCE.in()
+                        Shooternf.INSTANCE.setShooterVel(-1240),
+                        Intakenf.INSTANCE.in(),
+                        new FollowPath(scorePreloads),
+                        new SequentialGroup(
+                                Transfernf.INSTANCE.hotdog(),
+                                new WaitUntil(() -> scorePreloads.lastPath().isAtParametricEnd()),
+                                Lednf.INSTANCE.yellow
+//                                Transfernf.INSTANCE.on()
+                        )
+                ),
+                new FollowPath(grabSet2),
+                new ParallelGroup(
+                        Shooternf.INSTANCE.setShooterVel(-1240),
+                        Intakenf.INSTANCE.in(),
+                        new FollowPath(scoreSet2),
+                        new SequentialGroup(
+                                Transfernf.INSTANCE.hotdog(),
+                                new WaitUntil(() -> scoreSet2.lastPath().isAtParametricEnd()),
+                                Lednf.INSTANCE.yellow
+//                                Transfernf.INSTANCE.on()
+                        )
                 )
+
+
+
+
         );
     }
 
