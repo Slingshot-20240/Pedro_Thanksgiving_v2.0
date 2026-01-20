@@ -23,6 +23,8 @@ public class FSM {
 
     public double lastVelo = 800;
 
+    private ControlType savedType;
+
 
     // Everyone ignore this horrendous OOP
     // private double odoDistance = AVisionTele.odoDistance;
@@ -47,6 +49,19 @@ public class FSM {
                     shooter.shootFromFront();
                     shooter.hoodToFront();
                 }
+
+                // TODO: test, should work
+//                if (gamepad.switchMode.value()) {
+//                    if(type == ControlType.HARDCODED_CONTROL) {
+//                        savedType = ControlType.HARDCODED_CONTROL;
+//                        type = ControlType.PID_CONTROL;
+//                    } else {
+//                        savedType = ControlType.PID_CONTROL;
+//                        type = ControlType.HARDCODED_CONTROL;
+//                    }
+//                } else {
+//                    type = savedType;
+//                }
 
                 transfer.hotDog();
 
@@ -73,9 +88,9 @@ public class FSM {
                 }
 
                 if (type == ControlType.PID_CONTROL) {
-                    double distance = Robot.cam.getATdist();
+                    double distance = Robot.cam.getTargetArtifactTravelDistanceX();
 
-                    double targetVelocity = robot.shooter.calculateShooterRPM(distance);
+                    double targetVelocity = robot.shooter.calculateShooterRPM(distance) + 100;
 
                     double targetHoodPos;
                     //TODO - TUNE THIS OFFSET VALUE
@@ -87,8 +102,6 @@ public class FSM {
 
                     if (Robot.cam.getATdist() != 0) {
                         lastVelo = targetVelocity;
-                    } else {
-
                     }
 
 //                    if (targetVelocity >= robot.shooter.outtake1.getVelocity() - 50 || targetVelocity <= robot.shooter.outtake1.getVelocity() + 50) {
@@ -100,7 +113,7 @@ public class FSM {
 //                    }
 
                     // This should prevent the shooter from changing hood pos if it can't see the AprilTag (so if it cuts out it's fine)
-                    if (Robot.cam.getATdist() == 22) {
+                    if (Robot.cam.getTargetArtifactTravelDistanceX() == 22) {
                         robot.shooter.setHoodAngle(shooter.variableHood.getPosition());
                         robot.shooter.setShooterVelocity(-lastVelo);
                     } else {
@@ -108,7 +121,7 @@ public class FSM {
                         robot.shooter.setShooterVelocity(-targetVelocity);
                     }
 
-                    if (Robot.cam.getATdist() != 0) {
+                    if (Robot.cam.getTargetArtifactTravelDistanceX() != 22) {
                         robot.ledBoard0.setState(true);
                         robot.ledBoard1.setState(true);
                     } else {

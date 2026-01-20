@@ -101,63 +101,92 @@ public class MechanismTests {
     // -- SHOOTER --
     @Test
     public void shootFromBack() {
-        
+        shooterMech.shootFromBack();
+
+        verify(outtake1).setVelocity(anyDouble());
+        verify(outtake2).setVelocity(anyDouble());
     }
 
     @Test
     public void shootFromFront() {
+        shooterMech.shootFromFront();
 
+        verify(outtake1).setVelocity(anyDouble());
+        verify(outtake2).setVelocity(anyDouble());
     }
 
     @Test
     public void setVelocity() {
+        shooterMech.setShooterVelocity(1000);
 
+        verify(outtake1).setVelocity(anyDouble());
     }
 
     @Test
-    public void setHoodVelocity() {
+    public void setHoodAngle() {
+        shooterMech.setHoodAngle(60);
 
+        verify(hood).setPosition(anyDouble());
     }
 
     @Test
     public void setHoodFront() {
+        shooterMech.setHoodAngle(.5);
 
+        verify(hood).setPosition(.5);
     }
 
     @Test
     public void setHoodBack() {
+        shooterMech.setHoodAngle(.175);
 
+        verify(hood).setPosition(.175);
     }
 
     // -- INTAKE --
     @Test
     public void intakeOn() {
+        intakeMech.intakeOn();
 
+        verify(intake).setPower(anyDouble());
     }
 
     @Test
     public void intakeOff() {
+        intakeMech.intakeOff();
 
+        verify(intake).setPower(0);
     }
 
     @Test
     public void intakeReverse() {
+        intakeMech.intakeReverse();
 
+        verify(intake).setPower(-1);
     }
 
     // -- TRANSFER --
     @Test
     public void transferOn() {
+        transferMech.transferOn();
 
+        verify(backTransfer).setPower(anyDouble());
+        verify(frontTransfer).setPower(anyDouble());
     }
 
     @Test
     public void transferOff() {
+        transferMech.transferOff();
 
+        verify(backTransfer).setPower(0);
+        verify(frontTransfer).setPower(0);
     }
 
     @Test
     public void hotDog() {
+        transferMech.hotDog();
 
+        verify(backTransfer).setPower(1);
+        verify(frontTransfer).setPower(-.12);
     }
 }

@@ -33,13 +33,13 @@ public class Constants {
 
 //DRIVE
             //TODO - P USED TO BE 0.87
-            .drivePIDFCoefficients(new FilteredPIDFCoefficients(0.8,0.0,0.04,0.6,0.0))
+            .drivePIDFCoefficients(new FilteredPIDFCoefficients(0.79,0.0,0.05,0.7,0.0))
 //            .useSecondaryDrivePIDF(true)
 //            .secondaryDrivePIDFCoefficients(new FilteredPIDFCoefficients(0.1,0,0.01,0.6,0.01))
             ;
 
 
-    public static PathConstraints pathConstraints = new PathConstraints(0.992, 50, 1.5, 2.5);
+    public static PathConstraints pathConstraints = new PathConstraints(0.993, 50, 1.5, 2.5);
 //    public static PathConstraints pathConstraints = new PathConstraints(0.995, 40, 1.55, 1.6);
 
     public static MecanumConstants driveConstants = new MecanumConstants()
@@ -52,10 +52,10 @@ public class Constants {
             .leftRearMotorDirection(DcMotorSimple.Direction.REVERSE)
             .rightFrontMotorDirection(DcMotorSimple.Direction.FORWARD)
             .rightRearMotorDirection(DcMotorSimple.Direction.FORWARD)
-            .xVelocity(84) // real tuned val was 80
-            .yVelocity(69); //real tuned cal was 65
-            //.useVoltageCompensation(true)
-            //.nominalVoltage(13.99);
+            .xVelocity(83) // real tuned val was 80
+            .yVelocity(68) //real tuned val was 65
+            .useVoltageCompensation(true)
+            .nominalVoltage(13.99);
 
     public static Follower createFollower(HardwareMap hardwareMap) {
         return new FollowerBuilder(followerConstants, hardwareMap)

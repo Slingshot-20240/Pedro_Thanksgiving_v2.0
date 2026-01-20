@@ -21,9 +21,9 @@ public class Transfernf implements Subsystem {
 
     public Command on() {
         return new ParallelGroup(
-                new SetPower(frontTransfer, -1.0),
+                new SetPower(frontTransfer, -0.8), // DO NOT CHANGE NO MATTER WHAT!!! esp before round
                 new SetPower(backTransfer, -1.0)
-        );
+        ).addRequirements(frontTransfer,backTransfer);
     }
 
     public Command gateIntake() {
@@ -37,7 +37,7 @@ public class Transfernf implements Subsystem {
                         new SetPower(frontTransfer, -0.15),
                         new SetPower(backTransfer, -1.0)
                 )
-        );
+        ).addRequirements(frontTransfer,backTransfer);
     }
     public Command stepOn() {
         return new SequentialGroup(
@@ -45,20 +45,20 @@ public class Transfernf implements Subsystem {
                         new SetPower(frontTransfer, -0.5),
                         new SetPower(backTransfer, -1.0)
                 ),
-                new Delay(0.2),
+                new Delay(0.3),
                 new ParallelGroup(
                         new SetPower(frontTransfer, -1.0),
                         new SetPower(backTransfer, -1.0)
                 )
 
-        );
+        ).addRequirements(frontTransfer,backTransfer);
     }
 
     public Command stepOn(double maxPower) {
         return new SequentialGroup(
                 new ParallelGroup(
                         new SetPower(frontTransfer, -0.5),
-                        new SetPower(backTransfer, -0.5)
+                        new SetPower(backTransfer, -1.0)
                 ),
                 new Delay(0.2),
                 new ParallelGroup(
@@ -66,7 +66,7 @@ public class Transfernf implements Subsystem {
                         new SetPower(backTransfer, -1.0)
                 )
 
-        );
+        ).addRequirements(frontTransfer,backTransfer);
     }
 
     public Command pickup(PathChain pathChain, double distanceForHotdog) {
@@ -77,13 +77,19 @@ public class Transfernf implements Subsystem {
                 ),
                 new WaitUntil(() -> pathChain.lastPath().getDistanceRemaining() < distanceForHotdog),
                 hotdog()
-        );
+        ).addRequirements(frontTransfer,backTransfer);
     }
 
     public Command hotdog() {
         return new ParallelGroup(
-                new SetPower(frontTransfer, -0.11),
+                new SetPower(frontTransfer, -0.12),// DO NOT CHANGE NO MATTER WHAT!!! esp before round
                 new SetPower(backTransfer, 1.0)
+        ).addRequirements(frontTransfer,backTransfer);
+    }
+    public Command onInstant() {
+        return new ParallelGroup(
+                new InstantCommand(() -> frontTransfer.setPower(-1)),
+                new InstantCommand(() -> backTransfer.setPower(1))
         );
     }
 
@@ -99,13 +105,13 @@ public class Transfernf implements Subsystem {
         return new ParallelGroup(
                 new SetPower(frontTransfer, 0),
                 new SetPower(backTransfer, 0)
-        );
+        ).addRequirements(frontTransfer,backTransfer);
     }
 
     public Command forceBackOn() {
         return new ParallelGroup(
                 new SetPower(backTransfer, -1.0)
-        );
+        ).addRequirements(frontTransfer,backTransfer);
     }
 
 

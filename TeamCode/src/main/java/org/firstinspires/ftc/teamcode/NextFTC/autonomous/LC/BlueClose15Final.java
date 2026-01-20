@@ -1,10 +1,11 @@
 package org.firstinspires.ftc.teamcode.NextFTC.autonomous.LC;
 
+import static dev.nextftc.extensions.pedro.PedroComponent.follower;
+
 import com.acmerobotics.dashboard.config.Config;
 import com.pedropathing.geometry.BezierCurve;
 import com.pedropathing.geometry.BezierLine;
 import com.pedropathing.geometry.Pose;
-
 import com.pedropathing.paths.HeadingInterpolator;
 import com.pedropathing.paths.PathChain;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
@@ -12,29 +13,34 @@ import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import org.firstinspires.ftc.teamcode.NextFTC.autonomous.PoseStorage;
 import org.firstinspires.ftc.teamcode.NextFTC.sequences_and_groups.asc;
 import org.firstinspires.ftc.teamcode.NextFTC.sequences_and_groups.f;
+import org.firstinspires.ftc.teamcode.NextFTC.subsystems_nf.Hoodnf;
 import org.firstinspires.ftc.teamcode.NextFTC.subsystems_nf.Intakenf;
 import org.firstinspires.ftc.teamcode.NextFTC.subsystems_nf.Lednf;
 import org.firstinspires.ftc.teamcode.NextFTC.subsystems_nf.Shooternf;
 import org.firstinspires.ftc.teamcode.NextFTC.subsystems_nf.Transfernf;
-import org.firstinspires.ftc.teamcode.NextFTC.subsystems_nf.Hoodnf;
 import org.firstinspires.ftc.teamcode.pedroPathing.Constants;
 
 import dev.nextftc.core.commands.Command;
 import dev.nextftc.core.commands.groups.ParallelGroup;
 import dev.nextftc.core.commands.groups.SequentialGroup;
 import dev.nextftc.core.components.SubsystemComponent;
-import dev.nextftc.extensions.pedro.FollowPath;
 import dev.nextftc.extensions.pedro.PedroComponent;
 import dev.nextftc.ftc.NextFTCOpMode;
 import dev.nextftc.ftc.components.BulkReadComponent;
 
-import static dev.nextftc.extensions.pedro.PedroComponent.follower;
-
-
 @Config
-@Autonomous(name = "1 gate 15 red")
-public class RedClose15Final extends NextFTCOpMode {
-    public RedClose15Final() {
+@Autonomous(name = "1 gate 15 blue")
+public class BlueClose15Final extends NextFTCOpMode {
+    private double mx(double x) { return 144 - x; }
+
+    private double mh(double deg) {
+        if (deg == 0) return 180;
+        if (deg == 180) return 0;
+        if (deg == 90 || deg == 268) return deg;
+        return 180 - deg;
+    }
+
+    public BlueClose15Final() {
         addComponents(
                 new SubsystemComponent(
                         f.i, asc.i,
@@ -296,7 +302,7 @@ public class RedClose15Final extends NextFTCOpMode {
                         new SequentialGroup(
 //                                new ParallelGroup(
                                 f.i.follow(grabSet2,"red"),
-                                        //Transfernf.INSTANCE.pickup(grabSet2,2)
+                                //Transfernf.INSTANCE.pickup(grabSet2,2)
 //                                ),
                                 f.i.follow(scoreSet2,"green")
 
@@ -311,7 +317,7 @@ public class RedClose15Final extends NextFTCOpMode {
                 new ParallelGroup(
                         new SequentialGroup(
 //                                new ParallelGroup(
-                                        f.i.follow(grabSet3,"red"),
+                                f.i.follow(grabSet3,"red"),
 //                                        Transfernf.INSTANCE.pickup(grabSet3,2)
 //                                        Transfernf.INSTANCE.hotdog()
 //                                ),

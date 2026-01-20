@@ -17,8 +17,8 @@ public class logiTest extends OpMode {
 
     @Override
     public void loop() {
-        telemetry.addData("AT angle: ", cam.getATangle());
-        telemetry.addData("AT distance", cam.getATdist());
+        telemetry.addData("AT angle: ", cam.getTargetArtifactTravelDistanceX());
+        telemetry.addData("AT distance", cam.getTargetArtifactTravelDistanceX());
         telemetry.update();
     }
 }
