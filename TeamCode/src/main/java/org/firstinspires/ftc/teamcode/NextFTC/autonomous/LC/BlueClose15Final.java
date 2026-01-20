@@ -42,14 +42,14 @@ public class BlueClose15Final extends NextFTCOpMode {
 
     public BlueClose15Final() {
         addComponents(
-                new SubsystemComponent(
-                        f.i, asc.i,
-                        Intakenf.INSTANCE, Hoodnf.INSTANCE,
-                        Shooternf.INSTANCE, Transfernf.INSTANCE,
-                        Lednf.INSTANCE
-                ),
-                new PedroComponent(Constants::createFollower),
-                BulkReadComponent.INSTANCE
+            new SubsystemComponent(
+                    f.i, asc.i,
+                    Intakenf.INSTANCE, Hoodnf.INSTANCE,
+                    Shooternf.INSTANCE, Transfernf.INSTANCE,
+                    Lednf.INSTANCE
+            ),
+            new PedroComponent(Constants::createFollower),
+            BulkReadComponent.INSTANCE
         );
     }
 
@@ -76,7 +76,7 @@ public class BlueClose15Final extends NextFTCOpMode {
                 .addPath(
                         new BezierLine(new Pose(mx(126.2), 119), scorePose)
                 )
-                .setLinearHeadingInterpolation(Math.toRadians(36), Math.toRadians(mh(43)))
+                .setLinearHeadingInterpolation(Math.toRadians(mh(36)), Math.toRadians(mh(43)))
 //                .setTangentHeadingInterpolation().setReversed()
                 .build();
 
@@ -289,7 +289,7 @@ public class BlueClose15Final extends NextFTCOpMode {
 
 
                 new ParallelGroup(
-                        f.i.follow(scorePreloads,"green"),
+                        f.i.follow( scorePreloads,"green"),
                         asc.i.baseState(-1240,0.32),
 
                         asc.i.transferSequence(scorePreloads,1.5)
