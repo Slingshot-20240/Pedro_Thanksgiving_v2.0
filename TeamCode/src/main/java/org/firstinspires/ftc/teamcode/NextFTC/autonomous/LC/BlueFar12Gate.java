@@ -63,7 +63,7 @@ public class BlueFar12Gate extends NextFTCOpMode {
 
         grabSet2 = PedroComponent.follower()
                 .pathBuilder()
-                .addPath(new BezierCurve(scorePose, new Pose(mx(84), 65), new Pose(132, 57)))
+                .addPath(new BezierCurve(scorePose, new Pose(mx(84), 65), new Pose(mx(132), 57)))
                 .setLinearHeadingInterpolation(Math.toRadians(mh(67)), Math.toRadians(mh(0)))
                 .build();
 
@@ -102,7 +102,7 @@ public class BlueFar12Gate extends NextFTCOpMode {
         prepareHp = PedroComponent.follower()
                 .pathBuilder()
                 .addPath(new BezierLine(scorePose, new Pose(mx(132), 50)))
-                .setLinearHeadingInterpolation(Math.toRadians(mh(mh(67))), Math.toRadians(mh(300)))
+                .setLinearHeadingInterpolation(Math.toRadians(mh(67)), Math.toRadians(mh(300)))
                 .build();
 
         grabHp = PedroComponent.follower()
