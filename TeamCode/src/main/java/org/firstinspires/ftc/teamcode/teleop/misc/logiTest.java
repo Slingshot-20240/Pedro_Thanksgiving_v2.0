@@ -12,7 +12,7 @@ public class logiTest extends OpMode {
 
     @Override
     public void init() {
-        cam = new logi(hardwareMap);
+        cam = new logi(hardwareMap, telemetry);
     }
 
     @Override
