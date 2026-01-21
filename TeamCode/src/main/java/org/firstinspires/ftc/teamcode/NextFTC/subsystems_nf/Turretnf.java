@@ -20,8 +20,9 @@ public class Turretnf implements Subsystem {
     public static final Turretnf INSTANCE = new Turretnf();
     private Turretnf() {}
 
-    private CRServoEx turretServoL = new CRServoEx("tL", 0.03);
-    private CRServoEx turretServoR = new CRServoEx("tR", 0.03);
+    //Cache Tolerance makes it so it wont correct more when in that range
+    private CRServoEx turretServoL = new CRServoEx("tL", 0);
+    private CRServoEx turretServoR = new CRServoEx("tR", 0);
 
     public AnalogInput encoderL;
     public AnalogInput encoderR;
