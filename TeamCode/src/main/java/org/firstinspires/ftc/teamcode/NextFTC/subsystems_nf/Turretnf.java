@@ -107,6 +107,7 @@ public class Turretnf implements Subsystem {
 
 
     private double getTurretDegrees() {
+        //yeah so voltage is what feedback get from servo and its pretty much a linear graph so all you need to do is divide by max voltage which is 3.3. And then i just multiply by 360 to go into degrees you could do radians but i dont like radians
         double servoDeg = (turretEncoder.getVoltage() / 3.3) * 360.0;
 
         // convert to turret degrees
