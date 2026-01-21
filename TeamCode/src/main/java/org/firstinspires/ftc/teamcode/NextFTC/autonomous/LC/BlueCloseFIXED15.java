@@ -9,7 +9,6 @@ import com.pedropathing.geometry.Pose;
 import com.pedropathing.paths.HeadingInterpolator;
 import com.pedropathing.paths.PathChain;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
-import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 
 import org.firstinspires.ftc.teamcode.NextFTC.autonomous.PoseStorage;
 import org.firstinspires.ftc.teamcode.NextFTC.sequences_and_groups.asc;
@@ -29,10 +28,9 @@ import dev.nextftc.extensions.pedro.PedroComponent;
 import dev.nextftc.ftc.NextFTCOpMode;
 import dev.nextftc.ftc.components.BulkReadComponent;
 
-@Disabled
 @Config
-@Autonomous(name = "1 gate 15 blue")
-public class BlueClose15Final extends NextFTCOpMode {
+@Autonomous(name = "1 gate 15 blue FIXED")
+public class BlueCloseFIXED15 extends NextFTCOpMode {
     private double mx(double x) { return 144 - x; }
 
     private double mh(double deg) {
@@ -42,7 +40,7 @@ public class BlueClose15Final extends NextFTCOpMode {
         return 180 - deg;
     }
 
-    public BlueClose15Final() {
+    public BlueCloseFIXED15() {
         addComponents(
                 new SubsystemComponent(
                         f.i, asc.i,

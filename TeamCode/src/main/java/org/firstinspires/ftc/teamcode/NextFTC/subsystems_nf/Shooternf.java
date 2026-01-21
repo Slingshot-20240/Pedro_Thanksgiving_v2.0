@@ -24,8 +24,8 @@ public class Shooternf implements Subsystem {
 
     private final ControlSystem farShooterController = ControlSystem.builder()
             //extreme values
-            .velPid(5, 0, 0.008)
-            .basicFF(0.1)
+            .velPid(5.5, 0, 0.001)
+            .basicFF(0.005)
             .build();
 
     private boolean enabled = false;

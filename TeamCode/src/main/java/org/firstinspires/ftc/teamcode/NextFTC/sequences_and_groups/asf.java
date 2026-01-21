@@ -39,7 +39,7 @@ public class asf extends SubsystemGroup {
      */
     public final Command transferUpFor(double time) {
         return new ParallelGroup(
-                Transfernf.INSTANCE.stepOn(0.8),
+                Transfernf.INSTANCE.on(),
                 new Delay(time),
                 Lednf.INSTANCE.yellow
         );
@@ -80,14 +80,14 @@ public class asf extends SubsystemGroup {
     public final Command baseState(double shooterVel) {
         return new ParallelGroup(
                 Intakenf.INSTANCE.in(),
-                Shooternf.INSTANCE.setShooterVel(shooterVel, true),
+                Shooternf.INSTANCE.setShooterVel(shooterVel,true),
                 Hoodnf.INSTANCE.setHoodPos(0.32)
         );
     }
     public final Command baseState(double shooterVel, double hoodPos) {
         return new ParallelGroup(
                 Intakenf.INSTANCE.in(),
-                Shooternf.INSTANCE.setShooterVel(shooterVel, true),
+                Shooternf.INSTANCE.setShooterVel(shooterVel,true),
                 Hoodnf.INSTANCE.setHoodPos(hoodPos)
         );
     }
