@@ -5,6 +5,7 @@ import android.util.Size;
 
 import com.qualcomm.robotcore.hardware.HardwareMap;
 
+import org.firstinspires.ftc.robotcore.external.Telemetry;
 import org.firstinspires.ftc.robotcore.external.hardware.camera.WebcamName;
 import org.firstinspires.ftc.robotcore.external.hardware.camera.controls.ExposureControl;
 import org.firstinspires.ftc.robotcore.external.hardware.camera.controls.GainControl;
@@ -49,7 +50,7 @@ public class logi {
         portal = new VisionPortal.Builder()
                 .setCamera(hw.get(WebcamName.class, "Webcam 1"))
                 .addProcessors(apriltagPipeline, ballPipeline)
-                .setCameraResolution(new Size(1920, 1080))
+                .setCameraResolution(new Size(1280, 720))
                 .setStreamFormat(VisionPortal.StreamFormat.MJPEG)
                 .setAutoStopLiveView(true)
                 .setLiveViewContainerId(myPortalsList[0])
@@ -58,33 +59,6 @@ public class logi {
         portal.setProcessorEnabled(apriltagPipeline, true);
         portal.setProcessorEnabled(ballPipeline, false);
 
-    }
-
-    public logi(WebcamName cam) {
-        apriltagPipeline = new AprilTagProcessor.Builder()
-                .setTagFamily(AprilTagProcessor.TagFamily.TAG_36h11)
-                .setDrawTagID(true)
-                .setDrawTagOutline(true)
-                .setDrawAxes(true)
-                .setDrawCubeProjection(true)
-//                .setLensIntrinsics(0.187319959814, -0.575948480673, -0.00438930956954, 0.00126723944556)
-                .setOutputUnits(DistanceUnit.INCH, AngleUnit.DEGREES)
-
-                .build();
-
-        ballPipeline = new BallProcessor();
-
-        portal = new VisionPortal.Builder()
-                .setCamera(cam)
-                .addProcessors(apriltagPipeline, ballPipeline)
-                .setCameraResolution(new Size(1920, 1080))
-                .setStreamFormat(VisionPortal.StreamFormat.MJPEG)
-                .setAutoStopLiveView(true)
-
-                .build();
-
-        portal.setProcessorEnabled(apriltagPipeline, true);
-        portal.setProcessorEnabled(ballPipeline, false);
 
         //Exposure Control
         ExposureControl exposureControl = portal.getCameraControl(ExposureControl.class);
@@ -95,7 +69,7 @@ public class logi {
         exposureControl.setMode(ExposureControl.Mode.Manual);
 
         // Set a short exposure (e.g., 5 milliseconds) to "freeze" motion
-        exposureControl.setExposure(5, TimeUnit.MILLISECONDS);
+        exposureControl.setExposure(exposureControl.getMinExposure(TimeUnit.MILLISECONDS), TimeUnit.MILLISECONDS);
 
         // Increase gain to compensate for the dark image
         gainControl.setGain(200); // Adjust based on your lighting

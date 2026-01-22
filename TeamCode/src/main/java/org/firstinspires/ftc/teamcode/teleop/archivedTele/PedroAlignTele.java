@@ -36,9 +36,9 @@ public class PedroAlignTele extends OpMode {
     @Override
     public void init() {
         controls = new GamepadMapping(gamepad1, gamepad2);
-        robot = new Robot(hardwareMap, controls);
+        robot = new Robot(hardwareMap, controls, telemetry);
         fsm = new FSM(hardwareMap, controls, robot);
-        cam = new logi(hardwareMap);
+        cam = new logi(hardwareMap, telemetry);
 
         follower = Constants.createFollower(hardwareMap);
         follower.setStartingPose(startingPose == null ? new Pose() : startingPose);

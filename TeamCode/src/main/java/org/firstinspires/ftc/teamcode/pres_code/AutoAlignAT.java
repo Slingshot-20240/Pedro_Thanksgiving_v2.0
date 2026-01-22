@@ -34,7 +34,7 @@ public class AutoAlignAT extends OpMode {
     @Override
     public void init() {
         controls = new GamepadMapping(gamepad1, gamepad2);
-        robot = new Robot(hardwareMap, controls);
+        robot = new Robot(hardwareMap, controls, telemetry);
         shooter = new Shooter(hardwareMap);
 
         follower = Constants.createFollower(hardwareMap);
