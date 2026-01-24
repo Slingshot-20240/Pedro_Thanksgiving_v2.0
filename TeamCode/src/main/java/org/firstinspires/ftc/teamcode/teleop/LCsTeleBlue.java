@@ -21,8 +21,8 @@ import org.firstinspires.ftc.teamcode.teleop.fsm.FSM;
 import java.util.function.Supplier;
 
 @Config
-@TeleOp(name = "ALCsTeleRed")
-public class LCsTeleRed extends OpMode {
+@TeleOp(name = "ALCsTeleBlue")
+public class LCsTeleBlue extends OpMode {
 
     private GamepadMapping controls;
     private FSM fsm;
@@ -62,7 +62,16 @@ public class LCsTeleRed extends OpMode {
     public static double odoTurn_kP = 0.3;
     public static double odoMinTurnPower = 0.08;
 
-    public static Pose gatePose = new Pose(129,70);
+    private static double mx(double x) { return 144 - x; }
+
+    private static double mh(double deg) {
+        if (deg == 0) return 180;
+        if (deg == 180) return 0;
+        if (deg == 90 || deg == 268) return deg;
+        return 180 - deg;
+    }
+
+    public static Pose gatePose = new Pose(mx(129),70);
 
     @Override
     public void init() {
@@ -85,7 +94,7 @@ public class LCsTeleRed extends OpMode {
                 .addPath(new Path(new BezierLine(
                         follower::getPose,
                         //TODO - tune control point
-                        new Pose(112,70)
+                        new Pose(mx(112),70)
                 )))
                 .setHeadingInterpolation(
                         HeadingInterpolator.tangent.reverse()
@@ -96,7 +105,7 @@ public class LCsTeleRed extends OpMode {
                         gatePose
                 )))
                 .setHeadingInterpolation(
-                        HeadingInterpolator.constant(Math.toRadians(180))
+                        HeadingInterpolator.constant(Math.toRadians(mh(180)))
                 )
                 .build();
 
@@ -108,7 +117,7 @@ public class LCsTeleRed extends OpMode {
                 .setHeadingInterpolation(
                         HeadingInterpolator.linearFromPoint(
                                 follower::getHeading,
-                                Math.toRadians(90),
+                                Math.toRadians(mh(90)),
                                 0.8 //TODO - change and/or tune end t value
                         )
                 )
@@ -122,7 +131,7 @@ public class LCsTeleRed extends OpMode {
                 .setHeadingInterpolation(
                         HeadingInterpolator.linearFromPoint(
                                 follower::getHeading,
-                                Math.toRadians(180),
+                                Math.toRadians(mh(180)),
                                 0.8 //TODO - change and/or tune end t value
                         )
                 )
@@ -136,7 +145,7 @@ public class LCsTeleRed extends OpMode {
                 .setHeadingInterpolation(
                         HeadingInterpolator.linearFromPoint(
                                 follower::getHeading,
-                                Math.toRadians(270),
+                                Math.toRadians(mh(270)),
                                 0.8 //TODO - change and/or tune end t value
                         )
                 )
@@ -160,7 +169,7 @@ public class LCsTeleRed extends OpMode {
         Pose pose = follower.getPose();
         double heading = pose.getHeading();
         double headingDeg = Math.toDegrees(heading);
-        odoDistance = pose.distanceFrom(new Pose(140,140));
+        odoDistance = pose.distanceFrom(new Pose(mx(140),140));
 
 
         boolean controllerBusy =
@@ -227,7 +236,7 @@ public class LCsTeleRed extends OpMode {
         follower.setTeleOpDrive(forward, strafe, rotate, true);
 
         if (gamepad1.x) {
-            follower.setPose(new Pose(72,8,Math.toRadians(90)));
+            follower.setPose(new Pose(mx(72),8,Math.toRadians(mh(90))));
         }
 
         // Auto Gate
@@ -238,23 +247,23 @@ public class LCsTeleRed extends OpMode {
 
             // FAR CASE
             //TODO - threshold for going far method
-            if (pose.getX() < 100) {
+            if (pose.getX() < mx(100)) {
                 follower.followPath(gateBackFar.get());
                 automatedDrive = true;
             }
 
             // CLOSE CASE
             else {
-                if (headingDeg > 45 && headingDeg < 135) {
+                if (headingDeg > mh(45) && headingDeg < mh(135)) {
                     follower.followPath(gateRightClose.get());
                     telemetry.addLine("Forward");
                 }
-                else if (headingDeg > 135 && headingDeg < 225) {
+                else if (headingDeg > mh(135) && headingDeg < mh(225)) {
                     follower.followPath(gateBackClose.get());
                     telemetry.addLine("Left");
 
                 }
-                else if (headingDeg > 225 && headingDeg < 315) {
+                else if (headingDeg > mh(225) && headingDeg < mh(315)) {
                     follower.followPath(gateLeftClose.get());
                     telemetry.addLine("Back");
 
@@ -310,7 +319,6 @@ public class LCsTeleRed extends OpMode {
     @Override
     public void stop() {
         PoseStorage.startingPose = follower.getPose();
-        robot.shooter.variableHood.setPosition(0.5);
     }
     private double angleWrap(double angle) {
         while (angle > Math.PI) angle -= 2 * Math.PI;
