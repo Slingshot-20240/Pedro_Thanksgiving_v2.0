@@ -1,10 +1,11 @@
-package org.firstinspires.ftc.teamcode.NextFTC.autonomous.alliance.close;
+package org.firstinspires.ftc.teamcode.NextFTC.autonomous.LC.close;
+
+import static dev.nextftc.extensions.pedro.PedroComponent.follower;
 
 import com.acmerobotics.dashboard.config.Config;
 import com.pedropathing.geometry.BezierCurve;
 import com.pedropathing.geometry.BezierLine;
 import com.pedropathing.geometry.Pose;
-
 import com.pedropathing.paths.HeadingInterpolator;
 import com.pedropathing.paths.PathChain;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
@@ -12,11 +13,11 @@ import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import org.firstinspires.ftc.teamcode.NextFTC.autonomous.PoseStorage;
 import org.firstinspires.ftc.teamcode.NextFTC.sequences_and_groups.asc;
 import org.firstinspires.ftc.teamcode.NextFTC.sequences_and_groups.f;
+import org.firstinspires.ftc.teamcode.NextFTC.subsystems_nf.Hoodnf;
 import org.firstinspires.ftc.teamcode.NextFTC.subsystems_nf.Intakenf;
 import org.firstinspires.ftc.teamcode.NextFTC.subsystems_nf.Lednf;
 import org.firstinspires.ftc.teamcode.NextFTC.subsystems_nf.Shooternf;
 import org.firstinspires.ftc.teamcode.NextFTC.subsystems_nf.Transfernf;
-import org.firstinspires.ftc.teamcode.NextFTC.subsystems_nf.Hoodnf;
 import org.firstinspires.ftc.teamcode.pedroPathing.Constants;
 
 import dev.nextftc.core.commands.Command;
@@ -27,13 +28,11 @@ import dev.nextftc.extensions.pedro.PedroComponent;
 import dev.nextftc.ftc.NextFTCOpMode;
 import dev.nextftc.ftc.components.BulkReadComponent;
 
-import static dev.nextftc.extensions.pedro.PedroComponent.follower;
-
 
 @Config
-@Autonomous(name = "15 Final Red Close")
-public class RedClose15Alliance2Gate extends NextFTCOpMode {
-    public RedClose15Alliance2Gate() {
+@Autonomous(name = "Red 15 Close FIXED")
+public class RedClose15 extends NextFTCOpMode {
+    public RedClose15() {
         addComponents(
                 new SubsystemComponent(
                         f.i, asc.i,
@@ -90,9 +89,9 @@ public class RedClose15Alliance2Gate extends NextFTCOpMode {
             //Gate 1
                 .addPath(
                         new BezierCurve(
-                                new Pose(127, 79),
-                                new Pose(109, 76),
-                                new Pose(128, 73)
+                                new Pose(126.5, 83.4),
+                                new Pose(112, 77.000),
+                                new Pose(130, 71.000)
                         )
                 )
                 .setLinearHeadingInterpolation(Math.toRadians(0), Math.toRadians(0))
@@ -126,24 +125,8 @@ public class RedClose15Alliance2Gate extends NextFTCOpMode {
                         )
                 )
                 .setLinearHeadingInterpolation(Math.toRadians(45), Math.toRadians(0))
-//                .setTangentHeadingInterpolation()
-
-
-
-                //Gate 2
-                .addPath(
-                        new BezierCurve(
-                                new Pose(132.4, 54.000),
-                                new Pose(120.000, 54.000),
-                                new Pose(113.000, 69.000),
-                                new Pose(129, 63)
-                        )
-                )
-                .setLinearHeadingInterpolation(Math.toRadians(0), Math.toRadians(90))
-
-
-
                 .build();
+//                .setTangentHeadingInterpolation()
 
         scoreSet3 = follower().pathBuilder()
                 //Score set 3
