@@ -1,27 +1,26 @@
-package org.firstinspires.ftc.teamcode.NextFTC.autonomous.LC;
-
-import static dev.nextftc.extensions.pedro.PedroComponent.follower;
+package org.firstinspires.ftc.teamcode.NextFTC.autonomous.alliance.close;
 
 import com.acmerobotics.dashboard.config.Config;
 import com.pedropathing.geometry.BezierCurve;
 import com.pedropathing.geometry.BezierLine;
 import com.pedropathing.geometry.Pose;
+
 import com.pedropathing.paths.HeadingInterpolator;
 import com.pedropathing.paths.PathChain;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
-import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 
 import org.firstinspires.ftc.teamcode.NextFTC.autonomous.PoseStorage;
 import org.firstinspires.ftc.teamcode.NextFTC.sequences_and_groups.asc;
 import org.firstinspires.ftc.teamcode.NextFTC.sequences_and_groups.f;
-import org.firstinspires.ftc.teamcode.NextFTC.subsystems_nf.Hoodnf;
 import org.firstinspires.ftc.teamcode.NextFTC.subsystems_nf.Intakenf;
 import org.firstinspires.ftc.teamcode.NextFTC.subsystems_nf.Lednf;
 import org.firstinspires.ftc.teamcode.NextFTC.subsystems_nf.Shooternf;
 import org.firstinspires.ftc.teamcode.NextFTC.subsystems_nf.Transfernf;
+import org.firstinspires.ftc.teamcode.NextFTC.subsystems_nf.Hoodnf;
 import org.firstinspires.ftc.teamcode.pedroPathing.Constants;
 
 import dev.nextftc.core.commands.Command;
+import dev.nextftc.core.commands.delays.Delay;
 import dev.nextftc.core.commands.groups.ParallelGroup;
 import dev.nextftc.core.commands.groups.SequentialGroup;
 import dev.nextftc.core.components.SubsystemComponent;
@@ -29,23 +28,16 @@ import dev.nextftc.extensions.pedro.PedroComponent;
 import dev.nextftc.ftc.NextFTCOpMode;
 import dev.nextftc.ftc.components.BulkReadComponent;
 
-@Disabled
+import static dev.nextftc.extensions.pedro.PedroComponent.follower;
+
+
 @Config
-@Autonomous(name = "1 gate 15 blue")
-public class BlueClose15Final extends NextFTCOpMode {
-    private double mx(double x) { return 144 - x; }
-
-    private double mh(double deg) {
-        if (deg == 0) return 180;
-        if (deg == 180) return 0;
-        if (deg == 90 || deg == 268) return deg;
-        return 180 - deg;
-    }
-
-    public BlueClose15Final() {
+@Autonomous(name = "Chai Blue 15 Close")
+public class BlueClose15Alliance2Gate extends NextFTCOpMode {
+    public BlueClose15Alliance2Gate() {
         addComponents(
                 new SubsystemComponent(
-                        f.i, asc.i,
+                        f.i,asc.i,
                         Intakenf.INSTANCE, Hoodnf.INSTANCE,
                         Shooternf.INSTANCE, Transfernf.INSTANCE,
                         Lednf.INSTANCE
@@ -68,18 +60,17 @@ public class BlueClose15Final extends NextFTCOpMode {
     public PathChain grabHp;
     public PathChain scoreHp;
 
-    public Pose scorePose = new Pose(89,89);
+    public Pose scorePose = new Pose(55,89);
 
     public void buildPaths() {
-        follower().setStartingPose(new Pose(126.2, 119, Math.toRadians(36)));
+        follower().setStartingPose(new Pose(17.8, 119, Math.toRadians(144)));
 
         scorePreloads = follower()
                 .pathBuilder()
                 .addPath(
-                        new BezierLine(new Pose(126.2, 119), scorePose)
+                        new BezierLine(new Pose(17.8, 119), scorePose)
                 )
-                .setLinearHeadingInterpolation(Math.toRadians(36), Math.toRadians(43))
-//                .setTangentHeadingInterpolation().setReversed()
+                .setLinearHeadingInterpolation(Math.toRadians(144), Math.toRadians(135))
                 .build();
 
 
@@ -89,23 +80,30 @@ public class BlueClose15Final extends NextFTCOpMode {
                 .addPath(
                         new BezierCurve(
                                 scorePose,
-                                new Pose(92.292,77),
-                                new Pose(124, 79)
+                                new Pose(51.708, 77),
+                                new Pose(18, 80)
                         )
                 )
-                .setLinearHeadingInterpolation(Math.toRadians(43), Math.toRadians(0))
+                .setLinearHeadingInterpolation(Math.toRadians(135), Math.toRadians(180))
 
+
+                .addPath(
+                        new BezierCurve(
+                                new Pose(18, 80),
+                                new Pose(32, 77.000),
+                                new Pose(15, 74)
+                        )
+                )
+                .setLinearHeadingInterpolation(Math.toRadians(180), Math.toRadians(180))
 
                 .build();
 
 
         scoreSet2 = follower().pathBuilder()
-                //Score Set 2
                 .addPath(
-                        new BezierLine(new Pose(124, 79), scorePose)
+                        new BezierLine(new Pose(15, 74), scorePose)
                 )
-                .setLinearHeadingInterpolation(Math.toRadians(0), Math.toRadians(43))
-                //was 0
+                .setLinearHeadingInterpolation(Math.toRadians(180), Math.toRadians(136))
                 .build();
 
 
@@ -115,52 +113,47 @@ public class BlueClose15Final extends NextFTCOpMode {
         grabSet3 = follower()
                 .pathBuilder()
 
-                //Grab set 3
                 .addPath(
                         new BezierCurve(
                                 scorePose,
-                                new Pose(87.760, 55.000),
-                                new Pose(79.313, 57.000),
-                                new Pose(131, 54.000)
+                                new Pose(56.240, 55.000),
+                                new Pose(64.687, 57.000),
+                                new Pose(11.6, 54.000)
                         )
                 )
-                .setLinearHeadingInterpolation(Math.toRadians(43), Math.toRadians(0))
-//                .setTangentHeadingInterpolation()
+                .setLinearHeadingInterpolation(Math.toRadians(136), Math.toRadians(180))
 
 
 
-                //Gate 1
                 .addPath(
                         new BezierCurve(
-                                new Pose(131, 54.000),
-                                new Pose(120, 54.000),
-                                new Pose(113.000, 69.000),
-                                new Pose(127.4, 70)
+                                new Pose(11.6, 54.000),
+                                new Pose(24.000, 54.000),
+                                new Pose(38.000, 74.000),
+                                new Pose(15, 66)
                         )
                 )
-                .setLinearHeadingInterpolation(Math.toRadians(0), Math.toRadians(90))
+                .setLinearHeadingInterpolation(Math.toRadians(180), Math.toRadians(180))
 
 
 
                 .build();
 
         scoreSet3 = follower().pathBuilder()
-                //Score set 3
                 .addPath(
-                        new BezierLine(new Pose(127.4, 70), scorePose)
+                        new BezierLine(new Pose(15, 66), scorePose)
                 )
                 .setHeadingInterpolation(
                         HeadingInterpolator.piecewise(
-//                                new HeadingInterpolator.PiecewiseNode(
-//                                        0,
-//                                        0.5,
-//                                        //HeadingInterpolator.tangent.reverse()
-//                                ),
                                 new HeadingInterpolator.PiecewiseNode(
                                         0,
+                                        0.4,
+                                        HeadingInterpolator.linear(Math.toRadians(180), Math.toRadians(180))
+                                ),
+                                new HeadingInterpolator.PiecewiseNode(
+                                        0.4,
                                         1.0,
-                                        //TODO - tune the y value to make ball go in center due to newtons first law
-                                        HeadingInterpolator.facingPoint(new Pose(144,142))
+                                        HeadingInterpolator.facingPoint(new Pose(0,144))
                                 )
                         )
                 )
@@ -173,39 +166,37 @@ public class BlueClose15Final extends NextFTCOpMode {
                 .addPath(
                         new BezierCurve(
                                 scorePose,
-                                new Pose(88, 39),
-                                new Pose(82, 31),
-                                new Pose(131, 33.3)
+                                new Pose(56, 39),
+                                new Pose(62, 31),
+                                new Pose(13, 33.3)
                         )
                 )
-//                .setLinearHeadingInterpolation(Math.toRadians(43), Math.toRadians(0))
                 .setTangentHeadingInterpolation()
 
 
                 .build();
 
 
-        scoreSet4 = PedroComponent.follower().pathBuilder()
+        scoreSet4 = follower()
+                .pathBuilder()
+
                 .addPath(
-                        new BezierLine(
-                                new Pose(131, 33.3),
-                                scorePose
-                        )
+                        new BezierLine(new Pose(13, 33.3), scorePose)
                 )
                 .setHeadingInterpolation(
                         HeadingInterpolator.piecewise(
 
                                 new HeadingInterpolator.PiecewiseNode(
                                         0,
-                                        0.4,
+                                        0.6,
                                         HeadingInterpolator.tangent.reverse()
                                 ),
 
 
                                 new HeadingInterpolator.PiecewiseNode(
-                                        0.4,
+                                        0.6,
                                         1.0,
-                                        HeadingInterpolator.facingPoint(new Pose(144,140))
+                                        HeadingInterpolator.constant(Math.toRadians(138))
                                 )
                         )
                 )
@@ -217,22 +208,20 @@ public class BlueClose15Final extends NextFTCOpMode {
         grabHp = follower()
                 .pathBuilder()
 
-                //grab
                 .addPath(
-                        new BezierCurve(scorePose, new Pose(125,25), new Pose(130,13))
+                        new BezierLine(scorePose, new Pose(17.5,13))
                 )
                 .setTangentHeadingInterpolation()
 
 
-                //assure backup
                 .addPath(
-                        new BezierLine(new Pose(130,13), new Pose(122,15))
+                        new BezierLine(new Pose(17.5,13), new Pose(22,15))
                 )
                 .setTangentHeadingInterpolation().setReversed()
 
-                //assure pickup
+
                 .addPath(
-                        new BezierLine(new Pose(122,15), new Pose(127.5,13))
+                        new BezierLine(new Pose(22,15), new Pose(17.5,13))
                 )
                 .setTangentHeadingInterpolation()
 
@@ -244,8 +233,8 @@ public class BlueClose15Final extends NextFTCOpMode {
                 .pathBuilder()
                 .addPath(
                         new BezierLine(
-                                new Pose(127.5, 13),
-                                new Pose(90.000, 115)
+                                new Pose(17.5, 13),
+                                new Pose(54.000, 110.000)
                         )
                 )
                 .setHeadingInterpolation(
@@ -261,10 +250,9 @@ public class BlueClose15Final extends NextFTCOpMode {
                                         0.7,
                                         1.0,
                                         HeadingInterpolator.linear(
-                                                follower().getHeading(),
-                                                Math.toRadians(28.4)
+                                                Math.toRadians(180),
+                                                Math.toRadians(151.6)
                                         )
-//                                        HeadingInterpolator.facingPoint(new Pose(144,130))
                                 )
                         )
                 )
@@ -275,12 +263,10 @@ public class BlueClose15Final extends NextFTCOpMode {
     }
 
 
-    //TODO - figure out the max and min pos of servo! Does increasing bring hood up or down?
     private Command init_bot() {
         return new ParallelGroup(
-                Hoodnf.INSTANCE.setHoodPos(0.32),
-                Transfernf.INSTANCE.idle(),
-                Lednf.INSTANCE.yellow
+                Hoodnf.INSTANCE.setHoodPos(0.37),
+                Transfernf.INSTANCE.idle()
         );
 
     }
@@ -291,78 +277,62 @@ public class BlueClose15Final extends NextFTCOpMode {
 
 
                 new ParallelGroup(
-                        f.i.follow(scorePreloads,"green"),
-                        asc.i.baseState(-1240,0.32),
-
-                        asc.i.transferSequence(scorePreloads,1.5)
+                        f.i.follow(scorePreloads, "green"),
+                        asc.i.baseState(-1240),
+                        Transfernf.INSTANCE.hotdog()
                 ),
+                asc.i.transferUpFor(1.5),
 
 
-
-                //SET 2
                 new ParallelGroup(
                         new SequentialGroup(
-//                                new ParallelGroup(
-                                f.i.follow(grabSet2,"red"),
-                                //Transfernf.INSTANCE.pickup(grabSet2,2)
-//                                ),
+                                f.i.follow(grabSet2, "red"),
+                                new Delay(0.1),
                                 f.i.follow(scoreSet2,"green")
 
                         ),
                         asc.i.baseState(-1240),
 
-                        asc.i.transferSequenceDistance(scoreSet2,1.6,2)
+                        asc.i.transferSequence(scoreSet2,1.3)
                 ),
 
 
-                //SET 3
                 new ParallelGroup(
                         new SequentialGroup(
-//                                new ParallelGroup(
                                 f.i.follow(grabSet3,"red"),
-//                                        Transfernf.INSTANCE.pickup(grabSet3,2)
-//                                        Transfernf.INSTANCE.hotdog()
-//                                ),
-                                f.i.follow(scoreSet3,"green", true)
+                                new Delay(0.1),
+                                f.i.follow(scoreSet3,"green")
 
                         ),
                         asc.i.baseState(-1240),
 
-                        asc.i.transferSequenceDistance(scoreSet3,1.6,6)
+                        asc.i.transferSequence(scoreSet3,1.3)
                 ),
 
-                //SET 4
+
                 new ParallelGroup(
                         new SequentialGroup(
-//                                new ParallelGroup(
                                 f.i.follow(grabSet4,"red"),
-//                                        Transfernf.INSTANCE.pickup(grabSet4,2)
-//                                        Transfernf.INSTANCE.hotdog()
-//                                ),
+                                new Delay(0.1),
                                 f.i.follow(scoreSet4,"green")
 
                         ),
                         asc.i.baseState(-1240),
 
-                        asc.i.transferSequenceDistance(scoreSet4,1.4,3)
+                        asc.i.transferSequence(scoreSet4,1.3)
                 ),
 
 
 
-                //SET 5 - Human Player
                 new ParallelGroup(
                         new SequentialGroup(
-//                                new ParallelGroup(
                                 f.i.follow(grabHp,"red"),
-//                                        Transfernf.INSTANCE.pickup(grabHp,2)
-//                                        Transfernf.INSTANCE.hotdog()
-//                                ),
+                                new Delay(0.1),
                                 f.i.follow(scoreHp,"green")
                         ),
-                        asc.i.baseState(-1200,0.38, true),
+                        asc.i.baseState(-1200,0.37),
 
-                        //asc.i.transferSequenceDistance(scoreHp,5, 2.6),
-                        asc.i.transferSequenceDistance(scoreHp,5,1)
+                        asc.i.transferSequenceDistance(scoreHp,5, 2.6)
                 )
 
 

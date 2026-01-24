@@ -1,10 +1,11 @@
-package org.firstinspires.ftc.teamcode.NextFTC.autonomous.alliance;
+package org.firstinspires.ftc.teamcode.NextFTC.autonomous.alliance.close;
+
+import static dev.nextftc.extensions.pedro.PedroComponent.follower;
 
 import com.acmerobotics.dashboard.config.Config;
 import com.pedropathing.geometry.BezierCurve;
 import com.pedropathing.geometry.BezierLine;
 import com.pedropathing.geometry.Pose;
-
 import com.pedropathing.paths.HeadingInterpolator;
 import com.pedropathing.paths.PathChain;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
@@ -12,11 +13,11 @@ import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import org.firstinspires.ftc.teamcode.NextFTC.autonomous.PoseStorage;
 import org.firstinspires.ftc.teamcode.NextFTC.sequences_and_groups.asc;
 import org.firstinspires.ftc.teamcode.NextFTC.sequences_and_groups.f;
+import org.firstinspires.ftc.teamcode.NextFTC.subsystems_nf.Hoodnf;
 import org.firstinspires.ftc.teamcode.NextFTC.subsystems_nf.Intakenf;
 import org.firstinspires.ftc.teamcode.NextFTC.subsystems_nf.Lednf;
 import org.firstinspires.ftc.teamcode.NextFTC.subsystems_nf.Shooternf;
 import org.firstinspires.ftc.teamcode.NextFTC.subsystems_nf.Transfernf;
-import org.firstinspires.ftc.teamcode.NextFTC.subsystems_nf.Hoodnf;
 import org.firstinspires.ftc.teamcode.pedroPathing.Constants;
 
 import dev.nextftc.core.commands.Command;
@@ -28,13 +29,21 @@ import dev.nextftc.extensions.pedro.PedroComponent;
 import dev.nextftc.ftc.NextFTCOpMode;
 import dev.nextftc.ftc.components.BulkReadComponent;
 
-import static dev.nextftc.extensions.pedro.PedroComponent.follower;
-
 
 @Config
-@Autonomous(name = "Chai Blue 15 Close")
-public class BlueClose15Alliance extends NextFTCOpMode {
-    public BlueClose15Alliance() {
+@Autonomous(name = "Blue 12 Close 2 Gate")
+public class BlueClose12Alliance2Gate extends NextFTCOpMode {
+
+    private double mx(double x) { return 144 - x; }
+
+    private double mh(double deg) {
+        if (deg == 0) return 180;
+        if (deg == 180) return 0;
+        if (deg == 90 || deg == 268) return deg;
+        return 180 - deg;
+    }
+
+    public BlueClose12Alliance2Gate() {
         addComponents(
                 new SubsystemComponent(
                         f.i,asc.i,
@@ -89,9 +98,9 @@ public class BlueClose15Alliance extends NextFTCOpMode {
 
                 .addPath(
                         new BezierCurve(
-                                new Pose(18, 80),
-                                new Pose(32, 77.000),
-                                new Pose(15, 74)
+                                new Pose(mx(126.5), 83.4),
+                                new Pose(mx(112), 77.000),
+                                new Pose(mx(130), 71.000)
                         )
                 )
                 .setLinearHeadingInterpolation(Math.toRadians(180), Math.toRadians(180))
@@ -127,10 +136,9 @@ public class BlueClose15Alliance extends NextFTCOpMode {
 
                 .addPath(
                         new BezierCurve(
-                                new Pose(11.6, 54.000),
-                                new Pose(24.000, 54.000),
-                                new Pose(38.000, 74.000),
-                                new Pose(15, 66)
+                                new Pose(mx(126.5), 83.4),
+                                new Pose(mx(112), 77.000),
+                                new Pose(mx(130), 71.000)
                         )
                 )
                 .setLinearHeadingInterpolation(Math.toRadians(180), Math.toRadians(180))
@@ -320,19 +328,6 @@ public class BlueClose15Alliance extends NextFTCOpMode {
                         asc.i.baseState(-1240),
 
                         asc.i.transferSequence(scoreSet4,1.3)
-                ),
-
-
-
-                new ParallelGroup(
-                        new SequentialGroup(
-                                f.i.follow(grabHp,"red"),
-                                new Delay(0.1),
-                                f.i.follow(scoreHp,"green")
-                        ),
-                        asc.i.baseState(-1200,0.37),
-
-                        asc.i.transferSequenceDistance(scoreHp,5, 2.6)
                 )
 
 

@@ -1,4 +1,4 @@
-package org.firstinspires.ftc.teamcode.NextFTC.autonomous.alliance;
+package org.firstinspires.ftc.teamcode.NextFTC.autonomous.alliance.pushbot;
 
 import com.pedropathing.geometry.BezierCurve;
 import com.pedropathing.geometry.BezierLine;
@@ -17,19 +17,19 @@ import org.firstinspires.ftc.teamcode.NextFTC.subsystems_nf.Transfernf;
 import org.firstinspires.ftc.teamcode.NextFTC.subsystems_nf.Hoodnf;
 import org.firstinspires.ftc.teamcode.pedroPathing.Constants;
 
-
 import dev.nextftc.core.commands.Command;
 import dev.nextftc.core.commands.groups.ParallelGroup;
 import dev.nextftc.core.commands.groups.SequentialGroup;
 import dev.nextftc.core.components.SubsystemComponent;
+import dev.nextftc.extensions.pedro.FollowPath;
 import dev.nextftc.extensions.pedro.PedroComponent;
 import dev.nextftc.ftc.NextFTCOpMode;
 import dev.nextftc.ftc.components.BulkReadComponent;
 
-@Autonomous(name = "blue pushbot")
-public class BluePushBot12 extends NextFTCOpMode {
+@Autonomous(name = "red pushbot")
+public class RedPushBot12 extends NextFTCOpMode {
 
-    public BluePushBot12() {
+    public RedPushBot12() {
         addComponents(
                 new SubsystemComponent(
                         Intakenf.INSTANCE, Hoodnf.INSTANCE,
@@ -41,15 +41,6 @@ public class BluePushBot12 extends NextFTCOpMode {
         );
     }
 
-    private double mx(double x) { return 144 - x; }
-
-    private double mh(double deg) {
-        if (deg == 0) return 180;
-        if (deg == 180) return 0;
-        if (deg == 90 || deg == 268) return deg;
-        return 180 - deg;
-    }
-
     public PathChain scorePreloads;
     public PathChain set2;
     public PathChain grabSet3;
@@ -58,20 +49,20 @@ public class BluePushBot12 extends NextFTCOpMode {
     public PathChain scoreSet4;
     public PathChain pushBot;
 
-    public Pose scorePose = new Pose(mx(88),88);
-    public Pose farScorePose = new Pose(mx(88), 17);
+    public Pose scorePose = new Pose(88,88);
+    public Pose farScorePose = new Pose(88, 17);
 
     public static Pose startingPose = new Pose();
 
     public void buildPaths() {
-        PedroComponent.follower().setStartingPose(new Pose(mx(126.2), 119, Math.toRadians(mh(36))));
+        PedroComponent.follower().setStartingPose(new Pose(126.2, 119, Math.toRadians(36)));
 
         scorePreloads = PedroComponent.follower()
                 .pathBuilder()
                 .addPath(
-                        new BezierLine(new Pose(mx(126.2), 119.000), scorePose)
+                        new BezierLine(new Pose(126.2, 119.000), scorePose)
                 )
-                .setLinearHeadingInterpolation(Math.toRadians(mh(36)), Math.toRadians(mh(43)))
+                .setLinearHeadingInterpolation(Math.toRadians(36), Math.toRadians(43))
                 .build();
 
         set2 = PedroComponent.follower()
@@ -79,27 +70,27 @@ public class BluePushBot12 extends NextFTCOpMode {
                 .addPath(
                         new BezierCurve(
                                 scorePose,
-                                new Pose(mx(92.292), 77),
-                                new Pose(mx(126.5), 83.4)
+                                new Pose(92.292, 77),
+                                new Pose(126.5, 83.4)
                         )
                 )
-                .setLinearHeadingInterpolation(Math.toRadians(mh(43)), Math.toRadians(mh(0)))
+                .setLinearHeadingInterpolation(Math.toRadians(43), Math.toRadians(0))
 
                 //gate 1
                 .addPath(
                         new BezierCurve(
-                                new Pose(mx(126.5), 83.4),
-                                new Pose(mx(112), 77.000),
-                                new Pose(mx(130), 71.000)
+                                new Pose(126.5, 83.4),
+                                new Pose(112, 77.000),
+                                new Pose(130, 71.000)
                         )
                 )
-                .setLinearHeadingInterpolation(Math.toRadians(mh(0)), Math.toRadians(mh(90)))
+                .setLinearHeadingInterpolation(Math.toRadians(0), Math.toRadians(90))
 
                 //score set 2
                 .addPath(
-                        new BezierLine(new Pose(mx(130), 71.000), scorePose)
+                        new BezierLine(new Pose(130, 71.000), scorePose)
                 )
-                .setLinearHeadingInterpolation(Math.toRadians(mh(90)), Math.toRadians(mh(43)))
+                .setLinearHeadingInterpolation(Math.toRadians(90), Math.toRadians(43))
                 .build();
 
 
@@ -109,25 +100,25 @@ public class BluePushBot12 extends NextFTCOpMode {
                 .addPath(
                         new BezierCurve(
                                 scorePose,
-                                new Pose(mx(87.760), 55),
-                                new Pose(mx(79.313), 57),
-                                new Pose(mx(133), 54)
+                                new Pose(87.760, 55),
+                                new Pose(79.313, 57),
+                                new Pose(133, 54)
                         )
                 )
-                .setLinearHeadingInterpolation(Math.toRadians(mh(43)), Math.toRadians(mh(0)))
+                .setLinearHeadingInterpolation(Math.toRadians(43), Math.toRadians(0))
                 .build();
 
         scoreSet3 = PedroComponent.follower()
                 .pathBuilder()
                 .addPath(
                         new BezierCurve(
-                                new Pose(mx(133), 54),
-                                new Pose(mx(91.262), 56.240),
-                                new Pose(mx(95.176), 82.815),
+                                new Pose(133, 54),
+                                new Pose(91.262, 56.240),
+                                new Pose(95.176, 82.815),
                                 scorePose
                         )
                 )
-                .setLinearHeadingInterpolation(Math.toRadians(mh(90)), Math.toRadians(mh(43)))
+                .setLinearHeadingInterpolation(Math.toRadians(0), Math.toRadians(43))
                 .build();
 
 
@@ -136,31 +127,33 @@ public class BluePushBot12 extends NextFTCOpMode {
                 .addPath(
                         new BezierCurve(
                                 scorePose,
-                                new Pose(mx(88), 39),
-                                new Pose(mx(82), 31),
-                                new Pose(mx(132), 35)
+                                new Pose(88, 39),
+                                new Pose(82, 31),
+                                new Pose(132, 35)
                         )
                 )
-                .setLinearHeadingInterpolation(Math.toRadians(mh(43)), Math.toRadians(mh(0)))
+                .setLinearHeadingInterpolation(Math.toRadians(43), Math.toRadians(0))
                 .build();
 
         scoreSet4 = PedroComponent.follower().pathBuilder().addPath(
                         new BezierCurve(
-                                new Pose(mx(132.000), 35.000),
-                                new Pose(mx(79), 55),
-                                new Pose(mx(82), 16)
+                                new Pose(132.000, 35.000),
+                                new Pose(79, 55),
+                                new Pose(82, 16)
                         )
-                ).setLinearHeadingInterpolation(Math.toRadians(mh(0)), Math.toRadians(mh(67)))
+                ).setLinearHeadingInterpolation(Math.toRadians(0), Math.toRadians(67))
 
                 .build();
 
         pushBot = PedroComponent.follower()
                 .pathBuilder()
                 .addPath(
-                        new BezierLine(new Pose(mx(82), 16), new Pose(mx(100), 16))
+                        new BezierLine(new Pose(82, 16), new Pose(100, 16))
                 )
-                .setLinearHeadingInterpolation(Math.toRadians(mh(67)), Math.toRadians(mh(90)))
+                .setLinearHeadingInterpolation(Math.toRadians(67), Math.toRadians(90))
                 .build();
+
+
 
     }
 
@@ -219,15 +212,15 @@ public class BluePushBot12 extends NextFTCOpMode {
 
                         new ParallelGroup(
                                 new SequentialGroup(
-                                        f.i.follow(grabSet4),
-                                        f.i.follow(scoreSet4)
+                                        new FollowPath(grabSet4),
+                                        new FollowPath(scoreSet4)
                                 ),
                                 asc.i.baseState(-1525, 0.33),
                                 asc.i.transferSequenceDistance(scoreSet4,2.5,1)
 
                         ),
 
-                        f.i.follow(pushBot)
+                        new FollowPath(pushBot)
 
 
                 )

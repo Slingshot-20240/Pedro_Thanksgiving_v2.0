@@ -1,4 +1,4 @@
-package org.firstinspires.ftc.teamcode.NextFTC.autonomous.LC;
+package org.firstinspires.ftc.teamcode.NextFTC.autonomous.LC.broken;
 
 import com.acmerobotics.dashboard.config.Config;
 import com.pedropathing.geometry.BezierCurve;
