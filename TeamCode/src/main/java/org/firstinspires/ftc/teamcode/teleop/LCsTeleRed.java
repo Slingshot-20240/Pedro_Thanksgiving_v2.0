@@ -310,6 +310,7 @@ public class LCsTeleRed extends OpMode {
     @Override
     public void stop() {
         PoseStorage.startingPose = follower.getPose();
+        robot.shooter.variableHood.setPosition(0.5);
     }
     private double angleWrap(double angle) {
         while (angle > Math.PI) angle -= 2 * Math.PI;

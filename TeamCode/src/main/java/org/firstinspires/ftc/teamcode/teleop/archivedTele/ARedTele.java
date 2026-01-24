@@ -44,8 +44,8 @@ public class ARedTele extends OpMode {
     @Override
     public void init() {
         controls = new GamepadMapping(gamepad1, gamepad2);
-        robot = new Robot(hardwareMap, controls, telemetry);
-        cam = new logi(hardwareMap, telemetry);
+        robot = new Robot(hardwareMap, controls);
+        cam = new logi(hardwareMap);
         fsm = new FSM(hardwareMap, controls, robot);
 
         follower = Constants.createFollower(hardwareMap);
