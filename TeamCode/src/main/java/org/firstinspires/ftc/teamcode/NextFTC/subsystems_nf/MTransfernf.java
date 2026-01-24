@@ -22,7 +22,7 @@ public class MTransfernf implements Subsystem {
 
     public Command on() {
         return new ParallelGroup(
-                new SetPower(frontTransfer, -1), // DO NOT CHANGE NO MATTER WHAT!!! esp before round
+                new SetPower(frontTransfer, -1.0), // DO NOT CHANGE NO MATTER WHAT!!! esp before round
                 new SetPower(backTransfer, -1.0)
         ).addRequirements(frontTransfer, backTransfer);
     }
