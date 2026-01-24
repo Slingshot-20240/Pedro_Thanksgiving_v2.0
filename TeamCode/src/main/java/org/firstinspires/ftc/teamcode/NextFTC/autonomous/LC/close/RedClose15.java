@@ -84,18 +84,6 @@ public class RedClose15 extends NextFTCOpMode {
                         )
                 )
                 .setLinearHeadingInterpolation(Math.toRadians(45), Math.toRadians(0))
-
-
-            //Gate 1
-                .addPath(
-                        new BezierCurve(
-                                new Pose(126.5, 83.4),
-                                new Pose(112, 77.000),
-                                new Pose(130, 71.000)
-                        )
-                )
-                .setLinearHeadingInterpolation(Math.toRadians(0), Math.toRadians(0))
-
                 .build();
 
 
@@ -125,8 +113,23 @@ public class RedClose15 extends NextFTCOpMode {
                         )
                 )
                 .setLinearHeadingInterpolation(Math.toRadians(45), Math.toRadians(0))
-                .build();
 //                .setTangentHeadingInterpolation()
+
+
+
+                //Gate 2
+                .addPath(
+                        new BezierCurve(
+                                new Pose(126.5, 83.4),
+                                new Pose(112, 77.000),
+                                new Pose(130, 71.000)
+                        )
+                )
+                .setLinearHeadingInterpolation(Math.toRadians(0), Math.toRadians(90))
+
+
+
+                .build();
 
         scoreSet3 = follower().pathBuilder()
                 //Score set 3

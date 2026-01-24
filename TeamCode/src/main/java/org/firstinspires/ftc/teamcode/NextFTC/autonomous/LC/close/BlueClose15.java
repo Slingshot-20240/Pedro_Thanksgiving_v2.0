@@ -98,9 +98,9 @@ public class BlueClose15 extends NextFTCOpMode {
 
                 .addPath(
                         new BezierCurve(
-                                new Pose(mx(126.5), 83.4),
-                                new Pose(mx(112), 77.000),
-                                new Pose(mx(130), 71.000)
+                                new Pose(18, 80),
+                                new Pose(32, 77.000),
+                                new Pose(15, 74)
                         )
                 )
                 .setLinearHeadingInterpolation(Math.toRadians(180), Math.toRadians(180))
@@ -131,6 +131,20 @@ public class BlueClose15 extends NextFTCOpMode {
                         )
                 )
                 .setLinearHeadingInterpolation(Math.toRadians(136), Math.toRadians(180))
+
+
+
+                .addPath(
+                        new BezierCurve(
+                                new Pose(mx(126.5), 83.4),
+                                new Pose(mx(112), 77.000),
+                                new Pose(mx(130), 71.000)
+                        )
+                )
+                .setLinearHeadingInterpolation(Math.toRadians(180), Math.toRadians(180))
+
+
+
                 .build();
 
         scoreSet3 = follower().pathBuilder()
