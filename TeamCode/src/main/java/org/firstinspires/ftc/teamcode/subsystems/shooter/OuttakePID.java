@@ -18,7 +18,7 @@ public class OuttakePID extends LinearOpMode {
     public void runOpMode() {
         gamepad = new GamepadMapping(gamepad1, gamepad2);
         outtake = hardwareMap.get(DcMotorEx.class, "outtake");
-        robot = new Robot(hardwareMap, gamepad, telemetry);
+        robot = new Robot(hardwareMap, gamepad);
         
         // Set PIDF (start with defaults, tune later)
         outtake.setVelocityPIDFCoefficients(0.2, 2.0, 0.002, 0.0);

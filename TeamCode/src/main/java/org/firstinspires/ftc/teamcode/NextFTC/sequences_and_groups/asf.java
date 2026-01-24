@@ -76,6 +76,14 @@ public class asf extends SubsystemGroup {
                 transferUpFor(transferTime)
         );
     }
+    public final Command transferSequenceDistance(PathChain pathChain, double transferTime, double proximity, double spinUpTime) {
+        return new SequentialGroup(
+                new Delay(spinUpTime),
+                Transfernf.INSTANCE.hotdog(),
+                new WaitUntil(() -> pathChain.lastPath().getDistanceRemaining() < proximity),
+                transferUpFor(transferTime)
+        );
+    }
 
     public final Command baseState(double shooterVel) {
         return new ParallelGroup(
