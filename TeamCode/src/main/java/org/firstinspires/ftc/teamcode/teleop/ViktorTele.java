@@ -4,11 +4,7 @@ import com.acmerobotics.dashboard.config.Config;
 import com.bylazar.telemetry.PanelsTelemetry;
 import com.bylazar.telemetry.TelemetryManager;
 import com.pedropathing.follower.Follower;
-import com.pedropathing.geometry.BezierLine;
 import com.pedropathing.geometry.Pose;
-import com.pedropathing.paths.HeadingInterpolator;
-import com.pedropathing.paths.Path;
-import com.pedropathing.paths.PathChain;
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 
@@ -17,10 +13,6 @@ import org.firstinspires.ftc.teamcode.misc.gamepad.GamepadMapping;
 import org.firstinspires.ftc.teamcode.pedroPathing.Constants;
 import org.firstinspires.ftc.teamcode.subsystems.robot.Robot;
 import org.firstinspires.ftc.teamcode.teleop.fsm.FSM;
-
-import java.util.function.Supplier;
-
-import dev.nextftc.extensions.pedro.PedroComponent;
 
 @Config
 @TeleOp
@@ -35,10 +27,6 @@ public class ViktorTele extends OpMode {
     private boolean autoTurnVision = false;
     private boolean autoTurnOdo = false;
 
-    private boolean automatedDrive;
-    private Supplier<PathChain> pathChain;
-
-
     private TelemetryManager telemetryM;
     public static double odoDistance;
 
@@ -51,8 +39,8 @@ public class ViktorTele extends OpMode {
     public static double visionMiniTolerance = 0.02;
 
     // ODO target
-    public static double GOAL_X = 140;
-    public static double GOAL_Y = 140;
+    public static double GOAL_X = 138;
+    public static double GOAL_Y = 138;
 
     // ODO tuning
     public static double odoTurn_kP = 0.3;
@@ -72,19 +60,6 @@ public class ViktorTele extends OpMode {
 
         telemetryM = PanelsTelemetry.INSTANCE.getTelemetry();
 
-        pathChain = () -> follower.pathBuilder()
-                .addPath(new Path(new BezierLine(
-                        follower::getPose,
-                        new Pose(104, 32)
-                )))
-                .setHeadingInterpolation(
-                        HeadingInterpolator.linearFromPoint(
-                                follower::getHeading,
-                                Math.toRadians(90),
-                                0.8 //TODO - try diff t values
-                        )
-                )
-                .build();
     }
 
     @Override
@@ -103,7 +78,7 @@ public class ViktorTele extends OpMode {
 
         Pose pose = follower.getPose();
         double heading = pose.getHeading();
-        odoDistance = pose.distanceFrom(new Pose(140,140));
+        odoDistance = pose.distanceFrom(new Pose(138,138));
 
 
         boolean controllerBusy =
@@ -168,6 +143,8 @@ public class ViktorTele extends OpMode {
 
 
         follower.setTeleOpDrive(forward, strafe, rotate, true);
+        //TODO - Check if even needed
+        follower.startTeleopDrive(true);
 
         if (gamepad1.x) {
             follower.setPose(new Pose(72,8,Math.toRadians(90)));
@@ -175,15 +152,8 @@ public class ViktorTele extends OpMode {
 
         // Path following
 
-        if (gamepad1.startWasPressed()) {
-            follower.followPath(pathChain.get());
-            automatedDrive = true;
-        }
 
-        if (automatedDrive && (controllerBusy || !follower.isBusy())) {
-            follower.startTeleopDrive();
-            automatedDrive = false;
-        }
+
 
         /* ---------------- AUTO TURN TOGGLES ---------------- */
 
@@ -214,7 +184,6 @@ public class ViktorTele extends OpMode {
         telemetry.addData("ODO Error (deg)", Math.toDegrees(odoHeadingError));
         telemetry.addData("AutoTurn Vision", autoTurnVision);
         telemetry.addData("AutoTurn ODO", autoTurnOdo);
-        telemetry.addData("AutoPath", automatedDrive);
     }
 
     @Override
