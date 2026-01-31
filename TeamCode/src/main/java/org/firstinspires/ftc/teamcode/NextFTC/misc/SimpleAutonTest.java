@@ -10,12 +10,14 @@ import com.pedropathing.geometry.BezierLine;
 import com.pedropathing.geometry.Pose;
 
 import com.pedropathing.paths.HeadingInterpolator;
+import com.pedropathing.paths.Path;
 import com.pedropathing.paths.PathChain;
 import com.pedropathing.paths.callbacks.PathCallback;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 
 import org.firstinspires.ftc.robotcore.external.Telemetry;
+import org.firstinspires.ftc.teamcode.NextFTC.sequences_and_groups.asc;
 import org.firstinspires.ftc.teamcode.pedroPathing.DrawingNew;
 
 
@@ -52,7 +54,7 @@ public class SimpleAutonTest extends NextFTCOpMode {
     public SimpleAutonTest() {
         addComponents(
                 new SubsystemComponent(
-                        f.i,
+                        f.i, asc.i,
                         Intakenf.INSTANCE, Hoodnf.INSTANCE,
                         Shooternf.INSTANCE, Transfernf.INSTANCE,
                         Lednf.INSTANCE, Loginf.INSTANCE
@@ -62,13 +64,10 @@ public class SimpleAutonTest extends NextFTCOpMode {
         );
     }
 
-    public PathChain scorePreloads;
 
-    public PathChain grabMiddleSet, scoreMiddleSet;
-    public PathChain grabGate, scoreGate;
-    public PathChain grabGate2, scoreGate2;
-    public PathChain grabGate3, scoreGate3;
-    public PathChain grabSet4, scoreSet4;
+    public PathChain adjust;
+
+    public PathChain scorePreloads;
 
     public PathChain grabSet2, scoreSet2;
 
@@ -84,7 +83,25 @@ public class SimpleAutonTest extends NextFTCOpMode {
                 .addPath(
                         new BezierLine(new Pose(126.2, 119), scorePose)
                 )
+                .addParametricCallback(0.5, () -> asc.i.transferUpFor(2))
                 .setLinearHeadingInterpolation(Math.toRadians(36), Math.toRadians(50))
+                .build();
+
+        adjust = follower()
+                .pathBuilder()
+                .addPath(
+                        new BezierLine(follower()::getPose, follower()::getPose)
+                )
+
+                .setHeadingInterpolation(
+                        HeadingInterpolator.lazy(() -> {
+                            double start = follower().getHeading();
+                            double end = start + Math.toRadians(Loginf.INSTANCE.getATangle());
+
+                            return HeadingInterpolator.linear(start, end);
+                        })
+                )
+
                 .build();
 
         grabSet2 = PedroComponent.follower()
@@ -128,31 +145,13 @@ public class SimpleAutonTest extends NextFTCOpMode {
 
     private Command autonomous() {
         return new SequentialGroup(
+
                 new ParallelGroup(
-                        Shooternf.INSTANCE.setShooterVel(-1240),
-                        Intakenf.INSTANCE.in(),
-                        new FollowPath(scorePreloads),
-                        new SequentialGroup(
-                                Transfernf.INSTANCE.hotdog(),
-                                new WaitUntil(() -> scorePreloads.lastPath().isAtParametricEnd()),
-                                Lednf.INSTANCE.yellow
-//                                Transfernf.INSTANCE.on()
-                        )
-                ),
-                new FollowPath(grabSet2),
-                new ParallelGroup(
-                        Shooternf.INSTANCE.setShooterVel(-1240),
-                        Intakenf.INSTANCE.in(),
-                        new FollowPath(scoreSet2),
-                        new SequentialGroup(
-                                Transfernf.INSTANCE.hotdog(),
-                                new WaitUntil(() -> scoreSet2.lastPath().isAtParametricEnd()),
-                                Lednf.INSTANCE.yellow
-//                                Transfernf.INSTANCE.on()
-                        )
+                        f.i.follow(scorePreloads, "green"),
+                        asc.i.baseState(-1240),
+                        //try false also, see if parametric callback interrupts it
+                        Transfernf.INSTANCE.hotdog().setInterruptible(true)
                 )
-
-
 
 
         );

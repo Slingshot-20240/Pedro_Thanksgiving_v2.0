@@ -6,6 +6,7 @@ import com.pedropathing.geometry.BezierLine;
 import com.pedropathing.geometry.Pose;
 
 import com.pedropathing.paths.HeadingInterpolator;
+import com.pedropathing.paths.Path;
 import com.pedropathing.paths.PathChain;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 
@@ -14,6 +15,7 @@ import org.firstinspires.ftc.teamcode.NextFTC.sequences_and_groups.asc;
 import org.firstinspires.ftc.teamcode.NextFTC.sequences_and_groups.f;
 import org.firstinspires.ftc.teamcode.NextFTC.subsystems_nf.Intakenf;
 import org.firstinspires.ftc.teamcode.NextFTC.subsystems_nf.Lednf;
+import org.firstinspires.ftc.teamcode.NextFTC.subsystems_nf.Loginf;
 import org.firstinspires.ftc.teamcode.NextFTC.subsystems_nf.Shooternf;
 import org.firstinspires.ftc.teamcode.NextFTC.subsystems_nf.Transfernf;
 import org.firstinspires.ftc.teamcode.NextFTC.subsystems_nf.Hoodnf;
@@ -39,12 +41,14 @@ public class RedClose15Alliance2Gate extends NextFTCOpMode {
                         f.i, asc.i,
                         Intakenf.INSTANCE, Hoodnf.INSTANCE,
                         Shooternf.INSTANCE, Transfernf.INSTANCE,
-                        Lednf.INSTANCE
+                        Lednf.INSTANCE, Loginf.INSTANCE
                 ),
                 new PedroComponent(Constants::createFollower),
                 BulkReadComponent.INSTANCE
         );
     }
+
+    public PathChain adjust;
 
     public PathChain scorePreloads;
 
@@ -69,11 +73,26 @@ public class RedClose15Alliance2Gate extends NextFTCOpMode {
                 .addPath(
                         new BezierLine(new Pose(126.2, 119), scorePose)
                 )
+                .addParametricCallback(0.95, () -> asc.i.transferUpFor(2))
                 .setLinearHeadingInterpolation(Math.toRadians(36), Math.toRadians(45))
-//                .setTangentHeadingInterpolation().setReversed()
                 .build();
 
+        adjust = follower()
+                .pathBuilder()
+                .addPath(
+                        new BezierLine(follower()::getPose, follower()::getPose)
+                )
 
+                .setHeadingInterpolation(
+                        HeadingInterpolator.lazy(() -> {
+                            double start = follower().getHeading();
+                            double end = start + Math.toRadians(Loginf.INSTANCE.getATangle());
+
+                            return HeadingInterpolator.linear(start, end);
+                        })
+                )
+
+                .build();
 
         grabSet2 = PedroComponent.follower()
                 .pathBuilder()
