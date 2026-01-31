@@ -22,12 +22,13 @@ public class Robot {
     // front - 0
     // back - 1
 
-    // Front transfer 3 control hub
-    // Back transfer 5 control hub
-    // servo variable hood 0 on control hub
-    // outtake1 control hub 3
-    // outtake2 control hub 2
-    // intake expansion hub port 3
+    // servo transferF 3 control hub
+    // servo transferB 5 control hub
+    // servo variableHood 0 on control hub
+
+    // motor outtake1 control hub 3
+    // motor outtake2 control hub 2
+    // motor intake expansion hub port 3
 
     // MECHANISMS
     public final IMU imu;
@@ -35,6 +36,10 @@ public class Robot {
     public Transfer transfer;
     public Shooter shooter;
     public Drivetrain drivetrain;
+
+    public Park park;
+
+
     public GoBildaPinpointDriver driver;
     public Park park;
 
@@ -63,6 +68,8 @@ public class Robot {
         shooter = new Shooter(hardwareMap);
         park = new Park(hardwareMap);
 
+        park = new Park(hardwareMap);
+
         drivetrain = new Drivetrain(hardwareMap, imu, controls);
 
         ledBoard0 = hardwareMap.get(DigitalChannel.class, "ledBoard0");
@@ -73,7 +80,7 @@ public class Robot {
 
     public Robot(GamepadMapping controls, IMU imu, GoBildaPinpointDriver pinpoint,
                  logi cam, Intake intake, Transfer transfer, Shooter shooter, Drivetrain dt,
-                 DigitalChannel led0, DigitalChannel led1) {
+                 DigitalChannel led0, DigitalChannel led1, Park park) {
         this.controls = controls;
         this.imu = imu;
         this.driver = pinpoint;
@@ -84,6 +91,7 @@ public class Robot {
         this.drivetrain = dt;
         this.ledBoard0 = led0;
         this.ledBoard1 = led1;
+        this.park = park;
     }
 
     public void hardwareSoftReset() {
