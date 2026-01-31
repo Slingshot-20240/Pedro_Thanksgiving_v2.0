@@ -46,8 +46,8 @@ public class ViktorTele extends OpMode {
     public static double tolerance = 0.02;
 
     // Vision tuning
-    public static double visionTurn_kP = 0.1;
-    public static double visionMinTurnPower = 0.08;
+    public static double visionTurn_kP = 0.25;
+    public static double visionMinTurnPower = 0.11;
     public static double visionMiniTolerance = 0.02;
 
     // ODO target
