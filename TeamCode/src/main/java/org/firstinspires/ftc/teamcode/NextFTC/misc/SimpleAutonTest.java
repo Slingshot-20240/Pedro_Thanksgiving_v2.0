@@ -151,7 +151,9 @@ public class SimpleAutonTest extends NextFTCOpMode {
                         asc.i.baseState(-1240),
                         //try false also, see if parametric callback interrupts it
                         Transfernf.INSTANCE.hotdog().setInterruptible(true)
-                )
+                ),
+                f.i.follow(adjust,"red"),
+                Lednf.INSTANCE.color("green")
 
 
         );
