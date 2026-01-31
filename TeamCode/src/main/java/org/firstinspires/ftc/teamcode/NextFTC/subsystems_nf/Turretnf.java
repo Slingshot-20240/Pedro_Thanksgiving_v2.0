@@ -43,9 +43,7 @@ public class Turretnf implements Subsystem {
     private static final double TURRET_MAX_DEG =  50;
     public static boolean AUTO_AIM = true;
 
-    Pose goal = new Pose(144,144);
-
-
+    Pose goal = new Pose(141.5,141.5);
 
 
     @Override
