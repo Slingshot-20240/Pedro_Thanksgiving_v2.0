@@ -5,6 +5,7 @@ import com.qualcomm.robotcore.hardware.HardwareMap;
 
 import org.firstinspires.ftc.teamcode.misc.gamepad.GamepadMapping;
 import org.firstinspires.ftc.teamcode.subsystems.intake.Intake;
+import org.firstinspires.ftc.teamcode.subsystems.park.Park;
 import org.firstinspires.ftc.teamcode.subsystems.robot.Robot;
 import org.firstinspires.ftc.teamcode.subsystems.shooter.Shooter;
 import org.firstinspires.ftc.teamcode.subsystems.transfer.Transfer;
@@ -20,6 +21,7 @@ public class FSM {
     private final Intake intake;
     private final Transfer transfer;
     private final Shooter shooter;
+    private final Park park;
 
     public double lastVelo = 800;
 
@@ -35,7 +37,7 @@ public class FSM {
 
         intake = robot.intake;
         transfer = robot.transfer;
-
+        park = robot.park;
         shooter = robot.shooter;
     }
 
@@ -44,6 +46,7 @@ public class FSM {
 
         switch (state) {
             case BASE_STATE:
+                park.unTilt();
 
                 if (type == ControlType.HARDCODED_CONTROL) {
                     shooter.shootFromFront();
@@ -62,6 +65,10 @@ public class FSM {
 //                } else {
 //                    type = savedType;
 //                }
+
+                if (gamepad.park.value()) {
+                    state = FSMStates.PARK;
+                }
 
                 transfer.hotDog();
 
@@ -174,6 +181,14 @@ public class FSM {
                     state = FSMStates.BASE_STATE;
                     gamepad.resetMultipleControls(gamepad.transfer, gamepad.outtake);
                 }
+
+            case PARK:
+                park.tilt();
+                if (!gamepad.park.value()) {
+                    state = FSMStates.BASE_STATE;
+                    gamepad.resetMultipleControls(gamepad.park, gamepad.outtake, gamepad.transfer);
+                }
+
         }
     }
 
@@ -198,7 +213,8 @@ public class FSM {
         SHOOT_FRONT,
         SHOOT_BACK,
         OUTTAKING,
-        PID_SHOOT
+        PID_SHOOT,
+        PARK
     }
 
     public enum ControlType {

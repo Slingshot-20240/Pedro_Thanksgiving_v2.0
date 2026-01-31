@@ -24,6 +24,7 @@ public class GamepadMapping {
     public Toggle transfer; // LM1
     public Toggle outtake; // LM1
     public Toggle switchMode; // switch btwn PID shoot and hardcoded
+    public Toggle park;
 
     public GamepadMapping(Gamepad gamepad1, Gamepad gamepad2) {
         // GAMEPADS
@@ -41,6 +42,7 @@ public class GamepadMapping {
         transfer = new Toggle(false);
         outtake = new Toggle(false);
         switchMode = new Toggle(false);
+        park = new Toggle(false);
     }
 
     public void joystickUpdate() {
@@ -66,6 +68,7 @@ public class GamepadMapping {
 
         // MISC
         switchMode.update(gamepad1.dpad_down);
+        park.update(gamepad1.dpad_up);
     }
 
     public void resetMultipleControls(Toggle... toggles) {

@@ -10,6 +10,7 @@ import org.firstinspires.ftc.robotcore.external.Telemetry;
 import org.firstinspires.ftc.teamcode.misc.gamepad.GamepadMapping;
 import org.firstinspires.ftc.teamcode.subsystems.drivetrain.Drivetrain;
 import org.firstinspires.ftc.teamcode.subsystems.intake.Intake;
+import org.firstinspires.ftc.teamcode.subsystems.park.Park;
 import org.firstinspires.ftc.teamcode.subsystems.shooter.Shooter;
 import org.firstinspires.ftc.teamcode.subsystems.transfer.Transfer;
 import org.firstinspires.ftc.teamcode.subsystems.vision.logi;
@@ -35,6 +36,7 @@ public class Robot {
     public Shooter shooter;
     public Drivetrain drivetrain;
     public GoBildaPinpointDriver driver;
+    public Park park;
 
     public GamepadMapping controls;
 
@@ -59,6 +61,7 @@ public class Robot {
         intake = new Intake(hardwareMap);
         transfer = new Transfer(hardwareMap);
         shooter = new Shooter(hardwareMap);
+        park = new Park(hardwareMap);
 
         drivetrain = new Drivetrain(hardwareMap, imu, controls);
 
