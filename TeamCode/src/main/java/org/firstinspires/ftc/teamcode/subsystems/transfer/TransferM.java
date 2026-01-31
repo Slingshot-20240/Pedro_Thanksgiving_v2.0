@@ -1,28 +1,31 @@
 package org.firstinspires.ftc.teamcode.subsystems.transfer;
 
 import com.qualcomm.robotcore.hardware.CRServo;
+import com.qualcomm.robotcore.hardware.DcMotorEx;
+import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 
-public class Transfer {
+public class TransferM {
     public final CRServo backTransfer;
-    public final CRServo frontTransfer;
+    public final DcMotorEx frontTransfer;
 
 
-    public Transfer(HardwareMap hardwareMap) {
+    public TransferM(HardwareMap hardwareMap) {
         backTransfer = hardwareMap.get(CRServo.class, "transferB");
-        frontTransfer = hardwareMap.get(CRServo.class, "transferF");
+        frontTransfer = hardwareMap.get(DcMotorEx.class, "transferF");
 
+        frontTransfer.setDirection(DcMotorSimple.Direction.FORWARD);
     }
 
-    public Transfer(CRServo frontTransfer, CRServo backTransfer) {
+    public TransferM(DcMotorEx frontTransfer, CRServo backTransfer) {
         this.frontTransfer = frontTransfer;
         this.backTransfer = backTransfer;
     }
 // ------------------------------------------------------------------
 
     public void transferOn() {
-        backTransfer.setPower(-1.0);
-        frontTransfer.setPower(-0.8);
+        backTransfer.setPower(-1);
+        frontTransfer.setPower(-1);
     }
 
     public void transferOff() {
@@ -31,8 +34,8 @@ public class Transfer {
     }
 
     public void hotDog() {
-        backTransfer.setPower(1.0);
-        frontTransfer.setPower(-0.12);
+        backTransfer.setPower(1);
+        frontTransfer.setPower(-0.08);
     }
 
 }

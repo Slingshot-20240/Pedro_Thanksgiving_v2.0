@@ -52,6 +52,10 @@ public class MTransfernf implements Subsystem {
     public void initialize() {
         frontTransfer = new MotorEx("transferF");
         backTransfer = new CRServoEx("transferB");
+
+//        frontTransfer.reversed();
+//        frontTransfer.reverse();
+
     }
 
     @Override
