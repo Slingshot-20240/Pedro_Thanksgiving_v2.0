@@ -81,7 +81,7 @@ public class asc extends SubsystemGroup {
                 Intakenf.INSTANCE.in(),
                 Shooternf.INSTANCE.setShooterVel(shooterVel),
                 //used to be 0.33
-                Hoodnf.INSTANCE.setHoodPos(0.4)
+                Hoodnf.INSTANCE.setHoodPos(0.41)
         );
     }
     public final Command baseState(double shooterVel, double hoodPos) {

@@ -296,7 +296,7 @@ public class RedClose15Alliance2Gate extends NextFTCOpMode {
     //TODO - figure out the max and min pos of servo! Does increasing bring hood up or down?
     private Command init_bot() {
         return new ParallelGroup(
-                Hoodnf.INSTANCE.setHoodPos(0.35),
+                Hoodnf.INSTANCE.setHoodPos(0.41),
                 Transfernf.INSTANCE.idle()
         );
 
@@ -309,10 +309,10 @@ public class RedClose15Alliance2Gate extends NextFTCOpMode {
 
                     new ParallelGroup(
                             f.i.follow(scorePreloads, "green"),
-                            asc.i.baseState(-1240),
+                            asc.i.baseState(-1200),
                             Transfernf.INSTANCE.hotdog()
                     ),
-                    asc.i.transferUpFor(1.5),
+                    asc.i.transferUpFor(1),
 
 
                     //SET 2
@@ -325,9 +325,9 @@ public class RedClose15Alliance2Gate extends NextFTCOpMode {
                                     f.i.follow(scoreSet2,"green")
 
                             ),
-                            asc.i.baseState(-1240),
+                            asc.i.baseState(-1200),
 
-                            asc.i.transferSequence(scoreSet2,1.3)
+                            asc.i.transferSequence(scoreSet2,1)
                     ),
 
 
@@ -343,7 +343,7 @@ public class RedClose15Alliance2Gate extends NextFTCOpMode {
                             ),
                             asc.i.baseState(-1240),
 
-                            asc.i.transferSequence(scoreSet3,1.3)
+                            asc.i.transferSequence(scoreSet3,1)
                     ),
 
                     //SET 4
@@ -358,7 +358,7 @@ public class RedClose15Alliance2Gate extends NextFTCOpMode {
                             ),
                             asc.i.baseState(-1240),
 
-                            asc.i.transferSequence(scoreSet4,1.3)
+                            asc.i.transferSequence(scoreSet4,1)
                     ),
 
 
@@ -375,7 +375,7 @@ public class RedClose15Alliance2Gate extends NextFTCOpMode {
                             asc.i.baseState(-1200,0.37),
 
                             //asc.i.transferSequenceDistance(scoreHp,5, 2.6),
-                            asc.i.transferSequence(scoreHp,5)
+                            asc.i.transferSequence(scoreHp,1)
                     )
 
 
