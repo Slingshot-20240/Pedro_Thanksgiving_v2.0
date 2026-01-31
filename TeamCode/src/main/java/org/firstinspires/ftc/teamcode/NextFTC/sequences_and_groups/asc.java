@@ -80,7 +80,8 @@ public class asc extends SubsystemGroup {
         return new ParallelGroup(
                 Intakenf.INSTANCE.in(),
                 Shooternf.INSTANCE.setShooterVel(shooterVel),
-                Hoodnf.INSTANCE.setHoodPos(0.33)
+                //used to be 0.33
+                Hoodnf.INSTANCE.setHoodPos(0.4)
         );
     }
     public final Command baseState(double shooterVel, double hoodPos) {
