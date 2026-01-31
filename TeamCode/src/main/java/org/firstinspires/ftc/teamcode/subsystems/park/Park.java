@@ -11,11 +11,11 @@ public class Park {
     }
 
     public void tilt() {
-        parkServo.setPosition(.6);
+        parkServo.setPosition(0.25);
     }
 
     public void unTilt() {
-        parkServo.setPosition(0);
+        parkServo.setPosition(0.65);
     }
 
 }
