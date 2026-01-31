@@ -41,6 +41,7 @@ public class Robot {
 
 
     public GoBildaPinpointDriver driver;
+    public Park park;
 
     public GamepadMapping controls;
 
@@ -65,6 +66,7 @@ public class Robot {
         intake = new Intake(hardwareMap);
         transfer = new Transfer(hardwareMap);
         shooter = new Shooter(hardwareMap);
+        park = new Park(hardwareMap);
 
         park = new Park(hardwareMap);
 
