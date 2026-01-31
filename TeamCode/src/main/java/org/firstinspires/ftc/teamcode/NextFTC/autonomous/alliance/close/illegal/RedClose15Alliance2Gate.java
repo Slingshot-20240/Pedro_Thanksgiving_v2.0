@@ -73,7 +73,7 @@ public class RedClose15Alliance2Gate extends NextFTCOpMode {
                 .addPath(
                         new BezierLine(new Pose(126.2, 119), scorePose)
                 )
-                .addParametricCallback(0.95, () -> asc.i.transferUpFor(2))
+//                .addParametricCallback(0.95, () -> asc.i.transferUpFor(2))
                 .setLinearHeadingInterpolation(Math.toRadians(36), Math.toRadians(45))
                 .build();
 
