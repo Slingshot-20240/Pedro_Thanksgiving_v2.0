@@ -26,8 +26,8 @@ public class Robot {
     // servo transferB 5 control hub
     // servo variableHood 0 on control hub
 
-    // motor outtake1 control hub 3
-    // motor outtake2 control hub 2
+    // motor outtake1 control hub 2
+    // motor outtake2 control hub 3
     // motor intake expansion hub port 3
 
     // MECHANISMS
@@ -41,7 +41,6 @@ public class Robot {
 
 
     public GoBildaPinpointDriver driver;
-    public Park park;
 
     public GamepadMapping controls;
 

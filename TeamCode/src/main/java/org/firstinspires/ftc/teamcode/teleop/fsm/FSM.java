@@ -46,7 +46,7 @@ public class FSM {
 
         switch (state) {
             case BASE_STATE:
-                park.unTilt();
+                //park.unTilt();
 
                 if (type == ControlType.HARDCODED_CONTROL) {
                     shooter.shootFromFront();
@@ -183,10 +183,10 @@ public class FSM {
                 }
 
             case PARK:
-                park.tilt();
+                //park.tilt();
                 if (!gamepad.park.value()) {
                     state = FSMStates.BASE_STATE;
-                    gamepad.resetMultipleControls(gamepad.park, gamepad.outtake, gamepad.transfer);
+//                    gamepad.resetMultipleControls(gamepad.park, gamepad.outtake, gamepad.transfer);
                 }
 
         }
