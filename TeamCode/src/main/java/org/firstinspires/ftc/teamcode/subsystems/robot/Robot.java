@@ -16,19 +16,23 @@ import org.firstinspires.ftc.teamcode.subsystems.transfer.Transfer;
 import org.firstinspires.ftc.teamcode.subsystems.vision.logi;
 
 public class Robot {
-    // CONFIG
+// CONFIG
     // right - expansion
     // left - control
     // front - 0
     // back - 1
 
-    // servo transferF 3 control hub
-    // servo transferB 5 control hub
-    // servo variableHood 0 on control hub
 
-    // motor outtake1 control hub 2
-    // motor outtake2 control hub 3
-    // motor intake expansion hub port 3
+    // servo variableHood    control hub 1
+    // servo transferB       control hub 2
+
+    // servo park            expansion hub 5
+
+    // motor outtakeTop      control hub 2
+    // motor outtakeBot      control hub 3
+
+    // motor transferF       expansion hub port 2
+    // motor intake          expansion hub port 3
 
     // MECHANISMS
     public final IMU imu;

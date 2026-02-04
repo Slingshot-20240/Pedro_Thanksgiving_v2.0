@@ -82,8 +82,8 @@ public class Shooternf implements Subsystem {
 
     @Override
     public void initialize() {
-        outtake1 = new MotorEx("outtake1");
-        outtake2 = new MotorEx("outtake2");
+        outtake1 = new MotorEx("outtakeTop");
+        outtake2 = new MotorEx("outtakeBot");
         outtake2.reverse();
         shooter = new MotorGroup(outtake1, outtake2);
 
