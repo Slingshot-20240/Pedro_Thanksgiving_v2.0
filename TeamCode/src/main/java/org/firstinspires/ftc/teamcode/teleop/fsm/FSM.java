@@ -9,6 +9,7 @@ import org.firstinspires.ftc.teamcode.subsystems.park.Park;
 import org.firstinspires.ftc.teamcode.subsystems.robot.Robot;
 import org.firstinspires.ftc.teamcode.subsystems.shooter.Shooter;
 import org.firstinspires.ftc.teamcode.subsystems.transfer.Transfer;
+import org.firstinspires.ftc.teamcode.subsystems.transfer.TransferM;
 
 public class FSM {
     // GENERAL ROBOT STATES + CLASSES
@@ -19,7 +20,7 @@ public class FSM {
 
     // SUBSYSTEMS
     private final Intake intake;
-    private final Transfer transfer;
+    private final TransferM transfer;
     private final Shooter shooter;
     private final Park park;
 
@@ -46,7 +47,6 @@ public class FSM {
 
         switch (state) {
             case BASE_STATE:
-                //park.unTilt();
 
                 if (type == ControlType.HARDCODED_CONTROL) {
                     shooter.shootFromFront();
@@ -183,9 +183,10 @@ public class FSM {
                 }
 
             case PARK:
-                //park.tilt();
+                park.tilt();
                 if (!gamepad.park.value()) {
                     state = FSMStates.BASE_STATE;
+                    park.unTilt();
 //                    gamepad.resetMultipleControls(gamepad.park, gamepad.outtake, gamepad.transfer);
                 }
 
