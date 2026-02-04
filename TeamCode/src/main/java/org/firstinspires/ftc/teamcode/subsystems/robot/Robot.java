@@ -13,6 +13,7 @@ import org.firstinspires.ftc.teamcode.subsystems.intake.Intake;
 import org.firstinspires.ftc.teamcode.subsystems.park.Park;
 import org.firstinspires.ftc.teamcode.subsystems.shooter.Shooter;
 import org.firstinspires.ftc.teamcode.subsystems.transfer.Transfer;
+import org.firstinspires.ftc.teamcode.subsystems.transfer.TransferM;
 import org.firstinspires.ftc.teamcode.subsystems.vision.logi;
 
 public class Robot {
@@ -33,7 +34,8 @@ public class Robot {
     // MECHANISMS
     public final IMU imu;
     public Intake intake;
-    public Transfer transfer;
+    //public Transfer transfer;
+    public TransferM transfer;
     public Shooter shooter;
     public Drivetrain drivetrain;
 
@@ -63,7 +65,8 @@ public class Robot {
         cam = new logi(hardwareMap);
 
         intake = new Intake(hardwareMap);
-        transfer = new Transfer(hardwareMap);
+        // transfer = new Transfer(hardwareMap);
+        transfer = new TransferM(hardwareMap);
         shooter = new Shooter(hardwareMap);
         park = new Park(hardwareMap);
 
@@ -78,7 +81,7 @@ public class Robot {
     }
 
     public Robot(GamepadMapping controls, IMU imu, GoBildaPinpointDriver pinpoint,
-                 logi cam, Intake intake, Transfer transfer, Shooter shooter, Drivetrain dt,
+                 logi cam, Intake intake, TransferM transfer, Shooter shooter, Drivetrain dt,
                  DigitalChannel led0, DigitalChannel led1, Park park) {
         this.controls = controls;
         this.imu = imu;

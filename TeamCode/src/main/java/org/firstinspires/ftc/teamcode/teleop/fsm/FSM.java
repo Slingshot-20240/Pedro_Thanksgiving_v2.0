@@ -9,6 +9,7 @@ import org.firstinspires.ftc.teamcode.subsystems.park.Park;
 import org.firstinspires.ftc.teamcode.subsystems.robot.Robot;
 import org.firstinspires.ftc.teamcode.subsystems.shooter.Shooter;
 import org.firstinspires.ftc.teamcode.subsystems.transfer.Transfer;
+import org.firstinspires.ftc.teamcode.subsystems.transfer.TransferM;
 
 public class FSM {
     // GENERAL ROBOT STATES + CLASSES
@@ -19,7 +20,7 @@ public class FSM {
 
     // SUBSYSTEMS
     private final Intake intake;
-    private final Transfer transfer;
+    private final TransferM transfer;
     private final Shooter shooter;
     private final Park park;
 
