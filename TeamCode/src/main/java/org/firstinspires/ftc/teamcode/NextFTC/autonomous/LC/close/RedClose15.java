@@ -17,7 +17,7 @@ import org.firstinspires.ftc.teamcode.NextFTC.subsystems_nf.Hoodnf;
 import org.firstinspires.ftc.teamcode.NextFTC.subsystems_nf.Intakenf;
 import org.firstinspires.ftc.teamcode.NextFTC.subsystems_nf.Lednf;
 import org.firstinspires.ftc.teamcode.NextFTC.subsystems_nf.Shooternf;
-import org.firstinspires.ftc.teamcode.NextFTC.subsystems_nf.Transfernf;
+import org.firstinspires.ftc.teamcode.NextFTC.subsystems_nf.MTransfernf;
 import org.firstinspires.ftc.teamcode.pedroPathing.Constants;
 
 import dev.nextftc.core.commands.Command;
@@ -37,7 +37,7 @@ public class RedClose15 extends NextFTCOpMode {
                 new SubsystemComponent(
                         f.i, asc.i,
                         Intakenf.INSTANCE, Hoodnf.INSTANCE,
-                        Shooternf.INSTANCE, Transfernf.INSTANCE,
+                        Shooternf.INSTANCE, MTransfernf.INSTANCE,
                         Lednf.INSTANCE
                 ),
                 new PedroComponent(Constants::createFollower),
@@ -216,7 +216,6 @@ public class RedClose15 extends NextFTCOpMode {
                 )
                 .setTangentHeadingInterpolation().setReversed()
 
-                //assure pickup
                 .addPath(
                         new BezierLine(new Pose(122,15), new Pose(129,13))
                 )
@@ -264,7 +263,7 @@ public class RedClose15 extends NextFTCOpMode {
     private Command init_bot() {
         return new ParallelGroup(
                 Hoodnf.INSTANCE.setHoodPos(0.35),
-                Transfernf.INSTANCE.idle()
+                MTransfernf.INSTANCE.idle()
         );
 
     }
@@ -277,7 +276,7 @@ public class RedClose15 extends NextFTCOpMode {
                     new ParallelGroup(
                             f.i.follow(scorePreloads, "green"),
                             asc.i.baseState(-1240),
-                            Transfernf.INSTANCE.hotdog()
+                            MTransfernf.INSTANCE.hotdog()
                     ),
                     asc.i.transferUpFor(1.5),
 
@@ -286,8 +285,7 @@ public class RedClose15 extends NextFTCOpMode {
                     new ParallelGroup(
                             new SequentialGroup(
                                     new ParallelGroup(
-                                            f.i.follow(grabSet2, "red"),
-                                            Transfernf.INSTANCE.pickup(grabSet2,2)
+                                            f.i.follow(grabSet2, "red")
                                     ),
                                     f.i.follow(scoreSet2,"green")
 
@@ -302,8 +300,7 @@ public class RedClose15 extends NextFTCOpMode {
                     new ParallelGroup(
                             new SequentialGroup(
                                     new ParallelGroup(
-                                            f.i.follow(grabSet3, "red"),
-                                            Transfernf.INSTANCE.pickup(grabSet3,2)
+                                            f.i.follow(grabSet3, "red")
                                     ),
                                     f.i.follow(scoreSet3,"green")
 
@@ -317,8 +314,7 @@ public class RedClose15 extends NextFTCOpMode {
                     new ParallelGroup(
                             new SequentialGroup(
                                     new ParallelGroup(
-                                            f.i.follow(grabSet4, "red"),
-                                            Transfernf.INSTANCE.pickup(grabSet4,2)
+                                            f.i.follow(grabSet4, "red")
                                     ),
                                     f.i.follow(scoreSet4,"green")
 
@@ -334,8 +330,7 @@ public class RedClose15 extends NextFTCOpMode {
                     new ParallelGroup(
                             new SequentialGroup(
                                     new ParallelGroup(
-                                            f.i.follow(grabHp, "red"),
-                                            Transfernf.INSTANCE.pickup(grabHp,2)
+                                            f.i.follow(grabHp, "red")
                                     ),
                                     f.i.follow(scoreHp,"green")
                             ),

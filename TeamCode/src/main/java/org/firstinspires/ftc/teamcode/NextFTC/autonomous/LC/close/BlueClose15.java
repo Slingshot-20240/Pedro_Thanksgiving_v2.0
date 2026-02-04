@@ -17,7 +17,7 @@ import org.firstinspires.ftc.teamcode.NextFTC.subsystems_nf.Hoodnf;
 import org.firstinspires.ftc.teamcode.NextFTC.subsystems_nf.Intakenf;
 import org.firstinspires.ftc.teamcode.NextFTC.subsystems_nf.Lednf;
 import org.firstinspires.ftc.teamcode.NextFTC.subsystems_nf.Shooternf;
-import org.firstinspires.ftc.teamcode.NextFTC.subsystems_nf.Transfernf;
+import org.firstinspires.ftc.teamcode.NextFTC.subsystems_nf.MTransfernf;
 import org.firstinspires.ftc.teamcode.pedroPathing.Constants;
 
 import dev.nextftc.core.commands.Command;
@@ -46,9 +46,9 @@ public class BlueClose15 extends NextFTCOpMode {
     public BlueClose15() {
         addComponents(
                 new SubsystemComponent(
-                        f.i,asc.i,
+                        f.i, asc.i,
                         Intakenf.INSTANCE, Hoodnf.INSTANCE,
-                        Shooternf.INSTANCE, Transfernf.INSTANCE,
+                        Shooternf.INSTANCE, MTransfernf.INSTANCE,
                         Lednf.INSTANCE
                 ),
                 new PedroComponent(Constants::createFollower),
@@ -274,7 +274,7 @@ public class BlueClose15 extends NextFTCOpMode {
     private Command init_bot() {
         return new ParallelGroup(
                 Hoodnf.INSTANCE.setHoodPos(0.37),
-                Transfernf.INSTANCE.idle()
+                MTransfernf.INSTANCE.idle()
         );
 
     }
@@ -287,9 +287,9 @@ public class BlueClose15 extends NextFTCOpMode {
                 new ParallelGroup(
                         f.i.follow(scorePreloads, "green"),
                         asc.i.baseState(-1240),
-                        Transfernf.INSTANCE.hotdog()
+                        MTransfernf.INSTANCE.hotdog()
                 ),
-                asc.i.transferUpFor(1.5),
+                asc.i.transferUpFor(0.6),
 
 
                 new ParallelGroup(
@@ -301,7 +301,7 @@ public class BlueClose15 extends NextFTCOpMode {
                         ),
                         asc.i.baseState(-1240),
 
-                        asc.i.transferSequence(scoreSet2,1.3)
+                        asc.i.transferSequence(scoreSet2,0.6)
                 ),
 
 
@@ -314,7 +314,7 @@ public class BlueClose15 extends NextFTCOpMode {
                         ),
                         asc.i.baseState(-1240),
 
-                        asc.i.transferSequence(scoreSet3,1.3)
+                        asc.i.transferSequence(scoreSet3,0.6)
                 ),
 
 
@@ -327,7 +327,7 @@ public class BlueClose15 extends NextFTCOpMode {
                         ),
                         asc.i.baseState(-1240),
 
-                        asc.i.transferSequence(scoreSet4,1.3)
+                        asc.i.transferSequence(scoreSet4,0.6)
                 ),
 
 

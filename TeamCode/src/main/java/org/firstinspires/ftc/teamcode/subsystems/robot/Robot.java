@@ -35,6 +35,8 @@ public class Robot {
     // motor transferF       expansion hub port 2
     // motor intake          expansion hub port 3
 
+    // led                   control hub 6-7
+
     // MECHANISMS
     public final IMU imu;
     public Intake intake;
