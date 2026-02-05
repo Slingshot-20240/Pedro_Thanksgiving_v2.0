@@ -141,10 +141,10 @@ public class ViktorTele extends OpMode {
             rotate = -gamepad1.right_stick_x * 0.55;
         }
 
+        follower.startTeleopDrive(true);
 
         follower.setTeleOpDrive(forward, strafe, rotate, true);
         //TODO - Check if even needed
-        follower.startTeleopDrive(true);
 
         if (gamepad1.x) {
             follower.setPose(new Pose(72,8,Math.toRadians(90)));

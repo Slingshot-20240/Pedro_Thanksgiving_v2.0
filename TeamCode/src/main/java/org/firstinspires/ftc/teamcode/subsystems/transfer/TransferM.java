@@ -1,6 +1,7 @@
 package org.firstinspires.ftc.teamcode.subsystems.transfer;
 
 import com.qualcomm.robotcore.hardware.CRServo;
+import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorEx;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.HardwareMap;
@@ -35,7 +36,7 @@ public class TransferM {
 
     public void hotDog() {
         backTransfer.setPower(1);
-        frontTransfer.setPower(-0.08);
+        frontTransfer.setPower(-0.35);
     }
 
 }

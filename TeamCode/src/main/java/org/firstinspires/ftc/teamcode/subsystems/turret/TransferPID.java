@@ -82,6 +82,8 @@ public class TransferPID extends OpMode {
         frontTransfer.setVelocity(targetVel);
         frontTransfer.setVelocityPIDFCoefficients(p1, i1, d1, f1);
 
+        robot.transfer.backTransfer.setPower(1);
+
 
         // Read actual velocity
         double actualVel1 = frontTransfer.getVelocity();

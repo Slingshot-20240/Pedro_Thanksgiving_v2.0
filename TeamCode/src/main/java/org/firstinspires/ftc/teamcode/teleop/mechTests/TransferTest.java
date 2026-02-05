@@ -9,7 +9,7 @@ import org.firstinspires.ftc.teamcode.subsystems.robot.Robot;
 
 @Config
 @TeleOp(group = "mech tests")
-public class TransferTest extends OpMode {
+public class  TransferTest extends OpMode {
     Robot robot;
     GamepadMapping controls;
     public static double power = 0;
@@ -24,9 +24,10 @@ public class TransferTest extends OpMode {
     public void loop() {
         controls.update();
 
+        robot.shooter.setShooterVelocity(-1100);
         robot.intake.intakeOn();
 
-        robot.transfer.frontTransfer.setPower(power);
+        robot.transfer.frontTransfer.setVelocity(power);
         robot.transfer.backTransfer.setPower(1);
 
 //i may be wrong but idk if calling rr action like on and off willl work here
