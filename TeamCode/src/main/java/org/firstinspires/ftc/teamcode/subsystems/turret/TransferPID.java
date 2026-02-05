@@ -23,8 +23,8 @@ public class TransferPID extends OpMode {
 //test
     DcMotorEx frontTransfer;
     //public static double p1 = 600, i1 = 0.0, d1 = 0.0, f1 = 40;
-    public static double p1 = 0, i1 = 0, d1 = 0, f1 = 0;
-    public static int targetVel = 100;
+    public static double p1 = 10, i1 = 0, d1 = 0, f1 = 26;
+    public static int targetVel = -1000;
     private Telemetry dashboardTelemetry;
 
     Robot robot;
@@ -39,7 +39,7 @@ public class TransferPID extends OpMode {
         frontTransfer = hardwareMap.get(DcMotorEx.class, "transferF");
  
         // Set PIDF (start with defaults, tune later)
-        frontTransfer.setVelocityPIDFCoefficients(578, 0, 0, 70);
+        frontTransfer.setVelocityPIDFCoefficients(10, 0, 0, 26);
         controls = new GamepadMapping(gamepad1, gamepad2);
         robot = new Robot(hardwareMap, controls);
 
@@ -79,8 +79,15 @@ public class TransferPID extends OpMode {
         //double targetVel = 3500 + 1500 * Math.sin(2 * Math.PI * 0.5 * time);
 
       // Send target to REV Hub PID
-        frontTransfer.setVelocity(targetVel);
-        frontTransfer.setVelocityPIDFCoefficients(p1, i1, d1, f1);
+        robot.intake.intakeOn();
+
+        robot.shooter.setShooterVelocity(-1000);
+
+        //frontTransfer.setVelocityPIDFCoefficients(p1, i1, d1, f1);
+
+        //frontTransfer.setVelocity(targetVel);
+
+        frontTransfer.setPower(-1);
 
         robot.transfer.backTransfer.setPower(1);
 

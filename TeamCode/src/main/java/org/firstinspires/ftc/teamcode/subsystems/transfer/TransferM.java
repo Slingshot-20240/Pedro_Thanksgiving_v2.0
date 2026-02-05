@@ -16,6 +16,9 @@ public class TransferM {
         frontTransfer = hardwareMap.get(DcMotorEx.class, "transferF");
 
         frontTransfer.setDirection(DcMotorSimple.Direction.FORWARD);
+        frontTransfer.setVelocityPIDFCoefficients(10, 0, 0, 26);
+        frontTransfer.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+
     }
 
     public TransferM(DcMotorEx frontTransfer, CRServo backTransfer) {
@@ -26,7 +29,7 @@ public class TransferM {
 
     public void transferOn() {
         backTransfer.setPower(-1);
-        frontTransfer.setPower(-1);
+        frontTransfer.setVelocity(-2000);
     }
 
     public void transferOff() {
@@ -36,7 +39,7 @@ public class TransferM {
 
     public void hotDog() {
         backTransfer.setPower(1);
-        frontTransfer.setPower(-0.35);
+        frontTransfer.setVelocity(-600);
     }
 
 }
