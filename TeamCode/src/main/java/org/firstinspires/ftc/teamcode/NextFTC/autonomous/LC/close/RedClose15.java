@@ -284,6 +284,7 @@ public class RedClose15 extends NextFTCOpMode {
                     ),
                     asc.i.transferUpFor(1),
 
+//TODO - try parallel deadline group
 //TODO - TRY THIS IF ABOVE DOESN'T WORK
 //                    new SequentialGroup(
 //                            asc.i.baseState(-1260),
