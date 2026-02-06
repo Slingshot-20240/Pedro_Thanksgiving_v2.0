@@ -276,7 +276,10 @@ public class RedClose15 extends NextFTCOpMode {
 
 
                     new ParallelGroup(
-                            f.i.follow(scorePreloads,"green"),
+                            new SequentialGroup(
+                                    f.i.follow(scorePreloads,"red"),
+                                    Lednf.INSTANCE.color("green")
+                            ),
                             asc.i.baseState(-1270)
                     ),
                     asc.i.transferUpFor(1),
