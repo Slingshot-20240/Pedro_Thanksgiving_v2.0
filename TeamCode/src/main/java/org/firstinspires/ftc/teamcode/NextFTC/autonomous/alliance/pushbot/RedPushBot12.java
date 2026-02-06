@@ -175,9 +175,10 @@ public class RedPushBot12 extends NextFTCOpMode {
 
                         new ParallelGroup(
                                 f.i.follow(scorePreloads,"green"),
-                                asc.i.baseState(-1240,0.32)
+                                asc.i.baseState(-1270,0.32),
+                                asc.i.transferSequence(scorePreloads,2)
+
                         ),
-                        asc.i.transferUpFor(2),
 
 
                         //SET 2
@@ -188,8 +189,8 @@ public class RedPushBot12 extends NextFTCOpMode {
                                         //Transfernf.INSTANCE.pickup(grabSet2,2)
 //                                ),
                                 ),
-                                asc.i.baseState(-1240),
-                                asc.i.transferSequenceDistance(set2,2,2)
+                                asc.i.baseState(-1270),
+                                asc.i.transferSequenceDistance(set2,2,1)
 
                         ),
 
@@ -203,11 +204,11 @@ public class RedPushBot12 extends NextFTCOpMode {
 //                                        Transfernf.INSTANCE.pickup(grabSet3,2)
 //                                        Transfernf.INSTANCE.hotdog()
 //                                ),
-                                        f.i.follow(scoreSet3,"green", true)
+                                        f.i.follow(scoreSet3,"green")
 
                                 ),
-                                asc.i.baseState(-1240),
-                                asc.i.transferSequenceDistance(scoreSet3,2,2)
+                                asc.i.baseState(-1270),
+                                asc.i.transferSequenceDistance(scoreSet3,2,1)
                         ),
 
                         new ParallelGroup(
@@ -215,7 +216,7 @@ public class RedPushBot12 extends NextFTCOpMode {
                                         new FollowPath(grabSet4),
                                         new FollowPath(scoreSet4)
                                 ),
-                                asc.i.baseState(-1525, 0.33),
+                                asc.i.baseState(-1700, 0.33),
                                 asc.i.transferSequenceDistance(scoreSet4,2.5,1)
 
                         ),

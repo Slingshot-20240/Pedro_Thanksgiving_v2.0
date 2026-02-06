@@ -16,7 +16,7 @@ import org.firstinspires.ftc.robotcore.external.navigation.DistanceUnit;
 
 public class Constants {
     public static FollowerConstants followerConstants = new FollowerConstants()
-            .mass(10.79555) //me -98.6, w bot, 122.4
+            .mass(11) //me -98.6, w bot, 122.4
             .forwardZeroPowerAcceleration(-41)
             .lateralZeroPowerAcceleration(-67.6)
 
@@ -33,12 +33,13 @@ public class Constants {
 
 //DRIVE
             //TODO - P USED TO BE 0.87
-            .drivePIDFCoefficients(new FilteredPIDFCoefficients(0.79,0.0,0.05,0.7,0.0))
+            .drivePIDFCoefficients(new FilteredPIDFCoefficients(0.8,0.0,0.05,0.7,0.0))
 //            .useSecondaryDrivePIDF(true)
 //            .secondaryDrivePIDFCoefficients(new FilteredPIDFCoefficients(0.1,0,0.01,0.6,0.01))
             ;
 
 
+    //t value 0.993
     public static PathConstraints pathConstraints = new PathConstraints(0.993, 50, 1.5, 2.5);
 //    public static PathConstraints pathConstraints = new PathConstraints(0.995, 40, 1.55, 1.6);
 
@@ -52,8 +53,8 @@ public class Constants {
             .leftRearMotorDirection(DcMotorSimple.Direction.REVERSE)
             .rightFrontMotorDirection(DcMotorSimple.Direction.FORWARD)
             .rightRearMotorDirection(DcMotorSimple.Direction.FORWARD)
-            .xVelocity(83) // real tuned val was 80
-            .yVelocity(68); //real tuned val was 65
+            .xVelocity(86) // real tuned val was 80 // second value was 80
+            .yVelocity(70); //real tuned val was 65 //second value was 68
 //            .useVoltageCompensation(true)
 //            .nominalVoltage(13.99);
 

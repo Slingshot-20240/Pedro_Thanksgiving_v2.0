@@ -24,7 +24,7 @@ public class Robot {
     // back - 1
 
 
-    // servo variableHood    control hub 1
+    // servo variableHood    control hub 5
     // servo transferB       control hub 2
 
     // servo park            expansion hub 5

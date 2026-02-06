@@ -30,6 +30,7 @@ public class TransferM {
     public void transferOn() {
         backTransfer.setPower(-1);
         frontTransfer.setVelocity(-2000);
+//        frontTransfer.setPower(-1);
     }
 
     public void transferOff() {
@@ -39,7 +40,7 @@ public class TransferM {
 
     public void hotDog() {
         backTransfer.setPower(1);
-        frontTransfer.setVelocity(-600);
+        frontTransfer.setVelocity(-500);
     }
 
 }

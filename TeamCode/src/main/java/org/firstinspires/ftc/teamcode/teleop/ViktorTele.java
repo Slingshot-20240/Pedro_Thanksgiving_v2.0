@@ -36,7 +36,7 @@ public class ViktorTele extends OpMode {
     // Vision tuning
     public static double visionTurn_kP = 0.25;
     public static double visionMinTurnPower = 0.11;
-    public static double visionMiniTolerance = 0.02;
+    public static double visionMiniTolerance = 0.01;
 
     // ODO target
     public static double GOAL_X = 138;
@@ -141,7 +141,7 @@ public class ViktorTele extends OpMode {
             rotate = -gamepad1.right_stick_x * 0.55;
         }
 
-        follower.startTeleopDrive(true);
+        //follower.startTeleopDrive(true);
 
         follower.setTeleOpDrive(forward, strafe, rotate, true);
         //TODO - Check if even needed
@@ -176,6 +176,7 @@ public class ViktorTele extends OpMode {
         }
 
         // Telemetry
+        telemetry.addData("State", fsm.state);
 
         telemetry.addData("Pose", pose);
         telemetry.addData("Heading (deg)", Math.toDegrees(heading));
