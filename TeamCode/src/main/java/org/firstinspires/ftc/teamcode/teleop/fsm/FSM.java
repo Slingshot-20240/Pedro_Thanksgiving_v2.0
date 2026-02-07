@@ -103,7 +103,7 @@ public class FSM {
                 if (type == ControlType.PID_CONTROL) {
                     double distance = Robot.cam.getTargetArtifactTravelDistanceX();
 
-                    double targetVelocity = robot.shooter.calculateShooterRPM(distance) + 165;
+                    double targetVelocity = robot.shooter.calculateShooterRPM(distance) + 80;
 
                     double targetHoodPos;
                     //TODO - TUNE THIS OFFSET VALUE

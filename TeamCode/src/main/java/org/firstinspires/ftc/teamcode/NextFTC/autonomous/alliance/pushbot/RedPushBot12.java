@@ -6,7 +6,6 @@ import com.pedropathing.geometry.Pose;
 
 import com.pedropathing.paths.PathChain;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
-import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 
 import org.firstinspires.ftc.teamcode.NextFTC.autonomous.PoseStorage;
 import org.firstinspires.ftc.teamcode.NextFTC.sequences_and_groups.asc;
@@ -19,6 +18,7 @@ import org.firstinspires.ftc.teamcode.NextFTC.subsystems_nf.Hoodnf;
 import org.firstinspires.ftc.teamcode.pedroPathing.Constants;
 
 import dev.nextftc.core.commands.Command;
+import dev.nextftc.core.commands.delays.Delay;
 import dev.nextftc.core.commands.groups.ParallelGroup;
 import dev.nextftc.core.commands.groups.SequentialGroup;
 import dev.nextftc.core.components.SubsystemComponent;
@@ -27,8 +27,7 @@ import dev.nextftc.extensions.pedro.PedroComponent;
 import dev.nextftc.ftc.NextFTCOpMode;
 import dev.nextftc.ftc.components.BulkReadComponent;
 
-@Disabled
-@Autonomous(name = "red pushbot")
+@Autonomous(name = "Red Pushbot")
 public class RedPushBot12 extends NextFTCOpMode {
 
     public RedPushBot12() {
@@ -49,10 +48,11 @@ public class RedPushBot12 extends NextFTCOpMode {
     public PathChain scoreSet3;
     public PathChain grabSet4;
     public PathChain scoreSet4;
-    public PathChain pushBot;
+    public PathChain park;
+    public PathChain readyPush, pushBot;
 
     public Pose scorePose = new Pose(88,88);
-    public Pose farScorePose = new Pose(88, 17);
+    public Pose farScorePose = new Pose(86, 13);
 
     public static Pose startingPose = new Pose();
 
@@ -83,7 +83,7 @@ public class RedPushBot12 extends NextFTCOpMode {
                         new BezierCurve(
                                 new Pose(126.5, 83.4),
                                 new Pose(112, 77.000),
-                                new Pose(130, 71.000)
+                                new Pose(129, 71.000)
                         )
                 )
                 .setLinearHeadingInterpolation(Math.toRadians(0), Math.toRadians(90))
@@ -137,23 +137,42 @@ public class RedPushBot12 extends NextFTCOpMode {
                 .setLinearHeadingInterpolation(Math.toRadians(43), Math.toRadians(0))
                 .build();
 
-        scoreSet4 = PedroComponent.follower().pathBuilder().addPath(
+        readyPush = PedroComponent.follower().pathBuilder()
+                .addPath(
                         new BezierCurve(
                                 new Pose(132.000, 35.000),
-                                new Pose(79, 55),
-                                new Pose(82, 16)
+                                new Pose(68, 55),
+                                new Pose(78, 13)
                         )
-                ).setLinearHeadingInterpolation(Math.toRadians(0), Math.toRadians(67))
+                )
+                .setLinearHeadingInterpolation(Math.toRadians(0), Math.toRadians(90))
 
                 .build();
 
         pushBot = PedroComponent.follower()
                 .pathBuilder()
                 .addPath(
-                        new BezierLine(new Pose(82, 16), new Pose(100, 16))
+                        new BezierLine(new Pose(78, 13), new Pose(100, 13))
                 )
-                .setLinearHeadingInterpolation(Math.toRadians(67), Math.toRadians(90))
+                .setLinearHeadingInterpolation(Math.toRadians(90), Math.toRadians(90))
                 .build();
+
+        scoreSet4 = PedroComponent.follower()
+                .pathBuilder()
+                .addPath(
+                        new BezierLine(new Pose(100, 13), farScorePose)
+                )
+                .setLinearHeadingInterpolation(Math.toRadians(90), Math.toRadians(68))
+                .build();
+
+        park = PedroComponent.follower()
+                .pathBuilder()
+                .addPath(
+                        new BezierLine(farScorePose, new Pose(110,70))
+                )
+                .setLinearHeadingInterpolation(Math.toRadians(68), Math.toRadians(90))
+                .build();
+
 
 
 
@@ -184,13 +203,8 @@ public class RedPushBot12 extends NextFTCOpMode {
 
                         //SET 2
                         new ParallelGroup(
-                                new SequentialGroup(
-//                                new ParallelGroup(
-                                        f.i.follow(set2,"green")
-                                        //Transfernf.INSTANCE.pickup(grabSet2,2)
-//                                ),
-                                ),
-                                asc.i.transferSequenceDistance(set2,2,2)
+                                f.i.follow(set2,"green"),
+                                asc.i.transferSequenceDistance(set2,2,0.5)
 
                         ),
 
@@ -199,28 +213,25 @@ public class RedPushBot12 extends NextFTCOpMode {
                         //SET 3
                         new ParallelGroup(
                                 new SequentialGroup(
-//                                new ParallelGroup(
                                         f.i.follow(grabSet3,"red"),
-//                                        Transfernf.INSTANCE.pickup(grabSet3,2)
-//                                        Transfernf.INSTANCE.hotdog()
-//                                ),
                                         f.i.follow(scoreSet3,"green")
-
                                 ),
-                                asc.i.transferSequenceDistance(scoreSet3,2,2)
+                                asc.i.transferSequenceDistance(scoreSet3,2,0.5)
                         ),
 
                         new ParallelGroup(
                                 new SequentialGroup(
-                                        new FollowPath(grabSet4),
-                                        new FollowPath(scoreSet4)
+                                        f.i.follow(grabSet4,"red"),
+                                        f.i.follow(readyPush, "red"),
+                                        f.i.follow(pushBot, "yellow"),
+                                        f.i.follow(scoreSet4,"green"),
+                                        new Delay(3),
+                                        f.i.follow(park,"green")
                                 ),
-                                asc.i.transferSequenceDistance(scoreSet4,2.5,1)
 
-                        ),
-
-                        new FollowPath(pushBot)
-
+                                Shooternf.INSTANCE.setShooterVel(-1590),
+                                asc.i.transferSequence(scoreSet4,2.5)
+                        )
 
                 )
         );

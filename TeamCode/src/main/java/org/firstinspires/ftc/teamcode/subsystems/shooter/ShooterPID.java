@@ -25,7 +25,7 @@ public class ShooterPID extends OpMode {
     DcMotorEx flywheel1;
     DcMotorEx flywheel2;
     //public static double p1 = 600, i1 = 0.0, d1 = 0.0, f1 = 40;
-    public static double p1 = 578, i1 = 0.0, d1 = 0.0, f1 = 70;
+    public static double p1 = 700, i1 = 0.0, d1 = 0.0, f1 = 20;
     public static int targetVel = -1095;
     private Telemetry dashboardTelemetry;
     public static double hoodPos = 0.1;
@@ -38,8 +38,8 @@ public class ShooterPID extends OpMode {
     public void init() {
         double time = 0;
         dashboardTelemetry = new MultipleTelemetry(telemetry, FtcDashboard.getInstance().getTelemetry());
-        flywheel1 = hardwareMap.get(DcMotorEx.class, "outtake1");
-        flywheel2 = hardwareMap.get(DcMotorEx.class, "outtake2");
+        flywheel1 = hardwareMap.get(DcMotorEx.class, "outtakeTop");
+        flywheel2 = hardwareMap.get(DcMotorEx.class, "outtakeBot");
  
         // Set PIDF (start with defaults, tune later)
         flywheel1.setVelocityPIDFCoefficients(578, 0, 0, 70);

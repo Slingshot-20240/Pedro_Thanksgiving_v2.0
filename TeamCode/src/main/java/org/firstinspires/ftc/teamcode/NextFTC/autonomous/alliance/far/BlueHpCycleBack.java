@@ -27,10 +27,10 @@ import dev.nextftc.ftc.components.BulkReadComponent;
 
 import static dev.nextftc.extensions.pedro.PedroComponent.follower;
 
-@Autonomous(name = "Red Cycle HP Back")
-public class RedHpCycleBack extends NextFTCOpMode {
+@Autonomous(name = "Blue Cycle HP Back")
+public class BlueHpCycleBack extends NextFTCOpMode {
 
-    public RedHpCycleBack() {
+    public BlueHpCycleBack() {
         addComponents(
                 new SubsystemComponent(
                         Intakenf.INSTANCE, Hoodnf.INSTANCE,
@@ -53,15 +53,15 @@ public class RedHpCycleBack extends NextFTCOpMode {
     public PathChain scoreHp;
     public PathChain park;
 
-    Pose scorePose = new Pose(88, 17);
+    Pose scorePose = new Pose(88, 17).mirror();
 
     public void buildPaths() {
-        follower().setStartingPose(new Pose(88, 8.2, Math.toRadians(90)));
+        follower().setStartingPose(new Pose(88, 8.2, Math.toRadians(90)).mirror());
 
         scorePreloads = follower()
                 .pathBuilder()
-                .addPath(new BezierLine(new Pose(88, 8.2), scorePose))
-                .setLinearHeadingInterpolation(Math.toRadians(90), Math.toRadians(69.3))
+                .addPath(new BezierLine(new Pose(88, 8.2).mirror(), scorePose))
+                .setLinearHeadingInterpolation(Math.toRadians(180-90), Math.toRadians(180-69.3))
                 .build();
 
         //SET 2 SPECIFIC ONES
@@ -70,8 +70,8 @@ public class RedHpCycleBack extends NextFTCOpMode {
                 .addPath(
                         new BezierCurve(
                                 scorePose,
-                                new Pose(125, 25),
-                                new Pose(134.000, 11.000)
+                                new Pose(125, 25).mirror(),
+                                new Pose(134.000, 11.000).mirror()
                         )
                 )
                 .setTangentHeadingInterpolation()
@@ -80,31 +80,31 @@ public class RedHpCycleBack extends NextFTCOpMode {
         backAssureSet2 = follower()
                 .pathBuilder()
                 .addPath(
-                        new BezierLine(new Pose(134.000, 11.000), new Pose(125.000, 11))
+                        new BezierLine(new Pose(134.000, 11.000).mirror(), new Pose(125.000, 11).mirror())
                 )
-                .setConstantHeadingInterpolation(Math.toRadians(0))
+                .setConstantHeadingInterpolation(Math.toRadians(180-0))
                 .build();
 
         frontAssureSet2 = follower()
                 .pathBuilder()
                 .addPath(
-                        new BezierLine(new Pose(125.000, 11), new Pose(134.000, 11))
+                        new BezierLine(new Pose(125.000, 11).mirror(), new Pose(134.000, 11).mirror())
                 )
-                .setConstantHeadingInterpolation(Math.toRadians(0))
+                .setConstantHeadingInterpolation(Math.toRadians(180-0))
 
                 .addPath(
-                        new BezierLine(new Pose(125.000, 11), new Pose(134.000, 8.2))
+                        new BezierLine(new Pose(125.000, 11).mirror(), new Pose(134.000, 8.2).mirror())
                 )
-                .setLinearHeadingInterpolation(Math.toRadians(0), Math.toRadians(300))
-//                .setConstantHeadingInterpolation(Math.toRadians(0))
+                .setLinearHeadingInterpolation(Math.toRadians(180-0), Math.toRadians(180-300))
+//                .setConstantHeadingInterpolation(Math.toRadians(180-0))
                 .build();
 
         scoreSet2 = follower()
                 .pathBuilder()
                 .addPath(
-                        new BezierLine(new Pose(134.000, 8.2), scorePose)
+                        new BezierLine(new Pose(134.000, 8.2).mirror(), scorePose)
                 )
-                .setLinearHeadingInterpolation(Math.toRadians(300), Math.toRadians(69.3))
+                .setLinearHeadingInterpolation(Math.toRadians(180-300), Math.toRadians(180-69.3))
                 .build();
 
 
@@ -114,8 +114,8 @@ public class RedHpCycleBack extends NextFTCOpMode {
                 .addPath(
                         new BezierCurve(
                                 scorePose,
-                                new Pose(128, 18),
-                                new Pose(134.000, 15)
+                                new Pose(128, 18).mirror(),
+                                new Pose(134.000, 15).mirror()
                         )
                 )
                 .setTangentHeadingInterpolation()
@@ -124,32 +124,32 @@ public class RedHpCycleBack extends NextFTCOpMode {
         backAssure = follower()
                 .pathBuilder()
                 .addPath(
-                        new BezierLine(new Pose(134.000, 15), new Pose(125.000, 18))
+                        new BezierLine(new Pose(134.000, 15).mirror(), new Pose(125.000, 18).mirror())
                 )
-                .setConstantHeadingInterpolation(Math.toRadians(0))
+                .setConstantHeadingInterpolation(Math.toRadians(180-0))
                 .build();
 
         frontAssure = follower()
                 .pathBuilder()
                 .addPath(
-                        new BezierLine(new Pose(125.000, 18), new Pose(134.000, 20))
+                        new BezierLine(new Pose(125.000, 18).mirror(), new Pose(134.000, 20).mirror())
                 )
-                .setConstantHeadingInterpolation(Math.toRadians(0))
+                .setConstantHeadingInterpolation(Math.toRadians(180-0))
                 .build();
 
         scoreHp = follower()
                 .pathBuilder()
                 .addPath(
-                        new BezierLine(new Pose(134.000, 20), new Pose(88.000, 17.000))
+                        new BezierLine(new Pose(134.000, 20).mirror(), new Pose(88.000, 17.000).mirror())
                 )
-                .setLinearHeadingInterpolation(Math.toRadians(0), Math.toRadians(69.3))
+                .setLinearHeadingInterpolation(Math.toRadians(180-0), Math.toRadians(180-69.3))
                 .build();
 
 
         park = PedroComponent.follower()
                 .pathBuilder()
-                .addPath(new BezierLine(new Pose(134,20), new Pose(120, 30)))
-                .setLinearHeadingInterpolation(Math.toRadians(69.3), Math.toRadians(90))
+                .addPath(new BezierLine(new Pose(134,20).mirror(), new Pose(120, 30).mirror()))
+                .setLinearHeadingInterpolation(Math.toRadians(180-69.3), Math.toRadians(180-90))
                 .build();
 
     }

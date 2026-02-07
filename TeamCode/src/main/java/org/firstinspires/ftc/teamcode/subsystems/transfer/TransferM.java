@@ -40,7 +40,7 @@ public class TransferM {
 
     public void hotDog() {
         backTransfer.setPower(1);
-        frontTransfer.setVelocity(-440);
+        frontTransfer.setVelocity(-250);
     }
 
 }
