@@ -25,16 +25,15 @@ import dev.nextftc.core.commands.delays.Delay;
 import dev.nextftc.core.commands.groups.ParallelGroup;
 import dev.nextftc.core.commands.groups.SequentialGroup;
 import dev.nextftc.core.components.SubsystemComponent;
-import dev.nextftc.extensions.pedro.FollowPath;
 import dev.nextftc.extensions.pedro.PedroComponent;
 import dev.nextftc.ftc.NextFTCOpMode;
 import dev.nextftc.ftc.components.BulkReadComponent;
 
 
 @Config
-@Autonomous(name = "Red 15 Close FIXED")
-public class RedClose15 extends NextFTCOpMode {
-    public RedClose15() {
+@Autonomous(name = "Red 12 Close")
+public class RedClose12 extends NextFTCOpMode {
+    public RedClose12() {
         addComponents(
                 new SubsystemComponent(
                         f.i, asc.i,
@@ -49,16 +48,13 @@ public class RedClose15 extends NextFTCOpMode {
 
     public PathChain scorePreloads;
 
-    public PathChain grabSet2;
-    public PathChain scoreSet2;
+    public PathChain grabSet2, hitGate, scoreSet2;
 
-    public PathChain grabSet3;
-    public PathChain scoreSet3;
+    public PathChain set3;
 
-    public PathChain grabSet4;
-    public PathChain scoreSet4;
+    public PathChain set4;
     public PathChain grabHp;
-    public PathChain scoreHp;
+    public PathChain park;
 
     public Pose scorePose = new Pose(89,89);
 
@@ -81,28 +77,37 @@ public class RedClose15 extends NextFTCOpMode {
                 .addPath(
                         new BezierCurve(
                                 scorePose,
-                                new Pose(92.292,77),
-                                new Pose(127, 80)
+                                new Pose(92.292, 77),
+                                new Pose(126.5, 83.4)
                         )
                 )
                 .setLinearHeadingInterpolation(Math.toRadians(43), Math.toRadians(0))
                 .build();
 
-
-        scoreSet2 = follower().pathBuilder()
-                //Score Set 2
+        hitGate = PedroComponent.follower()
+                .pathBuilder()
                 .addPath(
-                        new BezierLine(new Pose(128, 80), scorePose)
+                        new BezierCurve(
+                                new Pose(126.5, 83.4),
+                                new Pose(112, 77.000),
+                                new Pose(130, 71.000)
+                        )
                 )
-                .setLinearHeadingInterpolation(Math.toRadians(0), Math.toRadians(43))
-                //was 0
+                .setLinearHeadingInterpolation(Math.toRadians(0), Math.toRadians(90))
+                .build();
+
+        scoreSet2 = PedroComponent.follower()
+                .pathBuilder()
+                .addPath(
+                        new BezierLine(new Pose(130, 71.000), scorePose)
+                )
+                .setLinearHeadingInterpolation(Math.toRadians(90), Math.toRadians(43))
                 .build();
 
 
 
 
-
-        grabSet3 = follower()
+        set3 = follower()
                 .pathBuilder()
 
             //Grab set 3
@@ -111,52 +116,27 @@ public class RedClose15 extends NextFTCOpMode {
                                 scorePose,
                                 new Pose(87.760, 55.000),
                                 new Pose(79.313, 57.000),
-                                new Pose(132.4, 54.000)
+                                new Pose(132.4, 54)
                         )
                 )
                 .setLinearHeadingInterpolation(Math.toRadians(43), Math.toRadians(0))
-//                .setTangentHeadingInterpolation()
 
-
-
-                //Gate 2
                 .addPath(
                         new BezierCurve(
                                 new Pose(132.4, 54),
-                                new Pose(100, 60),
-                                new Pose(130, 71.000)
+                                new Pose(91.262, 56.240),
+                                new Pose(95.176, 82.815),
+                                scorePose
                         )
                 )
-                .setLinearHeadingInterpolation(Math.toRadians(0), Math.toRadians(90))
+                .setLinearHeadingInterpolation(Math.toRadians(0), Math.toRadians(43))
 
 
 
                 .build();
 
-        scoreSet3 = follower().pathBuilder()
-                //Score set 3
-                .addPath(
-                        new BezierLine(new Pose(130, 71), scorePose)
-                )
-                .setHeadingInterpolation(
-                        HeadingInterpolator.piecewise(
-//                                new HeadingInterpolator.PiecewiseNode(
-//                                        0,
-//                                        0.5,
-//                                        //HeadingInterpolator.tangent.reverse()
-//                                ),
-                                new HeadingInterpolator.PiecewiseNode(
-                                        0,
-                                        1.0,
-                                        //TODO - tune the y value to make ball go in center due to newtons first law
-                                        HeadingInterpolator.facingPoint(new Pose(144,144))
-                                )
-                        )
-                )
-                .build();
 
-
-        grabSet4 = follower()
+        set4 = follower()
                 .pathBuilder()
 
                 .addPath(
@@ -164,19 +144,11 @@ public class RedClose15 extends NextFTCOpMode {
                                 scorePose,
                                 new Pose(84, 41),
                                 new Pose(80, 37),
-                                new Pose(131, 34)
+                                new Pose(131, 33.3)
                         )
                 )
 //                .setLinearHeadingInterpolation(Math.toRadians(43), Math.toRadians(0))
                 .setTangentHeadingInterpolation()
-
-
-                .build();
-
-
-        scoreSet4 = follower()
-                .pathBuilder()
-
                 .addPath(
                         new BezierLine(new Pose(131, 33.3), scorePose)
                 )
@@ -197,6 +169,7 @@ public class RedClose15 extends NextFTCOpMode {
                                 )
                         )
                 )
+
                 .build();
 
 
@@ -227,33 +200,17 @@ public class RedClose15 extends NextFTCOpMode {
 
 
 
-        scoreHp = follower()
+        park = follower()
                 .pathBuilder()
                 .addPath(
                         new BezierLine(
                                 new Pose(126, 13),
-                                new Pose(90.000, 110.000)
+                                new Pose(110, 55)
                         )
                 )
-                .setHeadingInterpolation(
-                        HeadingInterpolator.piecewise(
+                .setTangentHeadingInterpolation().setReversed()
 
-                                new HeadingInterpolator.PiecewiseNode(
-                                        0,
-                                        0.7,
-                                        HeadingInterpolator.tangent.reverse()
-                                ),
 
-                                new HeadingInterpolator.PiecewiseNode(
-                                        0.7,
-                                        1.0,
-                                        HeadingInterpolator.linear(
-                                                follower().getHeading(),
-                                                Math.toRadians(28.4)
-                                        )
-                                )
-                        )
-                )
                 .build();
 
 
@@ -274,87 +231,64 @@ public class RedClose15 extends NextFTCOpMode {
     private Command autonomous() {
         return new SequentialGroup(
 
+                //------------------------—------------------------—------------------------—
+                new ParallelGroup(
+                        f.i.follow(scorePreloads, "green"),
+                        asc.i.baseState(-1260),
+                        MTransfernf.INSTANCE.hotdog()
+                ),
+                Lednf.INSTANCE.color("yellow"),
+                MTransfernf.INSTANCE.on(),
+                new Delay(2),
+//
+                //------------------------—------------------------—------------------------—
 
-                    new ParallelGroup(
-                            new SequentialGroup(
-                                    f.i.follow(scorePreloads,"red"),
-                                    Lednf.INSTANCE.color("green")
-                            ),
-                            asc.i.baseState(-1270)
-                    ),
-                    asc.i.transferUpFor(1),
+                new ParallelGroup(
+                        new SequentialGroup(
+                            f.i.follow(grabSet2, "green"),
+                            f.i.follow(hitGate),
+                            f.i.follow(scoreSet2)
+                        ),
+                        MTransfernf.INSTANCE.hotdog()
+                ),
+                Lednf.INSTANCE.color("yellow"),
+                MTransfernf.INSTANCE.on(),
+                new Delay(2),
 
-//TODO - try parallel deadline group
-//TODO - TRY THIS IF ABOVE DOESN'T WORK
-//                    new SequentialGroup(
-//                            asc.i.baseState(-1260),
-//                            f.i.follow(scorePreloads,"green"),
-//                            asc.i.transferUpFor(1)
-//                    ),
+                //------------------------—------------------------—------------------------—
 
+                new ParallelGroup(
+                        new SequentialGroup(
+                                f.i.follow(set3, "green")
+                        ),
+                        MTransfernf.INSTANCE.hotdog()
+                ),
+                Lednf.INSTANCE.color("yellow"),
+                MTransfernf.INSTANCE.on(),
+                new Delay(2),
 
+                //------------------------—------------------------—------------------------—
 
+                new ParallelGroup(
+                        new SequentialGroup(
+                                f.i.follow(set4, "green")
+                        ),
+                        MTransfernf.INSTANCE.hotdog()
+                ),
+                Lednf.INSTANCE.color("yellow"),
+                MTransfernf.INSTANCE.on(),
+                new Delay(2),
 
+                //------------------------—------------------------—------------------------—
 
-                //SET 2
-                    new ParallelGroup(
-                            new SequentialGroup(
-                                    new ParallelGroup(
-                                            f.i.follow(grabSet2, "red")
-                                    ),
-                                    f.i.follow(scoreSet2,"green")
-
-                            ),
-                            asc.i.baseState(-1260),
-
-                            asc.i.transferSequenceDistance(scoreSet2,1.1,2)
-                    ),
-
-
-                    //SET 3
-                    new ParallelGroup(
-                            new SequentialGroup(
-                                    new ParallelGroup(
-                                            f.i.follow(grabSet3, "red")
-                                    ),
-                                    f.i.follow(scoreSet3,"green")
-
-                            ),
-                            asc.i.baseState(-1260),
-
-                            asc.i.transferSequenceDistance(scoreSet3,1.1,2)
-                    ),
-
-                    //SET 4
-                    new ParallelGroup(
-                            new SequentialGroup(
-                                    new ParallelGroup(
-                                            f.i.follow(grabSet4, "red")
-                                    ),
-                                    f.i.follow(scoreSet4,"green")
-
-                            ),
-                            asc.i.baseState(-1260),
-
-                            asc.i.transferSequenceDistance(scoreSet4,1.1,2)
-                    ),
-
-
-
-                    //SET 5 - Human Player
-                    new ParallelGroup(
-                            new SequentialGroup(
-                                    new ParallelGroup(
-                                            f.i.follow(grabHp, "red")
-                                    ),
-                                    f.i.follow(scoreHp,"green")
-                            ),
-                            asc.i.baseState(-1200,0.37),
-
-                            //asc.i.transferSequenceDistance(scoreHp,5, 2.6),
-                            asc.i.transferSequenceDistance(scoreHp,5,5)
-                    )
-
+                new ParallelGroup(
+                        new SequentialGroup(
+                                f.i.follow(grabHp, "green"),
+                                f.i.follow(park,"red")
+                        ),
+                        MTransfernf.INSTANCE.hotdog()
+                ),
+                Lednf.INSTANCE.color("yellow")
 
         );
     }

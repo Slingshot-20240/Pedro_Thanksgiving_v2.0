@@ -3,6 +3,7 @@ package org.firstinspires.ftc.teamcode.teleop.fsm;
 
 import com.qualcomm.robotcore.hardware.HardwareMap;
 
+import org.firstinspires.ftc.teamcode.NextFTC.subsystems_nf.MTransfernf;
 import org.firstinspires.ftc.teamcode.misc.gamepad.GamepadMapping;
 import org.firstinspires.ftc.teamcode.subsystems.intake.Intake;
 import org.firstinspires.ftc.teamcode.subsystems.park.Park;
@@ -53,7 +54,7 @@ public class FSM {
                     shooter.hoodToFront();
                 }
 
-                // TODO: test, should work
+//                // TODO: test, should work
 //                if (gamepad.switchMode.value()) {
 //                    if(type == ControlType.HARDCODED_CONTROL) {
 //                        savedType = ControlType.HARDCODED_CONTROL;
@@ -70,7 +71,12 @@ public class FSM {
                     state = FSMStates.PARK;
                 }
 
-                transfer.hotDog();
+                if (gamepad.transfer.locked()) {
+                    transfer.transferOn();
+                    intake.intakeOn();
+                } else {
+                    transfer.hotDog();
+                }
 
                 if (gamepad.outtake.locked()) {
                     state = FSMStates.OUTTAKING;
@@ -97,7 +103,7 @@ public class FSM {
                 if (type == ControlType.PID_CONTROL) {
                     double distance = Robot.cam.getTargetArtifactTravelDistanceX();
 
-                    double targetVelocity = robot.shooter.calculateShooterRPM(distance) + 100;
+                    double targetVelocity = robot.shooter.calculateShooterRPM(distance) + 165;
 
                     double targetHoodPos;
                     //TODO - TUNE THIS OFFSET VALUE

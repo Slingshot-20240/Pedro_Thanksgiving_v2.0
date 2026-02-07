@@ -39,7 +39,7 @@ public class MTransfernf implements Subsystem {
     public Command hotdog() {
         return new ParallelGroup(
 //                new RunToVelocity(transferController, -600),
-                new SetPower(frontTransfer,-0.1),
+                new SetPower(frontTransfer,-0.3),
                 new SetPower(backTransfer, 1.0)
         ).addRequirements(frontTransfer, backTransfer);
     }

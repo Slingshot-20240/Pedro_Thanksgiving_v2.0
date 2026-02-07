@@ -9,6 +9,7 @@ import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import org.firstinspires.ftc.teamcode.NextFTC.sequences_and_groups.asf;
 import org.firstinspires.ftc.teamcode.NextFTC.sequences_and_groups.f;
 import org.firstinspires.ftc.teamcode.NextFTC.subsystems_nf.Intakenf;
+import org.firstinspires.ftc.teamcode.NextFTC.subsystems_nf.MTransfernf;
 import org.firstinspires.ftc.teamcode.NextFTC.subsystems_nf.Shooternf;
 import org.firstinspires.ftc.teamcode.NextFTC.subsystems_nf.Transfernf;
 import org.firstinspires.ftc.teamcode.NextFTC.subsystems_nf.Hoodnf;
@@ -31,7 +32,7 @@ public class BlueFar12Gate extends NextFTCOpMode {
                 new SubsystemComponent(
                         asf.i, f.i,
                         Intakenf.INSTANCE, Hoodnf.INSTANCE,
-                        Shooternf.INSTANCE, Transfernf.INSTANCE
+                        Shooternf.INSTANCE, MTransfernf.INSTANCE
                 ),
                 new PedroComponent(Constants::createFollower),
                 BulkReadComponent.INSTANCE
@@ -131,14 +132,14 @@ public class BlueFar12Gate extends NextFTCOpMode {
 
     private Command transferUpFor(double time) {
         return new ParallelGroup(
-                Transfernf.INSTANCE.on(),
+                MTransfernf.INSTANCE.on(),
                 new Delay(time)
         );
     }
 
     private Command baseState() {
         return new ParallelGroup(
-                Transfernf.INSTANCE.hotdog(),
+                MTransfernf.INSTANCE.hotdog(),
                 Hoodnf.INSTANCE.setHoodPos(0.3)
         );
     }

@@ -5,6 +5,7 @@ import com.pedropathing.geometry.BezierLine;
 import com.pedropathing.geometry.Pose;
 import com.pedropathing.paths.PathChain;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
+import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 
 import org.firstinspires.ftc.teamcode.NextFTC.subsystems_nf.Intakenf;
 import org.firstinspires.ftc.teamcode.NextFTC.subsystems_nf.Shooternf;
@@ -24,7 +25,7 @@ import dev.nextftc.ftc.components.BulkReadComponent;
 
 import static dev.nextftc.extensions.pedro.PedroComponent.follower;
 
-
+@Disabled
 @Autonomous(name = "0 Red Cycle HP Back")
 public class RedHpCycleBack extends NextFTCOpMode {
 

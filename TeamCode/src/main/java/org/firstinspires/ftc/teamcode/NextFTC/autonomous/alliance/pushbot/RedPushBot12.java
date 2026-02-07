@@ -6,6 +6,7 @@ import com.pedropathing.geometry.Pose;
 
 import com.pedropathing.paths.PathChain;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
+import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 
 import org.firstinspires.ftc.teamcode.NextFTC.autonomous.PoseStorage;
 import org.firstinspires.ftc.teamcode.NextFTC.sequences_and_groups.asc;
@@ -26,6 +27,7 @@ import dev.nextftc.extensions.pedro.PedroComponent;
 import dev.nextftc.ftc.NextFTCOpMode;
 import dev.nextftc.ftc.components.BulkReadComponent;
 
+@Disabled
 @Autonomous(name = "red pushbot")
 public class RedPushBot12 extends NextFTCOpMode {
 
@@ -175,10 +177,9 @@ public class RedPushBot12 extends NextFTCOpMode {
 
                         new ParallelGroup(
                                 f.i.follow(scorePreloads,"green"),
-                                asc.i.baseState(-1270,0.32),
-                                asc.i.transferSequence(scorePreloads,2)
-
+                                asc.i.baseState(-1240,0.32)
                         ),
+                        asc.i.transferUpFor(2),
 
 
                         //SET 2
@@ -189,8 +190,7 @@ public class RedPushBot12 extends NextFTCOpMode {
                                         //Transfernf.INSTANCE.pickup(grabSet2,2)
 //                                ),
                                 ),
-                                asc.i.baseState(-1270),
-                                asc.i.transferSequenceDistance(set2,2,1)
+                                asc.i.transferSequenceDistance(set2,2,2)
 
                         ),
 
@@ -207,8 +207,7 @@ public class RedPushBot12 extends NextFTCOpMode {
                                         f.i.follow(scoreSet3,"green")
 
                                 ),
-                                asc.i.baseState(-1270),
-                                asc.i.transferSequenceDistance(scoreSet3,2,1)
+                                asc.i.transferSequenceDistance(scoreSet3,2,2)
                         ),
 
                         new ParallelGroup(
@@ -216,7 +215,6 @@ public class RedPushBot12 extends NextFTCOpMode {
                                         new FollowPath(grabSet4),
                                         new FollowPath(scoreSet4)
                                 ),
-                                asc.i.baseState(-1700, 0.33),
                                 asc.i.transferSequenceDistance(scoreSet4,2.5,1)
 
                         ),

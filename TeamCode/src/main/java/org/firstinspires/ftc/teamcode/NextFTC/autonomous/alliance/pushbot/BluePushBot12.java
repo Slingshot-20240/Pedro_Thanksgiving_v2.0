@@ -6,6 +6,7 @@ import com.pedropathing.geometry.Pose;
 
 import com.pedropathing.paths.PathChain;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
+import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 
 import org.firstinspires.ftc.teamcode.NextFTC.autonomous.PoseStorage;
 import org.firstinspires.ftc.teamcode.NextFTC.sequences_and_groups.asc;
@@ -26,6 +27,7 @@ import dev.nextftc.extensions.pedro.PedroComponent;
 import dev.nextftc.ftc.NextFTCOpMode;
 import dev.nextftc.ftc.components.BulkReadComponent;
 
+@Disabled
 @Autonomous(name = "blue pushbot")
 public class BluePushBot12 extends NextFTCOpMode {
 
@@ -46,7 +48,7 @@ public class BluePushBot12 extends NextFTCOpMode {
     private double mh(double deg) {
         if (deg == 0) return 180;
         if (deg == 180) return 0;
-        if (deg == 90 || deg == 268) return deg;
+        if (deg == 90 || deg == 270) return deg;
         return 180 - deg;
     }
 
