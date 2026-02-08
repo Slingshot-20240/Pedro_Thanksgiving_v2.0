@@ -35,6 +35,13 @@ public class MTransfernf implements Subsystem {
                 new SetPower(backTransfer, -1.0)
         ).addRequirements(frontTransfer, backTransfer);
     }
+    public Command farOn() {
+        return new ParallelGroup(
+//                new RunToVelocity(transferController, -2000),
+                new SetPower(frontTransfer,-0.8),
+                new SetPower(backTransfer, -1.0)
+        ).addRequirements(frontTransfer, backTransfer);
+    }
 
     public Command hotdog() {
         return new ParallelGroup(

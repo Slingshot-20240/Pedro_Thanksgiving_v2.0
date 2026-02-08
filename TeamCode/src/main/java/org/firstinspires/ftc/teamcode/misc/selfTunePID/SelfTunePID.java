@@ -10,7 +10,7 @@ import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.util.Range;
 
 
-
+@Disabled
 @Config
 @TeleOp
 public class SelfTunePID extends LinearOpMode {

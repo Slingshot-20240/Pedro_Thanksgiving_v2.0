@@ -130,7 +130,7 @@ public class RedFar12Gate extends NextFTCOpMode {
     private Command transferUpFor(double time) {
         return new ParallelGroup(
                 //MTransfernf.INSTANCE.on(),
-                MTransfernf.INSTANCE.on(),
+                MTransfernf.INSTANCE.farOn(),
                 Lednf.INSTANCE.yellow,
                 new Delay(time)
         );

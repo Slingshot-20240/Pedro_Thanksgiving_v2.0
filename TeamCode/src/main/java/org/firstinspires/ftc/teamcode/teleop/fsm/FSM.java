@@ -27,6 +27,8 @@ public class FSM {
 
     public double lastVelo = 800;
 
+    public double targetVelocity;
+
     private ControlType savedType;
 
 
@@ -71,13 +73,6 @@ public class FSM {
                     state = FSMStates.PARK;
                 }
 
-                if (gamepad.transfer.locked()) {
-                    transfer.transferOn();
-                    intake.intakeOn();
-                } else {
-                    transfer.hotDog();
-                }
-
                 if (gamepad.outtake.locked()) {
                     state = FSMStates.OUTTAKING;
                 }
@@ -96,14 +91,14 @@ public class FSM {
                     intake.intakeOff();
                 }
 
-                if (gamepad.transfer.locked() && type == ControlType.PID_CONTROL) {
-                    state = FSMStates.PID_SHOOT;
-                }
+//                if (gamepad.transfer.locked() && type == ControlType.PID_CONTROL) {
+//                    state = FSMStates.PID_SHOOT;
+//                }
 
                 if (type == ControlType.PID_CONTROL) {
                     double distance = Robot.cam.getTargetArtifactTravelDistanceX();
 
-                    double targetVelocity = robot.shooter.calculateShooterRPM(distance) + 80;
+                    targetVelocity = robot.shooter.calculateShooterRPM(distance) + 45;
 
                     double targetHoodPos;
                     //TODO - TUNE THIS OFFSET VALUE
@@ -141,6 +136,13 @@ public class FSM {
                         robot.ledBoard0.setState(false);
                         robot.ledBoard1.setState(true);
                     }
+                }
+
+                if (gamepad.transfer.locked()) {
+                    transfer.transferOn();
+                    intake.intakeOn();
+                } else {
+                    transfer.hotDog();
                 }
 
                 break;

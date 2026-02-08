@@ -16,8 +16,8 @@ public class Shooter {
     public Shooter(HardwareMap hardwareMap) {
         outtake1 = hardwareMap.get(DcMotorEx.class, "outtakeTop");
         outtake2 = hardwareMap.get(DcMotorEx.class, "outtakeBot");
-        outtake1.setVelocityPIDFCoefficients(700, 0, 0, 20); //700, 20 was old value
-        outtake2.setVelocityPIDFCoefficients(700, 0, 0, 20);
+        outtake1.setVelocityPIDFCoefficients(700, 0, 0, 100); //700, 20 was old value
+        outtake2.setVelocityPIDFCoefficients(700, 0, 0, 100);
         outtake2.setDirection(DcMotorSimple.Direction.REVERSE);
 
         variableHood = hardwareMap.get(Servo.class, "variableHood");

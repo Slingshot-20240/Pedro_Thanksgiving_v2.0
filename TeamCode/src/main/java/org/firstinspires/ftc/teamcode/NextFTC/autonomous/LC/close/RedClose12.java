@@ -56,7 +56,7 @@ public class RedClose12 extends NextFTCOpMode {
     public PathChain grabHp;
     public PathChain park;
 
-    public Pose scorePose = new Pose(89,89);
+    public Pose scorePose = new Pose(88,88);
 
     public void buildPaths() {
         follower().setStartingPose(new Pose(126.2, 119, Math.toRadians(36)));
@@ -204,11 +204,11 @@ public class RedClose12 extends NextFTCOpMode {
                 .pathBuilder()
                 .addPath(
                         new BezierLine(
-                                new Pose(126, 13),
+                                scorePose,
                                 new Pose(110, 55)
                         )
                 )
-                .setTangentHeadingInterpolation().setReversed()
+                .setTangentHeadingInterpolation()
 
 
                 .build();
@@ -283,12 +283,12 @@ public class RedClose12 extends NextFTCOpMode {
 
                 new ParallelGroup(
                         new SequentialGroup(
-                                f.i.follow(grabHp, "green"),
+                                //f.i.follow(grabHp, "green"),
                                 f.i.follow(park,"red")
                         ),
                         MTransfernf.INSTANCE.hotdog()
-                ),
-                Lednf.INSTANCE.color("yellow")
+                )
+//                Lednf.INSTANCE.color("yellow")
 
         );
     }

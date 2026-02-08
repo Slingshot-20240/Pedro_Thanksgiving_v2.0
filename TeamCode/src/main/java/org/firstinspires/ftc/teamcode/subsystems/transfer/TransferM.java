@@ -29,7 +29,7 @@ public class TransferM {
 
     public void transferOn() {
         backTransfer.setPower(-1);
-        frontTransfer.setVelocity(-2000);
+        frontTransfer.setVelocity(-1500);
 //        frontTransfer.setPower(-1);
     }
 

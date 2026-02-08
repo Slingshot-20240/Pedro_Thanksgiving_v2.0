@@ -164,7 +164,7 @@ public class BlueHpCycleBack extends NextFTCOpMode {
     private Command transferUpFor(double time) {
         return new ParallelGroup(
                 //MTransfernf.INSTANCE.on(),
-                MTransfernf.INSTANCE.on(),
+                MTransfernf.INSTANCE.farOn(),
                 new Delay(time)
         );
     }
@@ -194,10 +194,8 @@ public class BlueHpCycleBack extends NextFTCOpMode {
                         new ParallelGroup(
                                 new SequentialGroup(
                                         f.i.follow(grabSet2),
-                                        new Delay(0.2),
                                         f.i.follow(backAssureSet2),
-                                        f.i.follow(frontAssureSet2, true,0.7),
-                                        new Delay(0.2),
+                                        f.i.follow(frontAssureSet2),
                                         f.i.follow(scoreSet2)
                                 ),
                                 baseState(),
@@ -211,10 +209,8 @@ public class BlueHpCycleBack extends NextFTCOpMode {
                         new ParallelGroup(
                                 new SequentialGroup(
                                         f.i.follow(grabHp),
-                                        new Delay(0.2),
                                         f.i.follow(backAssure),
-                                        f.i.follow(frontAssure, true,0.7),
-                                        new Delay(0.2),
+                                        f.i.follow(frontAssure),
                                         f.i.follow(scoreHp)
                                 ),
                                 baseState(),
@@ -227,10 +223,8 @@ public class BlueHpCycleBack extends NextFTCOpMode {
                         new ParallelGroup(
                                 new SequentialGroup(
                                         f.i.follow(grabHp),
-                                        new Delay(0.2),
                                         f.i.follow(backAssure),
-                                        f.i.follow(frontAssure, true,0.7),
-                                        new Delay(0.2),
+                                        f.i.follow(frontAssure),
                                         f.i.follow(scoreHp)
                                 ),
                                 baseState(),
@@ -243,10 +237,8 @@ public class BlueHpCycleBack extends NextFTCOpMode {
                         new ParallelGroup(
                                 new SequentialGroup(
                                         f.i.follow(grabHp),
-                                        new Delay(0.2),
                                         f.i.follow(backAssure),
-                                        f.i.follow(frontAssure, true,0.7),
-                                        new Delay(0.2),
+                                        f.i.follow(frontAssure),
                                         f.i.follow(park)
                                 ),
                                 baseState(),

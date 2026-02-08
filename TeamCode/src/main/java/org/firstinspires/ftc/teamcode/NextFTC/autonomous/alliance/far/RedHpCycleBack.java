@@ -61,7 +61,7 @@ public class RedHpCycleBack extends NextFTCOpMode {
         scorePreloads = follower()
                 .pathBuilder()
                 .addPath(new BezierLine(new Pose(88, 8.2), scorePose))
-                .setLinearHeadingInterpolation(Math.toRadians(90), Math.toRadians(69.3))
+                .setLinearHeadingInterpolation(Math.toRadians(90), Math.toRadians(68.8))
                 .build();
 
         //SET 2 SPECIFIC ONES
@@ -70,8 +70,7 @@ public class RedHpCycleBack extends NextFTCOpMode {
                 .addPath(
                         new BezierCurve(
                                 scorePose,
-                                new Pose(125, 25),
-                                new Pose(134.000, 11.000)
+                                new Pose(125, 25), new Pose(134.000, 12)
                         )
                 )
                 .setTangentHeadingInterpolation()
@@ -80,7 +79,7 @@ public class RedHpCycleBack extends NextFTCOpMode {
         backAssureSet2 = follower()
                 .pathBuilder()
                 .addPath(
-                        new BezierLine(new Pose(134.000, 11.000), new Pose(125.000, 11))
+                        new BezierLine(new Pose(134.000, 12), new Pose(124, 12))
                 )
                 .setConstantHeadingInterpolation(Math.toRadians(0))
                 .build();
@@ -88,12 +87,12 @@ public class RedHpCycleBack extends NextFTCOpMode {
         frontAssureSet2 = follower()
                 .pathBuilder()
                 .addPath(
-                        new BezierLine(new Pose(125.000, 11), new Pose(134.000, 11))
+                        new BezierLine(new Pose(124, 12), new Pose(134.000, 12))
                 )
                 .setConstantHeadingInterpolation(Math.toRadians(0))
 
                 .addPath(
-                        new BezierLine(new Pose(125.000, 11), new Pose(134.000, 8.2))
+                        new BezierLine(new Pose(125.000, 12), new Pose(134.000, 11))
                 )
                 .setLinearHeadingInterpolation(Math.toRadians(0), Math.toRadians(300))
 //                .setConstantHeadingInterpolation(Math.toRadians(0))
@@ -102,9 +101,9 @@ public class RedHpCycleBack extends NextFTCOpMode {
         scoreSet2 = follower()
                 .pathBuilder()
                 .addPath(
-                        new BezierLine(new Pose(134.000, 8.2), scorePose)
+                        new BezierLine(new Pose(134.000, 11), scorePose)
                 )
-                .setLinearHeadingInterpolation(Math.toRadians(300), Math.toRadians(69.3))
+                .setLinearHeadingInterpolation(Math.toRadians(300), Math.toRadians(68.8))
                 .build();
 
 
@@ -142,14 +141,14 @@ public class RedHpCycleBack extends NextFTCOpMode {
                 .addPath(
                         new BezierLine(new Pose(134.000, 20), new Pose(88.000, 17.000))
                 )
-                .setLinearHeadingInterpolation(Math.toRadians(0), Math.toRadians(69.3))
+                .setLinearHeadingInterpolation(Math.toRadians(0), Math.toRadians(68.8))
                 .build();
 
 
         park = PedroComponent.follower()
                 .pathBuilder()
                 .addPath(new BezierLine(new Pose(134,20), new Pose(120, 30)))
-                .setLinearHeadingInterpolation(Math.toRadians(69.3), Math.toRadians(90))
+                .setLinearHeadingInterpolation(Math.toRadians(68.8), Math.toRadians(90))
                 .build();
 
     }
@@ -164,7 +163,7 @@ public class RedHpCycleBack extends NextFTCOpMode {
     private Command transferUpFor(double time) {
         return new ParallelGroup(
                 //MTransfernf.INSTANCE.on(),
-                MTransfernf.INSTANCE.on(),
+                MTransfernf.INSTANCE.farOn(),
                 new Delay(time)
         );
     }
@@ -194,10 +193,8 @@ public class RedHpCycleBack extends NextFTCOpMode {
                         new ParallelGroup(
                                 new SequentialGroup(
                                         f.i.follow(grabSet2),
-                                        new Delay(0.2),
                                         f.i.follow(backAssureSet2),
-                                        f.i.follow(frontAssureSet2, true,0.7),
-                                        new Delay(0.2),
+                                        f.i.follow(frontAssureSet2),
                                         f.i.follow(scoreSet2)
                                 ),
                                 baseState(),
@@ -211,10 +208,8 @@ public class RedHpCycleBack extends NextFTCOpMode {
                         new ParallelGroup(
                                 new SequentialGroup(
                                         f.i.follow(grabHp),
-                                        new Delay(0.2),
                                         f.i.follow(backAssure),
-                                        f.i.follow(frontAssure, true,0.7),
-                                        new Delay(0.2),
+                                        f.i.follow(frontAssure),
                                         f.i.follow(scoreHp)
                                 ),
                                 baseState(),
@@ -227,10 +222,8 @@ public class RedHpCycleBack extends NextFTCOpMode {
                         new ParallelGroup(
                                 new SequentialGroup(
                                         f.i.follow(grabHp),
-                                        new Delay(0.2),
                                         f.i.follow(backAssure),
-                                        f.i.follow(frontAssure, true,0.7),
-                                        new Delay(0.2),
+                                        f.i.follow(frontAssure),
                                         f.i.follow(scoreHp)
                                 ),
                                 baseState(),
@@ -243,10 +236,8 @@ public class RedHpCycleBack extends NextFTCOpMode {
                         new ParallelGroup(
                                 new SequentialGroup(
                                         f.i.follow(grabHp),
-                                        new Delay(0.2),
                                         f.i.follow(backAssure),
-                                        f.i.follow(frontAssure, true,0.7),
-                                        new Delay(0.2),
+                                        f.i.follow(frontAssure),
                                         f.i.follow(park)
                                 ),
                                 baseState(),
