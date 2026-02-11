@@ -165,9 +165,9 @@ public class NikethTele extends OpMode {
         }
 
         if (gamepad1.right_bumper) {
-            follower.setTeleOpDrive(Math.pow(forward,3), Math.pow(strafe,3) , Math.pow(rotate,3), true);
+            follower.setTeleOpDrive(Math.pow(forward,5), Math.pow(strafe,5) , Math.pow(rotate,5), true);
         } else {
-            follower.setTeleOpDrive(Math.pow(forward,3), 0, Math.pow(rotate,3), true);
+            follower.setTeleOpDrive(Math.pow(forward,5), 0, Math.pow(rotate,5), true);
         }
 
         // Path following
