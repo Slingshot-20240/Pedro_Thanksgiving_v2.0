@@ -109,8 +109,8 @@ public class NikethTele extends OpMode {
                         Math.abs(gamepad1.left_stick_y) > 0.05 ||
                         Math.abs(gamepad1.right_stick_x) > 0.05;
 
-        double forward = -gamepad1.left_stick_y;
-        double strafe  = -gamepad1.left_stick_x;
+        double forward = -Math.pow(gamepad1.left_stick_y,5);
+        double strafe  = -Math.pow(gamepad1.left_stick_x,5);
         double rotate;
 
 
@@ -161,13 +161,13 @@ public class NikethTele extends OpMode {
             }
 
         } else {
-            rotate = -gamepad1.right_stick_x;
+            rotate = -Math.pow(gamepad1.right_stick_x,5);
         }
 
         if (gamepad1.right_bumper) {
-            follower.setTeleOpDrive(Math.pow(forward,5), Math.pow(strafe,5) , Math.pow(rotate,5), true);
+            follower.setTeleOpDrive(forward, strafe , rotate, true);
         } else {
-            follower.setTeleOpDrive(Math.pow(forward,5), 0, Math.pow(rotate,5), true);
+            follower.setTeleOpDrive(forward,0, rotate, true);
         }
 
         // Path following
