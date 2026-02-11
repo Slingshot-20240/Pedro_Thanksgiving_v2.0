@@ -52,19 +52,20 @@ public class GamepadMapping {
     }
 
     public void update() {
+        //Niketh controls
         joystickUpdate();
         // INTAKE
-        intake.update(gamepad1.right_trigger >= 0.5);
+        intake.update(gamepad1.left_trigger >= 0.5);
 
         // SHOOTER
         shootBack.update(gamepad1.left_trigger >= 0.5);
-        shootFront.update(gamepad1.left_bumper);
+        shootFront.update(gamepad1.right_bumper);
 
         // TRANSFER
         transfer.update(gamepad1.left_bumper);
 
         // OUTTAKE
-        outtake.update(gamepad1.y);
+        outtake.update(gamepad1.left_bumper);
 
         // MISC
         switchMode.update(gamepad1.dpad_down);

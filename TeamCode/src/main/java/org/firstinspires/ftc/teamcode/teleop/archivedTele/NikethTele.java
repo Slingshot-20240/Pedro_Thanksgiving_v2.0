@@ -184,7 +184,7 @@ public class NikethTele extends OpMode {
 
         /* ---------------- AUTO TURN TOGGLES ---------------- */
 
-        if (gamepad1.a && !autoTurnVision) {
+        if (gamepad1.right_trigger > 0 && !autoTurnVision) {
             autoTurnVision = true;
         }
 
