@@ -92,8 +92,8 @@ public class ViktorTele extends OpMode {
 
 
 
-        //------------- error calculation -------------\\
-        // Vision error
+//        //------------- error calculation -------------\\
+//        // Vision error
         double visionBearing = Math.toRadians(Robot.cam.getATangle());
         double visionHeadingError = angleWrap(visionBearing);
         boolean visionTurnFinished =
@@ -140,10 +140,10 @@ public class ViktorTele extends OpMode {
         } else {
             rotate = -gamepad1.right_stick_x * 0.55;
         }
-
-        follower.startTeleopDrive(true);
-
+//        follower.startTeleopDrive(true);
         follower.setTeleOpDrive(forward, strafe, rotate, true);
+
+
         //TODO - Check if even needed
 
         if (gamepad1.x) {
@@ -155,7 +155,7 @@ public class ViktorTele extends OpMode {
 
 
 
-        /* ---------------- AUTO TURN TOGGLES ---------------- */
+//        /* ---------------- AUTO TURN TOGGLES ---------------- */
 
         if (gamepad1.a && !autoTurnVision) {
             autoTurnVision = true;

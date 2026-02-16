@@ -3,6 +3,7 @@ package org.firstinspires.ftc.teamcode.teleop.mechTests;
 import com.acmerobotics.dashboard.FtcDashboard;
 import com.acmerobotics.dashboard.config.Config;
 import com.acmerobotics.dashboard.telemetry.MultipleTelemetry;
+import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 
@@ -11,8 +12,9 @@ import org.firstinspires.ftc.teamcode.misc.gamepad.GamepadMapping;
 import org.firstinspires.ftc.teamcode.subsystems.robot.Robot;
 import org.firstinspires.ftc.teamcode.subsystems.shooter.Shooter;
 
+@Disabled
 @Config
-@TeleOp(group = "shooter mech test")
+@TeleOp(group = "mech test")
 public class ShooterTest extends OpMode {
     Robot robot;
     GamepadMapping controls;

@@ -1,5 +1,6 @@
 package org.firstinspires.ftc.teamcode.teleop.archivedTele;
 
+import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 
@@ -7,6 +8,7 @@ import org.firstinspires.ftc.teamcode.misc.gamepad.GamepadMapping;
 import org.firstinspires.ftc.teamcode.subsystems.robot.Robot;
 import org.firstinspires.ftc.teamcode.teleop.fsm.FSM;
 
+@Disabled
 @TeleOp
 public class FSMTest extends OpMode {
     private Robot robot;

@@ -70,7 +70,14 @@ public class FSM {
                     state = FSMStates.PARK;
                 }
 
-                transfer.hotDog();
+                if (gamepad.transfer.locked()) {
+                    intake.intakeOn();
+
+                    transfer.transferOn();
+                } else {
+                    transfer.hotDog();
+                }
+
 
                 if (gamepad.outtake.locked()) {
                     state = FSMStates.OUTTAKING;
@@ -88,10 +95,6 @@ public class FSM {
                     intake.intakeOn();
                 } else {
                     intake.intakeOff();
-                }
-
-                if (gamepad.transfer.locked() && type == ControlType.PID_CONTROL) {
-                    state = FSMStates.PID_SHOOT;
                 }
 
                 if (type == ControlType.PID_CONTROL) {

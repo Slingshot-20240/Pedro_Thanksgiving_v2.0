@@ -1,4 +1,4 @@
-package org.firstinspires.ftc.teamcode.subsystems.turret;
+package org.firstinspires.ftc.teamcode.teleop.pid;
 
 
 import com.acmerobotics.dashboard.FtcDashboard;
@@ -83,11 +83,11 @@ public class TransferPID extends OpMode {
 
         robot.shooter.setShooterVelocity(-1000);
 
-        //frontTransfer.setVelocityPIDFCoefficients(p1, i1, d1, f1);
+        frontTransfer.setVelocityPIDFCoefficients(p1, i1, d1, f1);
 
-        //frontTransfer.setVelocity(targetVel);
+        frontTransfer.setVelocity(targetVel);
 
-        frontTransfer.setPower(-1);
+        //frontTransfer.setPower(-1);
 
         robot.transfer.backTransfer.setPower(1);
 

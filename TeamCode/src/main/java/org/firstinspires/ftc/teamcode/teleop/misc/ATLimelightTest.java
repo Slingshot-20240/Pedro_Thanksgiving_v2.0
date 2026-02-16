@@ -2,6 +2,7 @@ package org.firstinspires.ftc.teamcode.teleop.misc;
 
 import com.acmerobotics.dashboard.config.Config;
 import com.qualcomm.hardware.gobilda.GoBildaPinpointDriver;
+import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 
@@ -13,8 +14,9 @@ import org.firstinspires.ftc.teamcode.subsystems.vision.PythonLimelight;
 
 import dev.nextftc.core.units.Angle;
 
+@Disabled
 @Config
-@TeleOp(group = "intake mech tests")
+@TeleOp(group = "vision tests")
 public class ATLimelightTest extends OpMode {
 
     public AprilTagLimelight limelight;
