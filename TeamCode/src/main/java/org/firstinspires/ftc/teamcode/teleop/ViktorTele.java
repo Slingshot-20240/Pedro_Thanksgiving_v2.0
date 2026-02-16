@@ -15,7 +15,7 @@ import org.firstinspires.ftc.teamcode.subsystems.robot.Robot;
 import org.firstinspires.ftc.teamcode.teleop.fsm.FSM;
 
 @Config
-@TeleOp
+@TeleOp(name = "AViktorTele")
 public class ViktorTele extends OpMode {
 
     private GamepadMapping controls;
@@ -31,12 +31,12 @@ public class ViktorTele extends OpMode {
     public static double odoDistance;
 
 
-    public static double tolerance = 0.02;
+    public static double tolerance = 0.01;
 
     // Vision tuning
-    public static double visionTurn_kP = 0.25;
-    public static double visionMinTurnPower = 0.11;
-    public static double visionMiniTolerance = 0.02;
+    public static double visionTurn_kP = 0.04;
+    public static double visionMinTurnPower = 0.1;
+    public static double visionMiniTolerance = 0.01;
 
     // ODO target
     public static double GOAL_X = 138;
@@ -92,8 +92,8 @@ public class ViktorTele extends OpMode {
 
 
 
-//        //------------- error calculation -------------\\
-//        // Vision error
+        //------------- error calculation -------------\\
+        // Vision error
         double visionBearing = Math.toRadians(Robot.cam.getATangle());
         double visionHeadingError = angleWrap(visionBearing);
         boolean visionTurnFinished =
@@ -140,10 +140,10 @@ public class ViktorTele extends OpMode {
         } else {
             rotate = -gamepad1.right_stick_x * 0.55;
         }
-//        follower.startTeleopDrive(true);
+
+        //follower.startTeleopDrive(true);
+
         follower.setTeleOpDrive(forward, strafe, rotate, true);
-
-
         //TODO - Check if even needed
 
         if (gamepad1.x) {
@@ -155,7 +155,7 @@ public class ViktorTele extends OpMode {
 
 
 
-//        /* ---------------- AUTO TURN TOGGLES ---------------- */
+        /* ---------------- AUTO TURN TOGGLES ---------------- */
 
         if (gamepad1.a && !autoTurnVision) {
             autoTurnVision = true;
@@ -176,6 +176,7 @@ public class ViktorTele extends OpMode {
         }
 
         // Telemetry
+        telemetry.addData("State", fsm.state);
 
         telemetry.addData("Pose", pose);
         telemetry.addData("Heading (deg)", Math.toDegrees(heading));

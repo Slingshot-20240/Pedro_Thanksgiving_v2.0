@@ -1,4 +1,4 @@
-package org.firstinspires.ftc.teamcode.NextFTC.autonomous;
+package org.firstinspires.ftc.teamcode.NextFTC.autonomous.archived;
 
 import com.acmerobotics.dashboard.config.Config;
 import com.pedropathing.geometry.BezierCurve;
@@ -8,6 +8,7 @@ import com.pedropathing.geometry.Pose;
 import com.pedropathing.paths.HeadingInterpolator;
 import com.pedropathing.paths.PathChain;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
+import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 
 import org.firstinspires.ftc.teamcode.NextFTC.autonomous.PoseStorage;
 import org.firstinspires.ftc.teamcode.NextFTC.subsystems_nf.Intakenf;
@@ -29,7 +30,7 @@ import dev.nextftc.ftc.components.BulkReadComponent;
 
 import static dev.nextftc.extensions.pedro.PedroComponent.follower;
 
-
+@Disabled
 @Config
 @Autonomous(name = "18 Concept")
 public class Red18CloseConcept extends NextFTCOpMode {

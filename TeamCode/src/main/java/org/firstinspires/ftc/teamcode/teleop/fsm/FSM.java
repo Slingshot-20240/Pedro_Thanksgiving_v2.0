@@ -3,6 +3,7 @@ package org.firstinspires.ftc.teamcode.teleop.fsm;
 
 import com.qualcomm.robotcore.hardware.HardwareMap;
 
+import org.firstinspires.ftc.teamcode.NextFTC.subsystems_nf.MTransfernf;
 import org.firstinspires.ftc.teamcode.misc.gamepad.GamepadMapping;
 import org.firstinspires.ftc.teamcode.subsystems.intake.Intake;
 import org.firstinspires.ftc.teamcode.subsystems.park.Park;
@@ -25,6 +26,8 @@ public class FSM {
     private final Park park;
 
     public double lastVelo = 800;
+
+    public double targetVelocity;
 
     private ControlType savedType;
 
@@ -53,7 +56,7 @@ public class FSM {
                     shooter.hoodToFront();
                 }
 
-                // TODO: test, should work
+//                // TODO: test, should work
 //                if (gamepad.switchMode.value()) {
 //                    if(type == ControlType.HARDCODED_CONTROL) {
 //                        savedType = ControlType.HARDCODED_CONTROL;
@@ -69,15 +72,6 @@ public class FSM {
                 if (gamepad.park.value()) {
                     state = FSMStates.PARK;
                 }
-
-                if (gamepad.transfer.locked()) {
-                    intake.intakeOn();
-
-                    transfer.transferOn();
-                } else {
-                    transfer.hotDog();
-                }
-
 
                 if (gamepad.outtake.locked()) {
                     state = FSMStates.OUTTAKING;
@@ -97,10 +91,14 @@ public class FSM {
                     intake.intakeOff();
                 }
 
+//                if (gamepad.transfer.locked() && type == ControlType.PID_CONTROL) {
+//                    state = FSMStates.PID_SHOOT;
+//                }
+
                 if (type == ControlType.PID_CONTROL) {
                     double distance = Robot.cam.getTargetArtifactTravelDistanceX();
 
-                    double targetVelocity = robot.shooter.calculateShooterRPM(distance) + 100;
+                    targetVelocity = robot.shooter.calculateShooterRPM(distance) + 45;
 
                     double targetHoodPos;
                     //TODO - TUNE THIS OFFSET VALUE
@@ -138,6 +136,13 @@ public class FSM {
                         robot.ledBoard0.setState(false);
                         robot.ledBoard1.setState(true);
                     }
+                }
+
+                if (gamepad.transfer.locked()) {
+                    transfer.transferOn();
+                    intake.intakeOn();
+                } else {
+                    transfer.hotDog();
                 }
 
                 break;

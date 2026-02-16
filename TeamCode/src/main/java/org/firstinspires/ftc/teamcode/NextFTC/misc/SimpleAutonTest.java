@@ -14,10 +14,12 @@ import com.pedropathing.paths.Path;
 import com.pedropathing.paths.PathChain;
 import com.pedropathing.paths.callbacks.PathCallback;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
+import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 
 import org.firstinspires.ftc.robotcore.external.Telemetry;
 import org.firstinspires.ftc.teamcode.NextFTC.sequences_and_groups.asc;
+import org.firstinspires.ftc.teamcode.NextFTC.subsystems_nf.MTransfernf;
 import org.firstinspires.ftc.teamcode.pedroPathing.DrawingNew;
 
 
@@ -47,7 +49,7 @@ import dev.nextftc.extensions.pedro.TurnBy;
 import dev.nextftc.ftc.NextFTCOpMode;
 import dev.nextftc.ftc.components.BulkReadComponent;
 
-
+@Disabled
 @Config
 @Autonomous(name = "zSimple Auton Test")
 public class SimpleAutonTest extends NextFTCOpMode {
@@ -56,7 +58,7 @@ public class SimpleAutonTest extends NextFTCOpMode {
                 new SubsystemComponent(
                         f.i, asc.i,
                         Intakenf.INSTANCE, Hoodnf.INSTANCE,
-                        Shooternf.INSTANCE, Transfernf.INSTANCE,
+                        Shooternf.INSTANCE, MTransfernf.INSTANCE,
                         Lednf.INSTANCE, Loginf.INSTANCE
                 ),
                 new PedroComponent(Constants::createFollower),
@@ -72,7 +74,6 @@ public class SimpleAutonTest extends NextFTCOpMode {
     public PathChain grabSet2, scoreSet2;
 
     public Pose scorePose = new Pose(87,87);
-    //TODO - try different types, public private regular etc.
     double atErrorDeg;
 
     public void buildPaths() {
@@ -137,7 +138,7 @@ public class SimpleAutonTest extends NextFTCOpMode {
     private Command init_bot() {
         return new ParallelGroup(
                 Hoodnf.INSTANCE.setHoodPos(0.33),
-                Transfernf.INSTANCE.idle()
+                MTransfernf.INSTANCE.idle()
         );
 
     }
@@ -148,9 +149,8 @@ public class SimpleAutonTest extends NextFTCOpMode {
 
                 new ParallelGroup(
                         f.i.follow(scorePreloads, "green"),
-                        asc.i.baseState(-1240),
-                        //try false also, see if parametric callback interrupts it
-                        Transfernf.INSTANCE.hotdog().setInterruptible(true)
+                        asc.i.baseState(-1260),
+                        MTransfernf.INSTANCE.hotdog()
                 ),
                 f.i.follow(adjust,"red"),
                 Lednf.INSTANCE.color("green")

@@ -15,7 +15,7 @@ public class ParkServoTest extends OpMode {
 
     Park park;
 
-    public static double position = 0.38;
+    public static double position = 0.5;
 
     @Override
     public void init() {

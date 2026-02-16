@@ -30,14 +30,23 @@ public class MTransfernf implements Subsystem {
 
     public Command on() {
         return new ParallelGroup(
-                new RunToVelocity(transferController, -2000),
+//                new RunToVelocity(transferController, -2000),
+                new SetPower(frontTransfer,-1.0),
+                new SetPower(backTransfer, -1.0)
+        ).addRequirements(frontTransfer, backTransfer);
+    }
+    public Command farOn() {
+        return new ParallelGroup(
+//                new RunToVelocity(transferController, -2000),
+                new SetPower(frontTransfer,-0.8),
                 new SetPower(backTransfer, -1.0)
         ).addRequirements(frontTransfer, backTransfer);
     }
 
     public Command hotdog() {
         return new ParallelGroup(
-                new RunToVelocity(transferController, -600),
+//                new RunToVelocity(transferController, -600),
+                new SetPower(frontTransfer,-0.3),
                 new SetPower(backTransfer, 1.0)
         ).addRequirements(frontTransfer, backTransfer);
     }
@@ -50,7 +59,8 @@ public class MTransfernf implements Subsystem {
 
     public Command idle() {
         return new ParallelGroup(
-                new RunToVelocity(transferController, 0),
+//                new RunToVelocity(transferController, 0),
+                new SetPower(frontTransfer,0),
                 new SetPower(backTransfer, 0)
         ).addRequirements(frontTransfer, backTransfer);
     }

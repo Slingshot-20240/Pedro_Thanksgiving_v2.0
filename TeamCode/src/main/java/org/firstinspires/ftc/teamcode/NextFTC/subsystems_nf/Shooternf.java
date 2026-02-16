@@ -4,6 +4,9 @@ import com.bylazar.configurables.annotations.Configurable;
 
 import dev.nextftc.control.ControlSystem;
 import dev.nextftc.core.commands.Command;
+import dev.nextftc.core.commands.groups.ParallelGroup;
+import dev.nextftc.core.commands.groups.SequentialGroup;
+import dev.nextftc.core.commands.utility.InstantCommand;
 import dev.nextftc.core.subsystems.Subsystem;
 import dev.nextftc.hardware.controllable.MotorGroup;
 import dev.nextftc.hardware.controllable.RunToVelocity;
@@ -18,14 +21,14 @@ public class Shooternf implements Subsystem {
     public MotorGroup shooter;
 
     private final ControlSystem closeShooterController = ControlSystem.builder()
-            .velPid(10, 0, 0.004)
+            .velPid(3.5, 0, 0.002)
             //old 3.5, 0.002, ff = 0.001
-            .basicFF(0.006)
+            .basicFF(0.001)
             .build();
 
     private final ControlSystem farShooterController = ControlSystem.builder()
             //extreme values
-            .velPid(15, 0, 0.004)
+            .velPid(6, 0, 0.004)
             //old 5.5, 0.001, ff = 0.005
             .basicFF(0.008)
             .build();
@@ -40,6 +43,15 @@ public class Shooternf implements Subsystem {
     private ShooterControllerMode currentControllerMode = ShooterControllerMode.CLOSE;
 
 
+//    public Command setInstantShooterVel(double shooterVel) {
+//        return new SequentialGroup(
+//                new InstantCommand(() -> outtake2.reverse()),
+//                new ParallelGroup(
+//                    new InstantCommand(() -> Shooternf.INSTANCE.outtake1.getMotor().setVelocity(shooterVel)),
+//                    new InstantCommand(() -> Shooternf.INSTANCE.outtake2.getMotor().setVelocity(shooterVel))
+//                )
+//        );
+//    }
     public Command closeSide() {
         currentControllerMode = ShooterControllerMode.CLOSE;
         return new RunToVelocity(closeShooterController, -1210).requires(shooter);

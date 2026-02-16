@@ -3,6 +3,7 @@ package org.firstinspires.ftc.teamcode.NextFTC.autonomous.archived;
 import static dev.nextftc.extensions.pedro.PedroComponent.follower;
 
 import com.pedropathing.follower.Follower;
+import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 
 import org.firstinspires.ftc.teamcode.NextFTC.sequences_and_groups.f;
@@ -28,7 +29,7 @@ import dev.nextftc.ftc.NextFTCOpMode;
 import dev.nextftc.ftc.components.BulkReadComponent;
 import dev.nextftc.hardware.driving.MecanumDriverControlled;
 import dev.nextftc.hardware.impl.MotorEx;
-
+@Disabled
 @TeleOp(name = "NextFTC TeleOp Program Java")
 public class NextFTCTele extends NextFTCOpMode {
     public NextFTCTele() {
